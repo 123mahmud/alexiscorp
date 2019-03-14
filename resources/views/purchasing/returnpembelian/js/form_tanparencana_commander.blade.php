@@ -1,8 +1,8 @@
 <script>
   $(document).ready(function(){
     // Format textbox mata uang
-    $('#po_disc_value').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0});
-    $('#po_disc_value, #po_tax_percent, #po_disc_percent').on('change keyup', function(){
+    $('#pr_disc_value').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0});
+    $('#pr_disc_value, #pr_tax_percent, #pr_disc_percent').on('change keyup', function(){
       count_grandtotal();
     });
 
@@ -47,11 +47,11 @@
 
     $('#qty').keypress(function(e){
       if( e.which == 13 ) {
-        append_purchase_order_dt();
+        append_purchase_return_dt();
       }
     })
 
-    table_purchase_order_dt = $('#table_purchase_order_dt').DataTable({
+    table_purchase_return_dt = $('#table_purchase_return_dt').DataTable({
       "columnDefs" : [
         {
           'targets' : [3, 5, 6],
@@ -95,14 +95,14 @@
       }
     });
 
-    table_purchase_order_dt.on('draw', function(){
+    table_purchase_return_dt.on('draw', function(){
         count_grandtotal();
     })
 
-    $('#po_supplier').select2({
+    $('#pr_supplier').select2({
       placeholder: "Pilih Supplier",
       ajax: {
-        url: '{{ url("/purchasing/orderpembelian/find_m_supplier") }}',
+        url: '{{ url("/purchasing/returnpembelian/find_m_supplier") }}',
         dataType: 'json',
         data: function (params) {
           return {

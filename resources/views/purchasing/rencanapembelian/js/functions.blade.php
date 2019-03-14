@@ -97,7 +97,7 @@
 		else if(data.pp_status == 'AP') {
 			status_class = 'badge-success';
 		}
-		else if(data.pp_status == 'NAP') {
+		else if(data.pp_status == 'NA') {
 			status_class = 'badge-danger';
 		}
 		screen.find('.pp_status_label').addClass(status_class);
@@ -142,7 +142,7 @@
 		else if(data.pp_status == 'AP') {
 			status_class = 'badge-success';
 		}
-		else if(data.pp_status == 'NAP') {
+		else if(data.pp_status == 'NA') {
 			status_class = 'badge-danger';
 		}
 		screen.find('.pp_status_label').addClass(status_class);
@@ -219,13 +219,22 @@
 	}
 
 	// Mencari data
-	function cari(){
-	  var tgl_awal = $('[name="tgl_awal"]').val();
-	  var tgl_akhir = $('[name="tgl_akhir"]').val();
-	  var url_target = '{{ url("/purchasing/rencanapembelian/find_d_purchase_plan/?") }}tgl_awal=' + tgl_awal + '&tgl_akhir=' + tgl_akhir + '&_token={{ csrf_token() }}'; 
-	  tablex.ajax.url(url_target).load();
+	function search_purchase_plan() {
+		tabel_purchase_plan.ajax.reload();
 	}
 
+	function refresh_purchase_plan() {
+		$('#tgl_awal').val(
+	      moment().subtract(7, 'days').format('DD-MM-YYYY')
+	    );
+	    $('#tgl_akhir').val(
+	      moment().format('DD-MM-YYYY')
+	    );
+	    $('#pp_status').find('[value=""]').attr('selected', 'selected');
+
+	    search_purchase_plan();
+	    $('#pp_status').find('[value=""]').removeAttr('selected');
+	}
 
 	// mereset data
 	function resetData(){  

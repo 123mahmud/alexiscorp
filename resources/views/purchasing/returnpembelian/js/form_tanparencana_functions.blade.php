@@ -15,9 +15,9 @@
         total_gross += ( item_qty * item_price );
       }
 
-      var disc_value = $('#po_disc_value').val();
-      var disc_percent = $('#po_disc_percent').val();
-      var tax_percent = $('#po_tax_percent').val();
+      var disc_value = $('#pr_disc_value').val();
+      var disc_percent = $('#pr_disc_percent').val();
+      var tax_percent = $('#pr_tax_percent').val();
       disc_value = disc_value.replace(/\D/g, '');
       disc_value = disc_value != '' ? parseInt(disc_value) : 0;
       disc_percent = disc_percent != '' ? parseInt(disc_percent) : 0;
@@ -29,24 +29,24 @@
       var result_tax = result_disc * tax_percent;
       total_net = total_gross - disc_value - result_disc + result_tax;  
 
-      $('#po_total_gross').val(
+      $('#pr_total_gross').val(
         'Rp. ' + accounting.formatMoney(total_gross,"",0,'.',',')
       );
-      $('#po_total_net').val(
+      $('#pr_total_net').val(
         'Rp. ' + accounting.formatMoney(total_net,"",0,'.',',')
       );
   }
 
   function remove_detail(obj) {
     var tr = $(obj).parents('tr');
-    table_purchase_order_dt.row(tr).remove().draw();
+    table_purchase_return_dt.row(tr).remove().draw();
   }
 
   // Function untuk meng-insert sales plan
-  function insert_purchase_order() {
-    var data = $('#form_purchase_order').serialize();
+  function insert_purchase_return() {
+    var data = $('#form_purchase_return').serialize();
     $.ajax({
-      url: "{{ url('/purchasing/orderpembelian/insert_d_purchase_order') }}",
+      url: "{{ url('/purchasing/returnpembelian/insert_d_purchase_return') }}",
       type: 'POST',
       data: data,
       dataType: 'json',
@@ -77,10 +77,10 @@
     });
   }
 
-  function update_purchase_order() {
-    var data = $('#form_purchase_order').serialize();
+  function update_purchase_return() {
+    var data = $('#form_purchase_return').serialize();
     $.ajax({
-      url: "{{ url('/purchasing/orderpembelian/update_d_purchase_order') }}",
+      url: "{{ url('/purchasing/returnpembelian/update_d_purchase_return') }}",
       type: 'POST',
       data: data,
       dataType: 'json',
@@ -94,7 +94,7 @@
           });
 
           setTimeout(function(){
-            location.href = '{{ route('orderpembelian') }}#po_tanpa';
+            location.href = '{{ route('returnpembelian') }}#pr_tanpa';
           }, 3000);
         }
         else {
@@ -115,7 +115,7 @@
   
 
   // Function untuk menghitung grand total ketika menambahkan atau mengurangi item
-  function append_purchase_order_dt() {
+  function append_purchase_return_dt() {
       // Validasi
       var i_id = $('#i_name').val();
       var item = $('#i_name').select2('data')[0];
@@ -161,7 +161,7 @@
           var aksi = '<button type="button" class="btn btn-danger btn-hapus" onclick="remove_detail(this)"><i class="fa fa-trash-o"></i></button>';
 
           
-          table_purchase_order_dt.row.add([
+          table_purchase_return_dt.row.add([
             podt_item, podt_qty, podt_satuan, podt_prev_price, podt_price, harga_total, stock, aksi
           ]).draw();
         }
@@ -183,9 +183,9 @@
       $('#stock').val('');
   }
 
-  function remove_purchase_order_dt(obj) {
+  function remove_purchase_return_dt(obj) {
     var tr = $(obj).parents('tr');
-    table_purchase_order_dt.row(tr).remove().draw();
+    table_purchase_return_dt.row(tr).remove().draw();
   }
 
   

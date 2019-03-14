@@ -21,7 +21,7 @@
               <div class="col-md-6 col-sm-12 col-xs-12">
                 <select name="pp_status" class="form-control form-control-sm">
                   <option value="AP">Setuju</option>
-                  <option value="NAP">Tidak Setuju</option>
+                  <option value="NA">Tidak Setuju</option>
                 </select>
               </div>
 
