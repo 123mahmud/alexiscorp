@@ -56,28 +56,6 @@
         count_grandtotal();
     })
 
-    $('#po_supplier').select2({
-      placeholder: "Pilih Supplier",
-      ajax: {
-        url: '{{ url("/purchasing/orderpembelian/find_m_supplier") }}',
-        dataType: 'json',
-        data: function (params) {
-          return {
-              keyword: $.trim(params.term)
-          }
-        },
-        processResults: function (res) {
-            for(x in res.data) {
-              res.data[x].id = res.data[x].s_id; 
-              res.data[x].text = res.data[x].s_name; 
-            }
-            return {
-                results: res.data
-            };
-        }
-     }, 
-    });
-
     $('#po_purchase_plan').select2({
       placeholder: "Pilih Rencana Pembelian",
       ajax: {
@@ -106,9 +84,8 @@
       table_purchase_order_dt.clear().draw();
       var data = $(this).select2('data')[0];
       console.log(data);
-      var po_supplier = "<option value='" + data.pp_supplier + "'>" + data.s_name + "</option>";
-      $('#po_supplier').append(po_supplier);
-      $('#po_supplier').val(data.pp_supplier).trigger('change');
+      $('#po_supplier').val(data.pp_supplier);
+      $('#po_supplier_label').val(data.s_name);
       $.ajax({
         url: "{{ url('/purchasing/rencanapembelian/preview_rencanapembelian/') }}/" + id,
         type: 'GET',

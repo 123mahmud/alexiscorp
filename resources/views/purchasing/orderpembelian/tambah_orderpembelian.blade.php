@@ -108,9 +108,8 @@
 
                                 <div class="col-md-3 col-sm-6 col-xs-12">
                                   <div class="form-group">
-                                    <select class="form-control form-control-sm" name="po_supplier" id="po_supplier">
-                                      <option value="">--Pilih--</option>
-                                    </select>
+                                    <input type="hidden" name="po_supplier" id="po_supplier">
+                                    <input type="text" id="po_supplier_label" class="form-control form-control-sm" readonly>
                                   </div>
                                 </div>
 

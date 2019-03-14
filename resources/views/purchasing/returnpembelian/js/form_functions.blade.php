@@ -1,6 +1,6 @@
 <script>
   function count_grandtotal() {
-    var qty = $('[name="prdt_qty[]"]');
+    var qty = $('[name="prdt_qtyreturn[]"]');
       var price = $('[name="prdt_price[]"]');
       var item_qty, item_price, total_gross = 0, total_net = 0;
 

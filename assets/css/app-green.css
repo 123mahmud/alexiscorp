@@ -1478,7 +1478,7 @@ span a {
 /* Let's get this party started */
 ::-webkit-scrollbar {
   width: 7px;
-  height: 7px; }
+  height: 7px;background-color: rgba(255,255,255,.3); }
 
 /* Track */
 ::-webkit-scrollbar-track {

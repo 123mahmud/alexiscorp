@@ -74,7 +74,7 @@ class RencanaPembelianController extends Controller
     function find_d_purchase_plan(Request $req) {
 
        $data = array();
-       $rows = d_purchase_plan::leftJoin('m_supplier', 'pp_supplier', '=', 's_id')->leftJoin('users', 'pp_officer', '=', 'id')->orderBy('pp_tanggal', 'DESC');
+       $rows = d_purchase_plan::leftJoin('m_supplier', 'pp_supplier', '=', 's_id')->leftJoin('users', 'pp_officer', '=', 'id');
 
        // Filter berdasarkan tanggal dan keyword
        $pp_status = $req->pp_status;
@@ -85,6 +85,8 @@ class RencanaPembelianController extends Controller
        $tgl_awal = $tgl_awal != null ? $tgl_awal : '';
        $tgl_akhir = $req->tgl_akhir;
        $tgl_akhir = $tgl_akhir != null ? $tgl_akhir : '';
+
+
        if($tgl_awal != '' && $tgl_akhir != '') {
         $tgl_awal = preg_replace('/(\d+)[-\/](\d+)[-\/](\d+)/', '$3-$2-$1', $tgl_awal);
         $tgl_akhir = preg_replace('/(\d+)[-\/](\d+)[-\/](\d+)/', '$3-$2-$1', $tgl_akhir);
@@ -99,10 +101,31 @@ class RencanaPembelianController extends Controller
         $rows = $rows->where('pp_status', $pp_status);
        }
 
-       $rows = $rows->select('pp_id','pp_status', 'pp_officer', 'pp_code', 'pp_supplier','pp_status_po', 's_name', 'name', DB::raw("DATE_FORMAT(pp_tanggal_approve, '%d-%m-%Y') AS pp_tanggal_approve_label"), DB::raw("DATE_FORMAT(pp_tanggal, '%d-%m-%Y') AS pp_tanggal_label"), DB::raw("CASE pp_status WHEN 'WT' THEN 'Waiting' WHEN 'AP' THEN 'Disetujui' WHEN 'NAP' THEN 'Tidak Disetujui' END AS pp_status_label"), DB::raw("CASE pp_status_po WHEN 'NA' THEN 'Belum Aktif' WHEN 'A' THEN 'PO Aktif' WHEN 'NAP' THEN 'Tidak Disetujui' END AS pp_status_po_label"))->get();
+       // Filter untuk datatable
+       $search = $req->search;
+       $search = $search != null ? $search['value'] : '';
+       $start = $req->start;
+       $start = $start != null ? $start : 0;
+       $length = $req->length;
+       $length = $length != null ? $length : 10;
+       if($search != '') {
+        $rows = $rows->where('pp_code', 'LIKE', DB::raw("'%$search%'"))->orWhere('s_name', 'LIKE', DB::raw("'%$search%'"))->orWhere('name', 'LIKE', DB::raw("'%$search%'"));
+       }
+       $rows = $rows->skip($start)->take($length);
+
+       $rows = $rows->select('pp_id','pp_status', 'pp_officer', 'pp_code', 'pp_supplier','pp_status_po', 's_name', 'name', DB::raw("DATE_FORMAT(pp_tanggal_approve, '%d-%m-%Y') AS pp_tanggal_approve_label"), DB::raw("DATE_FORMAT(pp_tanggal, '%d-%m-%Y') AS pp_tanggal_label"), DB::raw("CASE pp_status WHEN 'WT' THEN 'Waiting' WHEN 'AP' THEN 'Disetujui' WHEN 'NA' THEN 'Tidak Disetujui' END AS pp_status_label"), DB::raw("CASE pp_status_po WHEN 'NA' THEN 'Belum Aktif' WHEN 'A' THEN 'PO Aktif' WHEN 'NAP' THEN 'Tidak Disetujui' END AS pp_status_po_label"))->orderBy('pp_tanggal', 'DESC')->orderBy('pp_code', 'DESC')->get();
        
 
-       $res = array('data' => $rows);
+       $draw = $req->draw;
+       $draw = $draw != null ? $draw : 1;
+       $recordsTotal = d_purchase_plan::count('pp_id');
+       $recordsFiltered = count($rows);
+       $res = [
+          'data' => $rows,
+          'recordsTotal' => $recordsTotal,
+          'recordsFiltered' => $recordsFiltered,
+          'draw' => $draw,
+       ];
        return response()->json($res);
     }
 

@@ -86,7 +86,7 @@
 
                                   <div class="col-md-3 col-sm-6 col-xs-12">
                                     <div class="form-group">
-                                      <input type="text" class="form-control form-control-sm datepicker" name="pr_tanggal">
+                                      <input type="text" class="form-control form-control-sm datepicker" name="pr_tanggal" value="{{ date('d-m-Y') }}">
                                     </div>
                                   </div>
 
@@ -117,7 +117,7 @@
 
                                   <div class="col-md-3 col-sm-6 col-xs-12">
                                     <div class="form-group">
-                                      <input type="text" class="form-control form-control-sm" readonly="" name="po_total_gross" id="po_total_gross">
+                                      <input type="text" class="form-control form-control-sm text-right" readonly="" name="po_total_gross" id="po_total_gross">
                                     </div>
                                   </div>
 
@@ -127,7 +127,7 @@
 
                                   <div class="col-md-3 col-sm-6 col-xs-12">
                                     <div class="form-group">
-                                      <input type="text" class="form-control form-control-sm" readonly="" name="" id="po_disc_percent">
+                                      <input type="text" class="form-control form-control-sm text-right" readonly="" name="" id="po_disc_percent">
                                     </div>
                                   </div>
 
@@ -137,7 +137,7 @@
 
                                   <div class="col-md-3 col-sm-6 col-xs-12">
                                     <div class="form-group">
-                                      <input type="text" class="form-control form-control-sm" readonly="" name="po_disc_value" id="po_disc_value">
+                                      <input type="text" class="form-control form-control-sm text-right" readonly="" name="po_disc_value" id="po_disc_value">
                                     </div>
                                   </div>
 
@@ -147,7 +147,7 @@
 
                                   <div class="col-md-3 col-sm-6 col-xs-12">
                                     <div class="form-group">
-                                      <input type="text" class="form-control form-control-sm" readonly="" name="po_tax_percent" id="po_tax_percent">
+                                      <input type="text" class="form-control form-control-sm text-right" readonly="" name="po_tax_percent" id="po_tax_percent">
                                     </div>
                                   </div>
 
@@ -157,7 +157,7 @@
 
                                   <div class="col-md-3 col-sm-6 col-xs-12">
                                     <div class="form-group">
-                                      <input type="text" class="form-control form-control-sm" readonly="" name="po_total_net" id="po_total_net">
+                                      <input type="text" class="form-control form-control-sm text-right" readonly="" name="po_total_net" id="po_total_net">
                                     </div>
                                   </div>
 
@@ -167,7 +167,7 @@
 
                                   <div class="col-md-3 col-sm-6 col-xs-12 ">
                                     <div class="form-group">
-                                      <input type="text" class="form-control form-control-sm" readonly="" name="pr_pricetotal" id="pr_pricetotal">
+                                      <input type="text" class="form-control form-control-sm text-right" readonly="" name="pr_pricetotal" id="pr_pricetotal">
                                     </div>
                                   </div>
 

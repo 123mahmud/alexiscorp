@@ -17,12 +17,12 @@
                     <div class="col-md-6 col-sm-12">
                       <div class="form-group">
                         <div class="input-group input-group-sm input-daterange">
-                          <input type="text" class="form-control" name="">
+                          <input type="text" class="form-control" name="" id="tgl_awal_revisi">
                           <span class="input-group-addon">-</span>
-                          <input type="text" class="form-control" name="">
+                          <input type="text" class="form-control" name="" id="tgl_akhir_revisi">
                           <div class="input-group-append">
-                          	<button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-                          	<button class="btn btn-secondary" type="button"><i class="fa fa-refresh"></i></button>
+                          	<button class="btn btn-primary" type="button" onclick="search_revisi_purchase_order()"><i class="fa fa-search"></i></button>
+                          	<button class="btn btn-secondary" type="button" onclick="refresh_revisi_purchase_order()"><i class="fa fa-refresh"></i></button>
                           </div>
                         </div>
                       </div>
@@ -34,10 +34,9 @@
             	
 
                 	<div class="table-responsive">
-                        <table class="table data-table table-hover" cellspacing="0">
+                        <table class="table table-hover" cellspacing="0" id="tabel_revisi_purchase_order">
                             <thead class="bg-primary">
                                 <tr>
-					                <th>No</th>
 					                <th>Tgl Order</th>
 					                <th>No Order</th>
 					                <th>Staff</th>
@@ -51,7 +50,6 @@
                             </thead>
                             <tbody>
                             	<tr>
-                            		<td>1</td>
                             		<td>31 Des 2018</td>
                             		<td>PO/201812/1</td>
                             		<td>Administrator</td>
