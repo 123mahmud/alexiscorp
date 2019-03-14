@@ -45,21 +45,20 @@
 
     tabel_purchase_order_tanparencana = $("#tabel_purchase_order_tanparencana").DataTable({
       "processing" : true,
-      "serverside" : true,
+      "serverSide" : true,
       ajax: {
         "url": "{{ url('purchasing/orderpembelian/find_d_purchase_order') }}",
         
-        data: function(){
+        data: function(data){
             var tgl_awal = $('#tgl_awal_tanparencana').val();
             var tgl_akhir = $('#tgl_akhir_tanparencana').val();
-            var outp = {
-              "_token": "{{ csrf_token() }}",
-              'use_purchase_plan' : 'no',
-              'tgl_awal' : tgl_awal,
-              'tgl_akhir' : tgl_akhir
-            }
+            
+            data["_token"] = "{{ csrf_token() }}";
+            data['use_purchase_plan'] = 'no';
+            data['tgl_awal'] = tgl_awal;
+            data['tgl_akhir'] = tgl_akhir;
 
-            return outp;
+            return data;
         },
       },
        columns: [
@@ -128,21 +127,19 @@
 
     tabel_purchase_order = $("#tabel_purchase_order").DataTable({
       "processing" : true,
-      "serverside" : true,
+      "serverSide" : true,
       ajax: {
         "url": "{{ url('purchasing/orderpembelian/find_d_purchase_order') }}",
         
-        data: function(){
+        data: function(data){
             var tgl_awal = $('#tgl_awal').val();
             var tgl_akhir = $('#tgl_akhir').val();
-            var outp = {
-              "_token": "{{ csrf_token() }}",
-              'use_purchase_plan' : 'no',
-              'tgl_awal' : tgl_awal,
-              'tgl_akhir' : tgl_akhir
-            }
+            data["_token"] = "{{ csrf_token() }}";
+            data['use_purchase_plan'] = 'yes';
+            data['tgl_awal'] = tgl_awal;
+            data['tgl_akhir'] = tgl_akhir;
 
-            return outp;
+            return data;
         },
       },
       columns: [
@@ -211,7 +208,7 @@
 
     tabel_history_purchase_order = $("#tabel_history_purchase_order").DataTable({
       "processing" : true,
-      "serverside" : true,
+      "serverSide" : true,
       ajax: {
         "url": "{{ route('find_d_purchase_order_dt') }}",
         

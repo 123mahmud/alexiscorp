@@ -1,56 +1,171 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{{asset('assets/img/games.ico')}}">
 
-    @include('layouts._head')
+    <title>Alexis</title>
 
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/login-mirip-discrottt/css/alamraya-style.css')}}">
+
+</head>
 <body>
-    <div class="auth">
-            <div class="auth-container">
-                <div class="card">
-                    <header class="auth-header">
-                        <h1 class="auth-title">
-                          <div class="logo">
-                              <span class="l l1"></span>
-                              <span class="l l2"></span>
-                              <span class="l l3"></span>
-                              <span class="l l4"></span>
-                              <span class="l l5"></span>
-                          </div>Alexis</h1>
-                    </header>
-                    <div class="auth-content">
-                        <p class="text-center">LOGIN TO CONTINUE</p>
-                        <form method="POST" action="{{ url('login') }}">
-                        {{ csrf_field() }}
-                            <div class="form-group">
-                                <label for="email">Username / E-mail</label>
-                                <input type="text" class="form-control underlined" name="email" id="email" placeholder="Your Username or E-mail address" required autofocus=""> </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control underlined" name="password" id="password" placeholder="Your password" required> </div>
-                            <div class="form-group">
-                                <label for="remember">
-                                    <input class="checkbox" id="remember" name="remember" type="checkbox">
-                                    <span>Remember me</span>
-                                </label>
-                                <!-- <a href="reset.html" class="forgot-btn pull-right">Forgot password?</a> -->
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-block btn-primary">Login</button>
-                            </div>
-                            <!-- <div class="form-group">
-                                <p class="text-muted text-center">Do not have an account?
-                                    <a href="signup.html">Sign Up!</a>
-                                </p>
-                            </div> -->
-                        </form>
+    <div class="background-loading">
+      {{-- ..Loading.. --}}
+      <div id="loader"></div>
+    </div>
+
+    <div id="particles-with-parallax"  data-friction-x="0.1" data-friction-y="0.1" data-scalar-x="25" data-scalar-y="15">
+            <div id="particles-js" class="layer" data-depth="0.40"></div>
+
+            <div data-depth="0.80" class="layer forest-1"></div>
+
+            <div data-depth="0.70" class="layer forest-2"></div>
+
+            <div data-depth="0.60" class="layer forest-3"></div>
+
+            <div data-depth="0.50" class="layer forest-4"></div>
+
+            <div data-depth="0.40" class="layer forest-5"></div>
+
+            <div data-depth="0.30" class="layer mountain-1"></div>
+
+            <div data-depth="0.20" class="layer mountain-2"></div>
+
+            <div data-depth="0.10" class="layer sky"></div>
+
+
+        
+    </div>
+
+
+        <div class="container">
+            <div class="ar-card">
+                <div class="ar-card-header">
+                    <img src="{{asset('assets/img/games.ico')}}" width="100px" height="100px" class="ar-card-logo">
+                    <div class="ar-card-header-h3">
+                        CV. Alexis
+                    </div>
+                    <div class="ar-card-header-h2">
+                        Login
                     </div>
                 </div>
-                <!-- <div class="text-center">
-                    <a href="index.html" class="btn btn-secondary btn-sm">
-                        <i class="fa fa-arrow-left"></i> Back to dashboard </a>
-                </div> -->
+                <div class="ar-card-body">
+                    <form method="POST" action="{{ url('login') }}">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <h5 class="form-label">Username</h5>
+                            <input type="text" class="form-control" name="email" id="email">
+                            @if ($errors->has('email'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <h5 class="form-label">Password</h5>
+                            <input type="password" class="form-control" name="password" id="password">
+                            @if ($errors->has('password'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('password') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <label for="remember" class="text-primary ">
+                            <input class="checkbox" id="remember" name="remember" type="checkbox">
+                            <span>Remember me</span>
+                        </label>
+                        <a class="anchor-link pull-right" href="javascript:void(0);">Forgot your password?</a>
+                        <button class="btn w-100 bg-primary" type="submit">Login</button>
+                        <label>
+                            <span class="span-underbutton">Need an account?</span>
+                            <a class="anchor-link" href="javascript:void(0);">Register</a>
+                        </label>
+                    </form>
+                </div>
             </div>
         </div>
-        @include('layouts._script')
+
+    <footer>
+        <span>Created by Ari Akbar Ind. 2019 Made with Ɛ>.</span>
+    </footer>
+    <script src="{{asset('assets/login-mirip-discrottt/js/jquery/jquery-3.3.1.js')}}"></script>
+    <script src="{{asset('assets/login-mirip-discrottt/js/parallax-mousehover/parallax.js')}}"></script>
+
+<script type="text/javascript">
+  $(window).ready(function(){
+
+    setTimeout(function(){
+      $('.content').addClass('animated fadeInLeft');
+
+      $('.background-loading').fadeOut('slow');
+    },1000);
+  });
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        // setTimeout(function(){
+
+
+            $(window).resize(function(){
+
+                console.log('resize');
+
+                parallax_func();
+
+
+            });
+
+            parallax_func();
+
+            function parallax_func(){
+                if($(window).width() > 700){
+
+                    var particles_js = document.getElementById('particles-with-parallax');
+
+                    var parallax = new Parallax(particles_js, {
+                        limitX:50,
+                        limitY:50,
+                        relativeInput:true,
+                        pointerEvents:true
+                    });
+                } else {
+                    parallax.destroy();
+                }
+            }
+        // },500);
+    });
+
+    // Collapse Navbar
+    var navbarCollapse = function() {
+        var scrollHeight = $(document).height();
+        var scrollPosition = $(window).height() + $(window).scrollTop();
+        if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+            // when scroll to bottom of the page
+          $('footer').addClass("footer");
+        } else {
+          $('footer').removeClass("footer");
+        }
+        // console.log(scrollHeight );
+        // console.log(scrollPosition );
+    };
+
+    $(window).scroll(navbarCollapse);
+
+    var themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) : {};
+
+    var themeName = themeSettings.themeName || '';
+
+    if (themeName) {
+        $('body').addClass(themeName);
+    } else {
+        console.log('nothing');
+    }
+</script>
 </body>
 </html>

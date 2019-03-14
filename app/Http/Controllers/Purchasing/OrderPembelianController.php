@@ -11,6 +11,8 @@ use App\model\purchasing\d_purchase_plan;
 use App\model\purchasing\d_purchase_plan_dt;
 use App\model\master\m_item;
 use App\model\master\m_supplier;
+
+
 use DB;
 use Response;
 
@@ -106,7 +108,7 @@ class OrderPembelianController extends Controller
     function find_d_purchase_order(Request $req) {
 
        $data = array();
-       $rows = d_purchase_order::leftJoin('m_supplier', 'po_supplier', '=', 's_id')->leftJoin('users', 'po_officer', '=', 'id')->orderBy('po_tanggal', 'DESC');
+       $rows = d_purchase_order::leftJoin('m_supplier', 'po_supplier', '=', 's_id')->leftJoin('users', 'po_officer', '=', 'id')->orderBy('po_tanggal', 'DESC')->orderBy('po_code', 'DESC');
 
        // Filter berdasarkan tanggal dan keyword
        $po_status = $req->po_status;
@@ -139,11 +141,31 @@ class OrderPembelianController extends Controller
         $rows = $rows->where([['po_purchase_plan', '!=', 0]]);
        }
 
+      // Filter untuk datatable
+       $search = $req->search;
+       $search = $search != null ? $search['value'] : '';
+       $start = $req->start;
+       $start = $start != null ? $start : 0;
+       $length = $req->length;
+       $length = $length != null ? $length : 10;
+       if($search != '') {
+        $rows = $rows->where('po_code', 'LIKE', DB::raw("'%$search%'"))->orWhere('s_name', 'LIKE', DB::raw("'%$search%'"))->orWhere('name', 'LIKE', DB::raw("'%$search%'"));
+       }
+       $rows = $rows->skip($start)->take($length);
+
 
        $rows = $rows->select('po_id','po_status', 'po_total_net', DB::raw("CONCAT('Rp ', FORMAT(po_total_net, 0)) AS po_total_net_label"), 'po_method', 'po_officer', 'po_code', 'po_supplier', 's_name', 'name', DB::raw("DATE_FORMAT(po_tanggal_kirim, '%d-%m-%Y') AS po_tanggal_kirim_label"), DB::raw("DATE_FORMAT(po_tanggal, '%d-%m-%Y') AS po_tanggal_label"), DB::raw("CASE po_status WHEN 'WT' THEN 'Waiting' WHEN 'AP' THEN 'Disetujui' WHEN 'NA' THEN 'Tidak Disetujui' END AS po_status_label"))->get();
        
-
-       $res = array('data' => $rows);
+       $draw = $req->draw;
+       $draw = $draw != null ? $draw : 1;
+       $recordsTotal = $use_purchase_plan == 'no' ? d_purchase_order::where('po_purchase_plan', 0)->count('po_id') : d_purchase_order::where([['po_purchase_plan', '!=', 0]])->count('po_id');
+       $recordsFiltered = count($rows);
+       $res = [
+          'data' => $rows,
+          'recordsTotal' => $recordsTotal,
+          'recordsFiltered' => $recordsFiltered,
+          'draw' => $draw,
+       ];
        return response()->json($res);
     }
 
@@ -269,6 +291,7 @@ class OrderPembelianController extends Controller
           'po_tanggal_kirim' => $po_tanggal_kirim,
           'po_supplier' => $po_supplier,
           'po_status' => 'WT',
+          'po_comp' => 1,
           'po_disc_value' => $po_disc_value,
           'po_disc_percent' => $po_disc_percent,
           'po_tax_percent' => $po_tax_percent,

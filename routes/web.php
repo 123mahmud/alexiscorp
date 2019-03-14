@@ -167,6 +167,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/purchasing/returnpembelian/update_d_purchase_return', 'Purchasing\ReturnPembelianController@update_d_purchase_return')->middleware('auth')->name('update_d_purchase_return');
 	Route::get('/purchasing/returnpembelian/approve_d_purchase_return', 'Purchasing\ReturnPembelianController@approve_d_purchase_return')->middleware('auth')->name('approve_d_purchase_return');
 	Route::get('/purchasing/returnpembelian/find_m_supplier', 'Purchasing\ReturnPembelianController@find_m_supplier')->middleware('auth');
+	Route::get('/purchasing/returnpembelian/find_d_purchase_order', 'Purchasing\ReturnPembelianController@find_d_purchase_order')->middleware('auth');
+	Route::get('/purchasing/returnpembelian/preview_orderpembelian/{id}', 'Purchasing\ReturnPembelianController@preview_orderpembelian')->middleware('auth');
 	
 	// Rencana bahan baku
 	Route::get('/purchasing/rencanabahanbaku/rencanabahanbaku', 'PurchaseController@rencanabahanbaku')->name('rencanabahanbaku');
@@ -180,8 +182,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/stok/opnamebahanbaku/index', 'StokController@opnamebahanbaku')->name('opnamebahanbaku');
 
 	Route::get('/stok/pencatatanbarangmasuk/index', 'StokController@pencatatanbarangmasuk')->name('pencatatanbarangmasuk');
-	Route::get('/stok/pencatatanbarangmasuk/create', 'StokController@tambah_pencatatanbarangmasuk')->name('tambah_pencatatanbarangmasuk');
+	Route::match(['get', 'post'],'/stok/pencatatanbarangmasuk/create', 'StokController@tambah_pencatatanbarangmasuk')->name('tambah_pencatatanbarangmasuk');
 	Route::get('/stok/pencatatanbarangmasuk/getinfopo', 'StokController@getinfopo')->name('getinfopo');
+	Route::get('/stok/pencatatanbarangmasuk/getpbdt', 'StokController@getpbdt')->name('getpbdt');
 
 	Route::get('/stok/penggunaanbahanbaku/index', 'StokController@penggunaanbahanbaku')->name('penggunaanbahanbaku');
 	Route::get('/stok/penggunaanbahanbaku/create', 'StokController@tambah_penggunaanbahanbaku')->name('tambah_penggunaanbahanbaku');

@@ -24,8 +24,8 @@
                           <span class="input-group-addon">-</span>
                           <input type="text" id="tgl_akhir" class="form-control" name="">
                           <div class="input-group-append">
-                          	<button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-                          	<button class="btn btn-secondary" type="button"><i class="fa fa-refresh"></i></button>
+                          	<button class="btn btn-primary" type="button" onclick="search_purchase_plan()"><i class="fa fa-search"></i></button>
+                          	<button class="btn btn-secondary" type="button" onclick="refresh_purchase_plan()"><i class="fa fa-refresh"></i></button>
                           </div>
                         </div>
                       </div>
@@ -35,8 +35,9 @@
                         <div class="form-group">
                             <select name="pp_status" id="pp_status" class="form-control form-control-sm">
                                 <option value="">Tampilkan Data : Semua</option>
-                                <option value="wait">Tampilkan Data : Waiting</option>
-                                <option value="confirm">Tampilkan Data : Disetujui</option>
+                                <option value="WT">Tampilkan Data : Waiting</option>
+                                <option value="AP">Tampilkan Data : Disetujui</option>
+                                <option value="NA">Tampilkan Data : Tidak Disetujui</option>
                             </select>
                         </div>
                     </div>

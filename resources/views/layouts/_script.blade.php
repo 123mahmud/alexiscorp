@@ -27,6 +27,33 @@
 <script src="{{asset('assets/js/vue.js')}}"></script>
 
 <script src="{{asset('assets/inputmask/min/jquery.inputmask.bundle.min.js')}}"></script>
+{{-- Loading --}}
+
+
+<script type="text/javascript">
+  $(window).ready(function(){
+
+    setTimeout(function(){
+      $('.content').addClass('animated fadeInLeft');
+
+      $('.background-loading').fadeOut('slow');
+    },500);
+    
+  });
+
+  $(document).on('click', '.color-item', function(){
+    $('.content').removeClass('animated fadeInLeft');
+    $('.background-loading').css('display', 'block');
+    // console.log('click');
+    setTimeout(function(){
+      $('.content').addClass('animated fadeInLeft');
+
+      $('.background-loading').fadeOut('slow');
+    },500);
+  })
+
+</script>
+{{-- End Loading --}}
 <script type="text/javascript">
   var getstorage;
   $('#sidebar-collapse-btn, #sidebar-overlay').click(function(){
@@ -42,6 +69,7 @@
   if (getstorage) {
     $('#app').addClass(getstorage);
   }  
+
 
 </script>
 <script type="text/javascript">

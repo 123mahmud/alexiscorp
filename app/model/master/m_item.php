@@ -32,7 +32,7 @@ class m_item extends Model {
       }
 
 
-      $m_item = $m_item->select('i_id', 'i_code', 'i_name', 'i_sat1', 'i_sat2', 'i_sat3','i_sat_hrg1', 'i_sat_hrg2', 'i_sat_hrg3', DB::raw("(SELECT s_name FROM m_satuan WHERE s_id = m_item.i_sat1) AS i_sat1_label"),  DB::raw("(SELECT s_name FROM m_satuan WHERE s_id = m_item.i_sat2) AS i_sat2_label"),  DB::raw("(SELECT s_name FROM m_satuan WHERE s_id = m_item.i_sat3) AS i_sat3_label"), DB::raw("IFNULL((SELECT s_qty FROM d_stock WHERE s_item = m_item.i_id), 0) AS stock"), DB::raw("IFNULL((SELECT podt_price FROM d_purchase_order_dt WHERE podt_item = m_item.i_id AND podt_purchase_order = (SELECT MAX(podt_purchase_order) WHERE podt_item = m_item.i_id) LIMIT 1), 0) AS prev_price"));
+      $m_item = $m_item->select('i_id', 'i_code', 'i_name', 'i_sat1', 'i_sat2', 'i_sat3','i_sat_hrg1', 'i_sat_hrg2', 'i_sat_hrg3', DB::raw("(SELECT s_name FROM m_satuan WHERE s_id = m_item.i_sat1) AS i_sat1_label"),  DB::raw("(SELECT s_name FROM m_satuan WHERE s_id = m_item.i_sat2) AS i_sat2_label"),  DB::raw("(SELECT s_name FROM m_satuan WHERE s_id = m_item.i_sat3) AS i_sat3_label"), DB::raw("IFNULL((SELECT s_qty FROM d_stock WHERE s_item = m_item.i_id), 0) AS stock"), DB::raw("IFNULL((SELECT podt_price FROM d_purchase_order_dt WHERE podt_item = m_item.i_id AND podt_purchase_order = (SELECT MAX(podt_purchase_order) from d_purchase_order_dt WHERE podt_item = m_item.i_id) LIMIT 1), 0) AS prev_price"));
 
       $res = [
         'data' => $m_item->get()
@@ -41,5 +41,22 @@ class m_item extends Model {
 
 
       return $res;
+    }
+
+    public function satuan_terkecil($id_item, $qty_item, $id_satuan) {
+      // Function untuk konversi satuan ke satuan terkecil
+      $qty_terkecil = 0;
+      $m_item = $this::where('i_id', $id_item)->first();
+      if( $id_satuan == $m_item->i_sat1 )  {
+        $qty_terkecil = $qty_item * $m_item->i_sat_isi1 ;
+      }
+      else if( $id_satuan == $m_item->i_sat2 )  {
+        $qty_terkecil = $qty_item * $m_item->i_sat_isi2 * $m_item->i_sat_isi1;
+      }
+      else if( $id_satuan == $m_item->i_sat3 )  {
+        $qty_terkecil = $qty_item * $m_item->i_sat_isi3 * $m_item->i_sat_isi1;
+      }
+
+      return $qty_terkecil;
     }
 }

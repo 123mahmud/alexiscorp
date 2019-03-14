@@ -11,7 +11,7 @@
     table_purchase_return_dt = $('#table_purchase_return_dt').DataTable({
       "columnDefs" : [
         {
-          'targets' : [1, 3, 4, 5],
+          'targets' : [1, 4, 5],
           'className' : 'text-right'
         },
         {
@@ -33,24 +33,9 @@
             qty = qty != '' ? parseInt(qty) : 0;
             var subtotal = qty * prdt_price;
             subtotal = 'Rp ' + accounting.formatMoney(subtotal,"",0,'.',',');
-            alert(subtotal);
             tr.find('td:eq(5)').text(subtotal);
 
-            // Validasi
-            var qtybeli = $(this).val();
-            qtybeli = qtybeli != '' ? parseInt(qtybeli) : 0;
-            if(qty > qtybeli) {
-              tr.find("[name='prdt_qtyreturn[]']").val(1);
-              $(this).trigger('change');
-              $.toast({
-                heading: 'Peringatan !',
-                text: 'Jumlah barang yang dikembalikan tidak boleh melebihi jumlah barang yang dibeli',
-                bgColor: '#d63031',
-                textColor: 'white',
-                loaderBg: '#ff7675',
-                icon: 'error'
-              });
-            }
+            
           });
           
           prdt_qty.on('keyup change', function(){
@@ -66,7 +51,7 @@
             tr.find('td:eq(5)').text(subtotal);
 
             // Validasi
-            var qtybeli = tr.find('[name="podt_qtybeli[]"]').val();
+            var qtybeli = tr.find('[name="prdt_qtybeli[]"]').val();
             qtybeli = qtybeli != '' ? parseInt(qtybeli) : 0;
             if(qty > qtybeli) {
               $(this).val(1);
@@ -154,7 +139,7 @@
           $('#po_total_net').val( 'Rp ' + accounting.formatMoney(purchase_order.po_total_net,"",0,'.',',') );
 
           // Menampilan daftar item berdasarkan PO yang dipilih
-            var purchase_order_dt = response.purchase_order_dt;
+          var purchase_order_dt = response.purchase_order_dt;
           if(purchase_order_dt.length > 0) {
             for(x in purchase_order_dt) {
               unit = purchase_order_dt[x];

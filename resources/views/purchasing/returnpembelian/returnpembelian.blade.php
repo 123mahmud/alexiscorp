@@ -45,5 +45,13 @@
 	</section>
 
 </article>
+	@section('extra_script')
+		@include('purchasing/returnpembelian/modal_detail')
+		@include('purchasing/returnpembelian/includes/modal_detail_revisi_po')
+		@include('purchasing/returnpembelian/includes/modal_update_status')
+		@include('purchasing/returnpembelian/js/functions')
+		@include('purchasing/returnpembelian/js/commander')
+	@endsection
+
 
 @endsection

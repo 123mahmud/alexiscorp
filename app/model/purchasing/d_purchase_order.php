@@ -4,8 +4,6 @@ namespace App\model\purchasing;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Lib\format;
-
 
 use DB;
 

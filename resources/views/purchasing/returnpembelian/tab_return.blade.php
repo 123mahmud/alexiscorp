@@ -21,12 +21,12 @@
                     <div class="col-md-6 col-sm-12">
                       <div class="form-group">
                         <div class="input-group input-group-sm input-daterange">
-                          <input type="text" class="form-control" name="">
+                          <input type="text" class="form-control" name="tgl_awal" id="tgl_awal">
                           <span class="input-group-addon">-</span>
-                          <input type="text" class="form-control" name="">
+                          <input type="text" class="form-control" name="tgl_akhir" id="tgl_akhir">
                           <div class="input-group-append">
-                          	<button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-                          	<button class="btn btn-secondary" type="button"><i class="fa fa-refresh"></i></button>
+                          	<button class="btn btn-primary" type="button" onclick="search_purchase_return()"><i class="fa fa-search"></i></button>
+                          	<button class="btn btn-secondary" type="button"  onclick="refresh_purchase_return()"><i class="fa fa-refresh"></i></button>
                           </div>
                         </div>
                       </div>
@@ -38,10 +38,9 @@
             	
 
                 	<div class="table-responsive">
-                        <table class="table data-table table-hover" cellspacing="0" id="tabel_purchase_return">
+                        <table class="table table-hover" cellspacing="0" id="tabel_purchase_return">
                             <thead class="bg-primary">
                                 <tr>
-					                <th>No</th>
 					                <th>Tgl Return</th>
 					                <th>ID Return</th>
 					                <th>Staff</th>
