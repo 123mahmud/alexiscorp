@@ -20,7 +20,7 @@
     <div class="row">
 
       <div class="col-12">
-        
+
         <div class="card">
                     <div class="card-header bordered p-2">
                       <div class="header-block">
@@ -33,7 +33,7 @@
                     <div class="card-block">
                         <section>
 
-                          <div class="row">
+                          <div class="row" id="myRow">
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Nama Barang</label>
@@ -54,10 +54,10 @@
                                 <select class="form-control form-control-sm tipe_barang data" name="tipe_barang" required="">
                                   <option value="" selected="" disabled="">--Pilih Type Barang--</option>
                                   <option value="BB">Bahan Baku</option>
-                                  <option value="SP">Spare Part</option>
                                   <option value="BJ">Barang Jual</option>
-                                  <option value="LL">Lain-lain</option>
                                   <option value="BP">Barang Produksi</option>
+                                  <option value="SP">Spare Part</option>
+                                  <option value="LL">Lain-lain</option>
                                 </select>
                               </div>
                             </div>
@@ -66,24 +66,15 @@
                               <label>Kelompok Barang</label>
                             </div>
 
-                            <div class="col-md-9 col-sm-6 col-xs-12">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
                                 <select class="form-control form-control-sm data" name="kelompok_barang" required="">
                                   <option value="" selected="" disabled="">--Pilih Kelompok Barang--</option>
-                               
-                                  <option value="BSJ">Barang Setengah Jadi</option>
-                                  <option value="BJD">Barang Jadi</option>
+                                  @foreach($data['group'] as $group)
+                                  <option value="{{ $group->g_id }}">{{ $group->g_name }}</option>
+                                  @endforeach
+                                  <!-- <option value="BJD">Barang Jadi</option> -->
                                 </select>
-                              </div>
-                            </div>
-                            
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Kode Barang</label>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <div class="form-group">
-                                <input type="text" class="form-control form-control-sm kode_barang data" readonly="" name="kode_barang" required="">
                               </div>
                             </div>
 
@@ -173,39 +164,13 @@
                               </div>
                             </div>
 
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Harga Persatuan</label>
-                            </div>
-                            
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Harga Satuan Utama</label>
-                              <div class="form-group">
-                               <input type="text" class="form-control-sm form-control harga harga_satuan_utama text-right data" name="harga_satuan_utama" required="">
-                              </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Harga Satuan Alternatif 1</label>
-                              <div class="form-group">
-                               <input type="text" class="form-control-sm form-control harga harga_satuan_1 text-right" name="harga_satuan_1" readonly="">
-                              </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Harga Satuan Alternatif 2</label>
-                              <div class="form-group">
-                               <input type="text" class="form-control-sm form-control harga harga_satuan_2  text-right" name="harga_satuan_2" readonly="">
-                              </div>
-                            </div>
-
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Detail</label>
                             </div>
 
                             <div class="col-md-9 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <textarea class="form-control data" name="detail" required=""></textarea>
+                                <textarea class="form-control" name="detail" required=""></textarea>
                               </div>
                             </div>
 
@@ -264,7 +229,7 @@
   $('.isi_satuan_1').change(function(){
     isi_satuan_1 = $(this).val();
     satuan_1 = $('.satuan_1').val();
-    harga = $('.harga_satuan_utama').val();
+    // harga = $('.harga_satuan_utama').val();
     if(satuan_1 == ''){
        $.toast({
               heading: 'Warning',
@@ -279,13 +244,13 @@
         if(isi_satuan_1 != ''){
                  harga = harga.replace(/\./g,'');
                  harga = harga.replace(/,/g,'.');
-        
+
                  hasilharga2 = parseFloat(parseFloat(isi_satuan_1) * parseFloat(harga)).toFixed(2);
-        
-                $('.harga_satuan_1').val(addCommas(hasilharga2));
+
+                // $('.harga_satuan_1').val(addCommas(hasilharga2));
           }
           else {
-            $('.harga_satuan_1').val('');
+            // $('.harga_satuan_1').val('');
           }
       }
     }
@@ -295,7 +260,7 @@
    $('.isi_satuan_2').change(function(){
     isi_satuan_1 = $(this).val();
     satuan_1 = $('.satuan_2').val();
-    harga = $('.harga_satuan_utama').val();
+    // harga = $('.harga_satuan_utama').val();
     if(satuan_1 == ''){
        $.toast({
               heading: 'Warning',
@@ -313,85 +278,85 @@
 
              hasilharga2 = parseFloat(parseFloat(isi_satuan_1) * parseFloat(harga)).toFixed(2);
 
-            $('.harga_satuan_2').val(addCommas(hasilharga2));
+            // $('.harga_satuan_2').val(addCommas(hasilharga2));
          }
          else {
-          $('.harga_satuan_2').val('');
+          // $('.harga_satuan_2').val('');
          }
       }
     }
   });
-   $('.harga_satuan_utama').change(function(){
-    satuan_1 = $('.satuan_1').val();
-    harga = $(this).val();
-    harga = harga.replace(/\./g,'');
-    harga = harga.replace(/,/g,'.');
-    if(satuan_1 != ''){
-      isi_satuan_1 = $('.isi_satuan_1').val();
-      
+   // $('.harga_satuan_utama').change(function(){
+   //  satuan_1 = $('.satuan_1').val();
+   //  harga = $(this).val();
+   //  harga = harga.replace(/\./g,'');
+   //  harga = harga.replace(/,/g,'.');
+   //  if(satuan_1 != ''){
+   //    isi_satuan_1 = $('.isi_satuan_1').val();
+   //
+   //
+   //     hasilharga = parseFloat(parseFloat(isi_satuan_1) * parseFloat(harga));
+   //     $('.harga_satuan_1').val(hasilharga);
+   //  }
+   //
+   //    satuan_2 = $('.satuan_2').val();
+   //  if(satuan_2 != ''){
+   //    isi_satuan_2 = $('.isi_satuan_2').val();
+   //    if(isi_satuan_2 != ''){
+   //        hasilharga2 = parseFloat(parseFloat(isi_satuan_2) * parseFloat(harga)).toFixed(2);
+   //
+   //      $('.harga_satuan_2').val(addCommas(hasilharga2));
+   //    }
+   //  }
+   // });
 
-       hasilharga = parseFloat(parseFloat(isi_satuan_1) * parseFloat(harga));
-       $('.harga_satuan_1').val(hasilharga);
-    }
+   // $('.harga_satuan_1').change(function(){
+   //    isi_satuan_1 = $(this).val();
+   //    satuan_1 = $('.satuan_1').val();
+   //
+   //
+   //    if(satuan_1 == ''){
+   //       $.toast({
+   //              heading: 'Warning',
+   //              text: 'Satuan Alternatif 1 Tidak di isi :)',
+   //              showHideTransition: 'plain',
+   //              icon: 'warning'
+   //          });
+   //         $(this).val('');
+   //    }
+   //
+   //
+   // });
+   //
+   // $('.harga_satuan_2').change(function(){
+   //    isi_satuan_1 = $(this).val();
+   //    satuan_1 = $('.satuan_2').val();
+   //    if(satuan_1 == ''){
+   //       $.toast({
+   //              heading: 'Warning',
+   //              text: 'Satuan Alternatif 2 Tidak di isi :)',
+   //              showHideTransition: 'plain',
+   //              icon: 'warning'
+   //          });
+   //         $(this).val('');
+   //    }
+   // });
 
-      satuan_2 = $('.satuan_2').val();
-    if(satuan_2 != ''){
-      isi_satuan_2 = $('.isi_satuan_2').val();
-      if(isi_satuan_2 != ''){
-          hasilharga2 = parseFloat(parseFloat(isi_satuan_2) * parseFloat(harga)).toFixed(2);
-
-        $('.harga_satuan_2').val(addCommas(hasilharga2));
-      }     
-    }
-   });
-
-   $('.harga_satuan_1').change(function(){
-      isi_satuan_1 = $(this).val();
-      satuan_1 = $('.satuan_1').val();
-
-    
-      if(satuan_1 == ''){
-         $.toast({
-                heading: 'Warning',
-                text: 'Satuan Alternatif 1 Tidak di isi :)',
-                showHideTransition: 'plain',
-                icon: 'warning'
-            });
-           $(this).val('');
-      }
-
-
-   });
-
-   $('.harga_satuan_2').change(function(){
-      isi_satuan_1 = $(this).val();
-      satuan_1 = $('.satuan_2').val();
-      if(satuan_1 == ''){
-         $.toast({
-                heading: 'Warning',
-                text: 'Satuan Alternatif 2 Tidak di isi :)',
-                showHideTransition: 'plain',
-                icon: 'warning'
-            });
-           $(this).val('');
-      }
-   });
-
-  $('.tipe_barang').change(function(){
-    tipe_barang = $(this).val();
-
-    $.ajax({
-      data : {tipe_barang},
-      type : "get",
-      url : baseUrl + '/master/databarang/tipe_barang',
-      dataType : "json",
-      success : function(response){
-        console.log(response);
-        console.log('response');
-          $('.kode_barang').val(response);
-      }
-    })
-  })
+  // $('.tipe_barang').change(function(){
+  //   tipe_barang = $(this).val();
+  //
+  //   $.ajax({
+  //     data : {tipe_barang},
+  //     type : "get",
+  //     url : baseUrl + '/master/databarang/tipe_barang',
+  //     dataType : "json",
+  //     success : function(response){
+  //       console.log(response);
+  //       console.log('response');
+  //         $('.kode_barang').val(response);
+  //     }
+  //   })
+  // })
 
   $('.harga').maskMoney({thousands:'.', decimal:',', precision:2});
 
@@ -404,7 +369,7 @@
 
       if(satuan_utama != ''){
         isi_satuan_utama = $('.isi_satuan_utama').val();
-        harga_satuan_utama = $('.harga_satuan_utama').val();
+        // harga_satuan_utama = $('.harga_satuan_utama').val();
 
         if(isi_satuan_utama == ''){
           $.toast({
@@ -415,21 +380,21 @@
           });
           return false;
         }
-        if(harga_satuan_utama == ''){
-           $.toast({
-              heading: 'Warning',
-              text: 'Harga Utama Belum di isi :)',
-              showHideTransition: 'plain',
-              icon: 'warning'
-          });
-            return false;
-        }
+        // if(harga_satuan_utama == ''){
+        //    $.toast({
+        //       heading: 'Warning',
+        //       text: 'Harga Utama Belum di isi :)',
+        //       showHideTransition: 'plain',
+        //       icon: 'warning'
+        //   });
+        //     return false;
+        // }
 
       } // satuan utama
 
       if(satuan_1 != ''){
         isi_satuan_1 = $('.isi_satuan_1').val();
-       harga_satuan_1 = $('.harga_satuan_1').val();
+       // harga_satuan_1 = $('.harga_satuan_1').val();
 
         if(isi_satuan_1 == ''){
            $.toast({
@@ -440,20 +405,20 @@
           });
             return false;
         }
-        if(harga_satuan_1== ''){
-           $.toast({
-              heading: 'Warning',
-              text: 'Harga Satuan 1 Belum di isi :)',
-              showHideTransition: 'plain',
-              icon: 'warning'
-          });
-            return false;
-        }
+        // if(harga_satuan_1== ''){
+        //    $.toast({
+        //       heading: 'Warning',
+        //       text: 'Harga Satuan 1 Belum di isi :)',
+        //       showHideTransition: 'plain',
+        //       icon: 'warning'
+        //   });
+        //     return false;
+        // }
       } // satuan 1
 
       if(satuan_2 != ''){
         isi_satuan_2 = $('.isi_satuan_2').val();
-        harga_satuan_2 = $('.harga_satuan_2').val();
+        // harga_satuan_2 = $('.harga_satuan_2').val();
 
         if(isi_satuan_2 == ''){
            $.toast({
@@ -465,28 +430,36 @@
             return false;
         }
 
-        if(harga_satuan_2 == ''){
-           $.toast({
-              heading: 'Warning',
-              text: 'Harga Alternatif 2 Belum di isi :)',
-              showHideTransition: 'plain',
-              icon: 'warning'
-          });
-            return false;
-        }
+        // if(harga_satuan_2 == ''){
+        //    $.toast({
+        //       heading: 'Warning',
+        //       text: 'Harga Alternatif 2 Belum di isi :)',
+        //       showHideTransition: 'plain',
+        //       icon: 'warning'
+        //   });
+        //     return false;
+        // }
       } // end satuan 2
 
-      data = $('.data').val();
-      if(data == ''){
-         $.toast({
-              heading: 'Warning',
-              text: 'Mohon Lengkapi Data :)',
-              showHideTransition: 'plain',
-              icon: 'warning'
-          });
-            return false;
+      lanjut = false;
+      $.each($('.data'), function() {
+        data = $(this).val();
+        if (data == '' || data == null) {
+          lanjut = false
+          return false;
+        } else {
+          lanjut = true;
+        }
+      });
+      if(lanjut == false){
+        $.toast({
+          heading: 'Warning',
+          text: 'Mohon Lengkapi Data :)',
+          showHideTransition: 'plain',
+          icon: 'warning'
+        });
+        return false;
       }
-
        $.confirm({
         animation: 'RotateY',
         closeAnimation: 'scale',
@@ -499,7 +472,7 @@
             btnClass: 'btn-blue',
                 text:'Ya',
                 action : function(){
-                 
+
                     $.ajax({
                       data : form_data,
                       url : baseUrl + '/master/databarang/save',
@@ -519,11 +492,11 @@
 
                           setTimeout(function(){
                           window.location.href = baseUrl + '/master/databarang/index';
-                             
+
                             },500);
                       }
                     });
-             
+
                 }
               },
               cancel:{
@@ -534,7 +507,7 @@
               }
           }
       });
-			
+
 		});
 
 

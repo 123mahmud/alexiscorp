@@ -23,7 +23,8 @@ class MasterBarangController extends Controller
     {
         $data['satuan'] = DB::table('m_satuan')
                           ->get();
-
+        $data['group'] = DB::table('m_group')
+          ->get();
         return view('master/databarang/tambah_databarang', compact('data'));
     }
     public function edit_databarang($id)
@@ -43,7 +44,7 @@ class MasterBarangController extends Controller
         $caritipe = DB::select("SELECT  substring(max(i_code),4) as id from m_item
                                   WHERE i_type = '$tipe_barang'");
 
-     
+
         $index = (integer)$caritipe[0]->id + 1;
         $index = str_pad($index, 4, '0' , STR_PAD_LEFT);
         $nota = $tipe_barang . '-' . $index;
@@ -55,7 +56,6 @@ class MasterBarangController extends Controller
             $urut = DB::table('m_item')
                     ->max('i_id');
 
-
             $harga_satuan_utama = str_replace(".", "", $request->harga_satuan_utama);
             $harga_satuan_utama = str_replace(",", ".", $harga_satuan_utama);
 
@@ -65,36 +65,36 @@ class MasterBarangController extends Controller
             $harga_satuan_2 = str_replace(".", "", $request->harga_satuan_2);
             $harga_satuan_2 = str_replace(",", ".", $harga_satuan_2);
 
-
             $urut = $urut + 1;
             $now = Carbon::now();
 
+            // get a new 'kode barang'
+            $kode_barang = $this->tipe_barang($request);
+            $kode_barang = json_decode($kode_barang);
+
             $masterbarang = new MasterBarang();
             $masterbarang->i_id = $urut;
-            $masterbarang->i_code = $request->kode_barang;
+            $masterbarang->i_code = $kode_barang;
             $masterbarang->i_type = $request->tipe_barang;
             $masterbarang->i_code_group = $request->kelompok_barang;
             $masterbarang->i_name = $request->nama_barang;
 
-
-
-
             $masterbarang->i_sat1 = $request->satuan_utama;
             if($request->satuan_1 != ''){
                 $masterbarang->i_sat2 = $request->satuan_1;
-                $masterbarang->i_sat_hrg2 = $harga_satuan_1;
+                // $masterbarang->i_sat_hrg2 = $harga_satuan_1;
                 $masterbarang->i_sat_isi2 = $request->isi_satuan_1;
             }
             if($request->satuan_2 != ''){
                 $masterbarang->i_sat_isi3 = $request->isi_satuan_2;
-                $masterbarang->i_sat_hrg3 = $harga_satuan_2;
+                // $masterbarang->i_sat_hrg3 = $harga_satuan_2;
                 $masterbarang->i_sat3 = $request->satuan_2;
             }
-          
+
             $masterbarang->i_sat_isi1 = $request->isi_satuan_utama;
-            $masterbarang->i_sat_hrg1 =$harga_satuan_utama;
+            // $masterbarang->i_sat_hrg1 =$harga_satuan_utama;
             $masterbarang->i_min_stock =$request->min_stock;
-    
+
             $masterbarang->i_det = $request->detail;
             $masterbarang->i_persentase = $request->persentase;
             $masterbarang->i_insert_by = $request->username;
@@ -135,7 +135,7 @@ class MasterBarangController extends Controller
                 'i_persentase' => $request->persentase,
                 'i_insert_by' => $request->username,
                 'i_updated_by' => $request->username,
-            ]); 
+            ]);
 
 
             if($request->satuan_1 != ''){
@@ -186,4 +186,3 @@ class MasterBarangController extends Controller
     }
 
 }
-
