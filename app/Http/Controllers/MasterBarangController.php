@@ -40,11 +40,8 @@ class MasterBarangController extends Controller
 
     public function tipe_barang(Request $request) {
         $tipe_barang = $request->tipe_barang;
-
         $caritipe = DB::select("SELECT  substring(max(i_code),4) as id from m_item
                                   WHERE i_type = '$tipe_barang'");
-
-
         $index = (integer)$caritipe[0]->id + 1;
         $index = str_pad($index, 4, '0' , STR_PAD_LEFT);
         $nota = $tipe_barang . '-' . $index;
@@ -129,7 +126,7 @@ class MasterBarangController extends Controller
                 'i_name' => $request->nama_barang,
                 'i_sat1' => $request->satuan_utama,
                 'i_sat_isi1' => $request->isi_satuan_utama,
-                'i_sat_hrg1' => $harga_satuan_utama,
+                // 'i_sat_hrg1' => $harga_satuan_utama,
                 'i_min_stock' => $request->min_stock,
                 'i_det' => $request->detail,
                 'i_persentase' => $request->persentase,
@@ -143,7 +140,7 @@ class MasterBarangController extends Controller
                 ->where('i_id' , $idbarang)
                 ->update([
                     'i_sat2' => $request->satuan_1,
-                    'i_sat_hrg2' => $harga_satuan_1,
+                    // 'i_sat_hrg2' => $harga_satuan_1,
                     'i_sat_isi2' => $request->isi_satuan_1,
                 ]);
             }
@@ -152,7 +149,7 @@ class MasterBarangController extends Controller
                 ->where('i_id' , $idbarang)
                 ->update([
                     'i_sat3' => $request->satuan_2,
-                    'i_sat_hrg3' => $harga_satuan_2,
+                    // 'i_sat_hrg3' => $harga_satuan_2,
                     'i_sat_isi3' => $request->isi_satuan_2,
                 ]);
             }
