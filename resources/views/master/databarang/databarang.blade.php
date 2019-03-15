@@ -20,20 +20,20 @@
 		<div class="row">
 
 			<div class="col-12">
-				
+
 				<div class="card">
                     <div class="card-header bordered p-2">
                     	<div class="header-block">
                             <h3 class="title"> Data Barang </h3>
                         </div>
                         <div class="header-block pull-right">
-                        	
+
                 			<a class="btn btn-primary" href="{{route('tambah_databarang')}}"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
                         </div>
                     </div>
                     <div class="card-block">
                         <section>
-                        	
+
                         	<div class="table-responsive">
 	                            <table class="table table-striped table-hover" cellspacing="0" id="table_barang">
 	                                <thead class="bg-primary">
@@ -60,13 +60,14 @@
 	                                		<td> <div class="btn-group btn-group-sm">
 	                                			@if($barang->i_isactive == 'Y')
 	                                				<button class="btn btn-warning btn-edit" onclick="window.location.href='{{url('master/databarang/edit/'.$barang->i_id.'')}}'" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
+																					<button class="btn btn-danger btn-disable" type="button" title="Disable" onclick="status('{{$barang->i_id}},{{$barang->i_isactive}}')"><i class="fa fa-times-circle"></i></button>
+																				@else
+																					<button class="btn btn-primary btn-disable" type="button" title="Enable" onclick="status('{{$barang->i_id}},{{$barang->i_isactive}}')"><i class="fa fa-check-square"></i></button>
 	                                			@endif
-	                                				<button class="btn btn-danger btn-disable" type="button" title="Disable" onclick="status('{{$barang->i_id}},{{$barang->i_isactive}}')"><i class="fa fa-eye-slash"></i></button>
-	                                			
 	                                			</div> </td>
 	                                	</tr>
 	                                	@endforeach
-	                                	
+
 	                                </tbody>
 	                            </table>
 	                        </div>
@@ -126,7 +127,7 @@
 									});
 
 									setTimeout(function(){
-			                         location.reload();	                            
+			                         location.reload();
 			                            },200);
 								}
 							})
@@ -143,6 +144,6 @@
 	}
 
 
-	
+
 </script>
 @endsection

@@ -35,6 +35,8 @@ class MasterBarangController extends Controller
                           ->get();
         $data['satuan'] = DB::table('m_satuan')
                          ->get();
+        $data['group'] = DB::table('m_group')
+        ->get();
         return view('master/databarang/edit_databarang', compact('data'));
     }
 

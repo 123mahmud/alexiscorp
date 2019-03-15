@@ -20,7 +20,7 @@
     <div class="row">
 
       <div class="col-12">
-        
+
         <div class="card">
                     <div class="card-header bordered p-2">
                       <div class="header-block">
@@ -56,34 +56,34 @@
                                   <option value="" disabled="">--Pilih Type Barang--</option>
                                   @if($barang->i_type = 'BB')
                                     <option value="BB" selected="">Bahan Baku</option>
-                                      <option value="BP">Bahan Produksi</option>
+                                      <!-- <option value="BP">Bahan Produksi</option>
                                     <option value="SP">Spare Part</option>
                                     <option value="BJ">Barang Jual</option>
-                                    <option value="LL">Lain-lain</option>
+                                    <option value="LL">Lain-lain</option> -->
                                   @elseif($barang->i_type = 'SP')
-                                    <option value="BB">Bahan Baku</option>
-                                      <option value="BP">Bahan Produksi</option>
+                                    <!-- <option value="BB">Bahan Baku</option>
+                                      <option value="BP">Bahan Produksi</option> -->
                                     <option value="SP" selected="">Spare Part</option>
-                                    <option value="BJ">Barang Jual</option>
-                                     <option value="LL">Lain-lain</option>
+                                    <!-- <option value="BJ">Barang Jual</option>
+                                     <option value="LL">Lain-lain</option> -->
                                   @elseif($barang->i_type = 'BJ')
-                                    <option value="BB">Bahan Baku</option>
+                                    <!-- <option value="BB">Bahan Baku</option>
                                       <option value="BP">Bahan Produksi</option>
-                                    <option value="SP">Spare Part</option>
+                                    <option value="SP">Spare Part</option> -->
                                     <option value="BJ" selected="">Barang Jual</option>
-                                     <option value="LL">Lain-lain</option>
+                                     <!-- <option value="LL">Lain-lain</option> -->
                                   @elseif($barang->i_type = 'LL')
-                                       <option value="BB">Bahan Baku</option>
+                                       <!-- <option value="BB">Bahan Baku</option>
                                          <option value="BP">Bahan Produksi</option>
                                     <option value="SP">Spare Part</option>
-                                    <option value="BJ">Barang Jual</option>
+                                    <option value="BJ">Barang Jual</option> -->
                                      <option value="LL" selected="">Lain-lain</option>
                                   @elseif($barang->i_type = 'BP')
-                                     <option value="BB">Bahan Baku</option>
+                                     <!-- <option value="BB">Bahan Baku</option> -->
                                       <option value="BP" selected="">Bahan Produksi</option>
-                                    <option value="SP">Spare Part</option>
+                                    <!-- <option value="SP">Spare Part</option>
                                     <option value="BJ">Barang Jual</option>
-                                     <option value="LL">Lain-lain</option>
+                                     <option value="LL">Lain-lain</option> -->
 
 
                                   @endif
@@ -99,22 +99,24 @@
 
                             <div class="col-md-9 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <select class="form-control form-control-sm" name="kelompok_barang" required="">
-                                  <option value="" selected="" disabled="">--Pilih Kelompok Barang--</option>
-                             
+                                <input type="hidden" id="group_hidden" value="{{ $barang->i_code_group }}">
+                                <select class="form-control form-control-sm" name="kelompok_barang" id="group" required="">
+                                  @foreach($data['group'] as $group)
+                                    <option value="{{ $group->g_code }}">{{ $group->g_name }}</option>
+                                  @endforeach
+                                  <!-- <option value="" selected="" disabled="">- -Pilih Kelompok Barang- -</option>
                                   @if($barang->i_code_group == 'BSJ'))
-                                  
                                     <option value="BSJ" selected="">Barang Setengah Jadi</option>
                                     <option value="BJD">Barang Jadi</option>
                                   @elseif($barang->i_code_group == 'BJD'))
                                      <option value="BBP">Bahan Baku Produksi</option>
                                     <option value="BSJ">Barang Setengah Jadi</option>
                                     <option value="BJD" selected="">Barang Jadi</option>
-                                  @endif
+                                  @endif -->
                                 </select>
                               </div>
                             </div>
-                            
+
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Kode Barang</label>
                             </div>
@@ -212,10 +214,10 @@
                             </div>
 
 
-                            <div class="col-md-3 col-sm-6 col-xs-12">
+                            <!-- <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Harga Persatuan</label>
                             </div>
-                            
+
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Harga Satuan Utama</label>
                               <div class="form-group">
@@ -235,7 +237,7 @@
                               <div class="form-group">
                                <input type="text" class="form-control-sm form-control harga harga_satuan_2 text-right" name="harga_satuan_2" value="{{number_format($barang->i_sat_hrg3, 2 , ',' , '.')}}" readonly="">
                               </div>
-                            </div>
+                            </div> -->
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Detail</label>
@@ -317,9 +319,9 @@
         if(isi_satuan_1 != ''){
                  harga = harga.replace(/\./g,'');
                  harga = harga.replace(/,/g,'.');
-        
+
                  hasilharga2 = parseFloat(parseFloat(isi_satuan_1) * parseFloat(harga)).toFixed(2);
-        
+
                 $('.harga_satuan_1').val(addCommas(hasilharga2));
           }
           else {
@@ -366,7 +368,7 @@
     harga = harga.replace(/,/g,'.');
     if(satuan_1 != ''){
       isi_satuan_1 = $('.isi_satuan_1').val();
-      
+
 
        hasilharga = parseFloat(parseFloat(isi_satuan_1) * parseFloat(harga));
        $('.harga_satuan_1').val(hasilharga);
@@ -379,7 +381,7 @@
           hasilharga2 = parseFloat(parseFloat(isi_satuan_2) * parseFloat(harga)).toFixed(2);
 
         $('.harga_satuan_2').val(addCommas(hasilharga2));
-      }     
+      }
     }
    });
 
@@ -429,7 +431,12 @@
 
   $('.harga').maskMoney({thousands:'.', decimal:',', precision:2});
 
+
   $(document).ready(function(){
+    // set selected 'group-list'
+    group_hidden = $('#group_hidden').val();
+    $("#group option[value='" + group_hidden + "']").prop("selected", true);
+
     $(document).on('click', '.btn-submit', function(){
       form_data = $('#formsukses').serialize();
       satuan_utama = $('.satuan_utama').val();
@@ -523,7 +530,7 @@
             btnClass: 'btn-blue',
                 text:'Ya',
                 action : function(){
-                 
+
                     $.ajax({
                       data : form_data,
                       url : baseUrl + '/master/databarang/update',
@@ -542,11 +549,11 @@
 
                           setTimeout(function(){
                           window.location.href = baseUrl + '/master/databarang/index';
-                             
+
                             },500);
                       }
                     });
-             
+
                 }
               },
               cancel:{
@@ -557,7 +564,7 @@
               }
           }
       });
-      
+
     });
 
 
