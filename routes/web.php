@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// Master
 	Route::get('/master/databarang/index', 'MasterBarangController@databarang')->name('databarang');
+	Route::get('/master/databarang/list', 'MasterBarangController@getList')->name('list_databarang');
 	Route::get('/master/databarang/create', 'MasterBarangController@tambah_databarang')->name('tambah_databarang');
 	Route::get('/master/databarang/edit/{id}', 'MasterBarangController@edit_databarang')->name('edit_databarang');
 	Route::get('/master/databarang/tipe_barang', 'MasterBarangController@tipe_barang');
@@ -169,7 +170,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/purchasing/returnpembelian/find_m_supplier', 'Purchasing\ReturnPembelianController@find_m_supplier')->middleware('auth');
 	Route::get('/purchasing/returnpembelian/find_d_purchase_order', 'Purchasing\ReturnPembelianController@find_d_purchase_order')->middleware('auth');
 	Route::get('/purchasing/returnpembelian/preview_orderpembelian/{id}', 'Purchasing\ReturnPembelianController@preview_orderpembelian')->middleware('auth');
-	
+
 	// Rencana bahan baku
 	Route::get('/purchasing/rencanabahanbaku/rencanabahanbaku', 'PurchaseController@rencanabahanbaku')->name('rencanabahanbaku');
 
@@ -188,7 +189,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/stok/penggunaanbahanbaku/index', 'StokController@penggunaanbahanbaku')->name('penggunaanbahanbaku');
 	Route::get('/stok/penggunaanbahanbaku/create', 'StokController@tambah_penggunaanbahanbaku')->name('tambah_penggunaanbahanbaku');
-	
+
 	Route::get('/stok/tipemenghitunghpp/index', 'StokController@tipemenghitunghpp')->name('tipemenghitunghpp');
 
 
