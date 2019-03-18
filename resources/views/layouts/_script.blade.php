@@ -38,8 +38,47 @@
 
       $('.background-loading').fadeOut('slow');
     },500);
-    
+
   });
+
+  function messageSuccess(title, message) {
+      $.toast({
+          heading: title,
+          text: message,
+          bgColor: '#00b894',
+          textColor: 'white',
+          loaderBg: '#3C415E',
+          icon: 'success',
+          stack: false,
+          hideAfter: 3000
+      });
+  }
+
+  function messageFailed(title, message) {
+      $.toast({
+          heading: title,
+          text: message,
+          bgColor: '#FF4444',
+          textColor: 'white',
+          loaderBg: '#3C415E',
+          icon: 'warning',
+          stack: false,
+          hideAfter: 3000
+      });
+  }
+
+  function messageWarning(title, message) {
+      $.toast({
+          heading: title,
+          text: message,
+          bgColor: '#FF4444',
+          textColor: 'white',
+          loaderBg: '#3C415E',
+          icon: 'error',
+          stack: false,
+          hideAfter: 3000
+      });
+  }
 
   $(document).on('click', '.color-item', function(){
     $('.content').removeClass('animated fadeInLeft');
@@ -68,7 +107,7 @@
   getstorage = localStorage.getItem('sidebar-collapse-storage');
   if (getstorage) {
     $('#app').addClass(getstorage);
-  }  
+  }
 
 
 </script>
@@ -97,13 +136,13 @@
   	});
 
 
-    
+
 $.ajaxSetup({
      headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
     });
-    
+
     $.extend( $.fn.dataTable.defaults, {
       "responsive":true,
 
@@ -125,7 +164,7 @@ $.ajaxSetup({
 
     });
     $('.table').attr('width', '100%');
-    
+
     var datatable = $('.data-table').dataTable();
 
     // new $.fn.dataTable.Responsive( datatable, {
@@ -154,17 +193,17 @@ $.ajaxSetup({
 
       if ($(window).width() > 768) {
         $('#search-container').css('display', 'block');
-      } 
-      
+      }
+
 
     });
 
     $('.input-daterange').datepicker({
         format:'dd-mm-yyyy',
         enableOnReadonly:false
-        
+
     });
-    
+
     $('.datetimepicker').datetimepicker({
         format:"D-M-Y HH:mm:ss",
         disabledTimeIntervals: false
@@ -173,7 +212,7 @@ $.ajaxSetup({
         format:"HH:mm:ss",
         disabledTimeIntervals: false,
         pickDate:false
-    });        
+    });
     // $('.modal.fade').on('scroll', function(){
     //     if($(this).hasClass('show')=== true){
     //         $('.datepicker').datepicker('hide');
@@ -232,7 +271,7 @@ $.ajaxSetup({
             hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
             stack: 8, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
             position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
-            
+
             // bgColor: '#444444',  // Background color of the toast
             // textColor: '#eeeeee',  // Text color of the toast
             textAlign: 'left',  // Text alignment i.e. left, right or center
@@ -249,7 +288,7 @@ $.ajaxSetup({
         var random = Math.floor(Math.random() * coeg.length);
 
         // $.toast(coeg[random]);
-        
+
         $('#btn-logout').confirm({
             title:'Peringatan!',
             theme:'modular-admin',
@@ -323,7 +362,7 @@ $.ajaxSetup({
                       li[i].style.display = "none";
 
                   }
-              
+
               }
         });
 

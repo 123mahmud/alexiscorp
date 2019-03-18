@@ -102,17 +102,8 @@
                                 <input type="hidden" id="group_hidden" value="{{ $barang->i_code_group }}">
                                 <select class="form-control form-control-sm" name="kelompok_barang" id="group" required="">
                                   @foreach($data['group'] as $group)
-                                    <option value="{{ $group->g_code }}">{{ $group->g_name }}</option>
+                                    <option value="{{ $group->m_gcode }}">{{ $group->m_gname }}</option>
                                   @endforeach
-                                  <!-- <option value="" selected="" disabled="">- -Pilih Kelompok Barang- -</option>
-                                  @if($barang->i_code_group == 'BSJ'))
-                                    <option value="BSJ" selected="">Barang Setengah Jadi</option>
-                                    <option value="BJD">Barang Jadi</option>
-                                  @elseif($barang->i_code_group == 'BJD'))
-                                     <option value="BBP">Bahan Baku Produksi</option>
-                                    <option value="BSJ">Barang Setengah Jadi</option>
-                                    <option value="BJD" selected="">Barang Jadi</option>
-                                  @endif -->
                                 </select>
                               </div>
                             </div>
@@ -212,32 +203,6 @@
                                <input type="number" class="form-control-sm form-control isi_satuan_2" min="0" name="isi_satuan_2" value="{{$barang->i_sat_isi3}}">
                               </div>
                             </div>
-
-
-                            <!-- <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Harga Persatuan</label>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Harga Satuan Utama</label>
-                              <div class="form-group">
-                               <input type="text" class="form-control-sm form-control harga harga_satuan_utama text-right" name="harga_satuan_utama"value="{{number_format($barang->i_sat_hrg1 , 2, ',' ,'.')}}" required="">
-                              </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Harga Satuan Alternatif 1</label>
-                              <div class="form-group">
-                               <input type="text" class="form-control-sm form-control harga harga_satuan_1 text-right" name="harga_satuan_1" value="{{number_format($barang->i_sat_hrg2,2,',','.')}}" readonly="">
-                              </div>
-                            </div>
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Harga Satuan Alternatif 2</label>
-                              <div class="form-group">
-                               <input type="text" class="form-control-sm form-control harga harga_satuan_2 text-right" name="harga_satuan_2" value="{{number_format($barang->i_sat_hrg3, 2 , ',' , '.')}}" readonly="">
-                              </div>
-                            </div> -->
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Detail</label>

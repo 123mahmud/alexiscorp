@@ -52,9 +52,12 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/master/dataarmada/modal_dataarmada', 'MasterArmadaController@modal_dataarmada')->name('modal_dataarmada');
 
 
-	Route::get('/master/datacustomer/datacustomer', 'MasterController@datacustomer')->name('datacustomer');
-	Route::get('/master/datacustomer/tambah_datacustomer', 'MasterController@tambah_datacustomer')->name('tambah_datacustomer');
-	Route::get('/master/datacustomer/edit_datacustomer', 'MasterController@edit_datacustomer')->name('edit_datacustomer');
+	// Route::get('/master/datacustomer/datacustomer', 'MasterCustomerController@index')->name('datacustomer');
+	// Route::get('/master/datacustomer/tambah_datacustomer', 'MasterCustomerController@create')->name('tambah_datacustomer');
+	// Route::get('/master/datacustomer/save_datacustomer', 'MasterCustomerController@store')->name('save_datacustomer');
+	// Route::get('/master/datacustomer/edit_datacustomer', 'MasterCustomerController@edit')->name('edit_datacustomer');
+	// Route::get('/master/datacustomer/update_datacustomer', 'MasterCustomerController@update')->name('update_datacustomer');
+
 	Route::get('/master/datapegawai/datapegawai', 'MasterController@datapegawai')->name('datapegawai');
 	Route::get('/master/datapegawai/tambah_datapegawai', 'MasterController@tambah_datapegawai')->name('tambah_datapegawai');
 	Route::get('/master/datapegawai/edit_datapegawai', 'MasterController@edit_datapegawai')->name('edit_datapegawai');
@@ -76,16 +79,17 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/master/datamesin/update/{id}', 'Master\dataMesinController@updateDataMesin');
 	Route::get('/master/datamesin/status', 'Master\dataMesinController@ubahStatus');
 //end data mesin
+
 	Route::get('/master/datacustomer/index', 'MasterCustomerController@index')->name('datacustomer');
 	Route::get('/master/datacustomer/getlist', 'MasterCustomerController@getlist')->name('getlist_datacustomer');
 	Route::get('/master/datacustomer/create', 'MasterCustomerController@create')->name('tambah_datacustomer');
 	Route::post('/master/datacustomer/save', 'MasterCustomerController@store')->name('save_datacustomer');
-	Route::get('/master/datacustomer/edit/', 'MasterCustomerController@edit')->name('edit_datacustomer');
-	Route::post('/master/datacustomer/update/', 'MasterCustomerController@update')->name('update_datacustomer');
-	Route::post('/master/datacustomer/disable/', 'MasterCustomerController@delete')->name('disable_datacustomer');
+	Route::get('/master/datacustomer/edit/{id}', 'MasterCustomerController@edit')->name('edit_datacustomer');
+	Route::post('/master/datacustomer/update/{id}', 'MasterCustomerController@update')->name('update_datacustomer');
+	Route::post('/master/datacustomer/disable/{id}', 'MasterCustomerController@destroy')->name('disable_datacustomer');
 
 //mahmud pegawai
-  	Route::get('/master/datapegawai/index', 'Master\PegawaiController@pegawai')->name('datapegawai');
+	Route::get('/master/datapegawai/index', 'Master\PegawaiController@pegawai')->name('datapegawai');
 	Route::get('/master/datapegawai/tambah-pegawai', 'Master\PegawaiController@tambahPegawai');
 	Route::get('/master/datapegawai/simpan-pegawai', 'Master\PegawaiController@simpanPegawai');
 	Route::get('/master/datapegawai/datatable-pegawai', 'Master\PegawaiController@pegawaiData');

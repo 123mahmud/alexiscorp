@@ -19,7 +19,7 @@ class MasterBarangController extends Controller
     {
       $datas = DB::table('m_item')
         ->join('m_satuan' , 's_id' , '=' , 'i_sat1')
-        ->join('m_group', 'g_code', '=', 'i_code_group')
+        ->join('m_group', 'm_gid', '=', 'i_group')
         ->orderBy('i_id' , 'desc')
         ->get();
       return Datatables::of($datas)
@@ -28,18 +28,14 @@ class MasterBarangController extends Controller
           return $datas->s_name;
         })
         ->addColumn('group', function($datas) {
-          return $datas->g_name;
+          return $datas->m_gname;
         })
         ->addColumn('action', function($datas) {
           if ($datas->i_isactive == 'Y') {
-            return '<div class="btn-group btn-group-sm">
-            <button class="btn btn-warning btn-edit" onclick="window.location.href=\''. url("master/databarang/edit/".$datas->i_id) .'\'" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
-            <button class="btn btn-primary btn-dsable" type="button" title="Disable" onclick="status(\'' .$datas->i_id .'\',\''. $datas->i_isactive .'\')"><i class="fa fa-check-square"></i></button>
-            </div>';
+            return '<button class="btn btn-warning btn-edit btn-sm" onclick="window.location.href=\''. url("master/databarang/edit/".$datas->i_id) .'\'" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
+            <button class="btn btn-primary btn-disable btn-sm" type="button" title="Disable" onclick="status(\'' .$datas->i_id .'\',\''. $datas->i_isactive .'\')"><i class="fa fa-check-square"></i></button>';
           } elseif ($datas->i_isactive == 'T') {
-            return '<div class="btn-group btn-group-sm">
-            <button class="btn btn-danger btn-disable" type="button" title="Enable" onclick="status(\'' .$datas->i_id .'\',\''. $datas->i_isactive .'\')"><i class="fa fa-minus-square"></i></button>
-            </div>';
+            return '<button class="btn btn-danger btn-enable btn-sm" type="button" title="Enable" onclick="status(\'' .$datas->i_id .'\',\''. $datas->i_isactive .'\')"><i class="fa fa-minus-square"></i></button>';
           }
         })
         ->rawColumns(['group', 'satuan', 'action'])

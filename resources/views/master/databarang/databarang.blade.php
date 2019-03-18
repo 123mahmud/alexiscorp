@@ -48,24 +48,6 @@
 		                                	</tr>
 	                                </thead>
 	                                <tbody>
-	                                	<!-- @foreach($data as $index=>$barang)
-	                                	<tr>
-	                                		<td> {{$index + 1}} </td>
-	                                		<td> {{$barang->i_code}} </td>
-	                                		<td> {{$barang->i_name}} </td>
-	                                		<td> {{$barang->s_name}} </td>
-	                                		<td> {{$barang->i_code_group}} </td>
-	                                		<td> {{number_format($barang->i_sat_hrg1 ,2 ,  '.' , ',')}} </td>
-	                                		<td> <div class="btn-group btn-group-sm">
-	                                			@if($barang->i_isactive == 'Y')
-	                                				<button class="btn btn-warning btn-edit" onclick="window.location.href='{{url('master/databarang/edit/'.$barang->i_id.'')}}'" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
-																					<button class="btn btn-danger btn-dsable" type="button" title="Disable" onclick="status('{{$barang->i_id}},{{$barang->i_isactive}}')"><i class="fa fa-times-circle"></i></button>
-																				@else
-																					<button class="btn btn-primary btn-disable" type="button" title="Enable" onclick="status('{{$barang->i_id}},{{$barang->i_isactive}}')"><i class="fa fa-check-square"></i></button>
-	                                			@endif
-	                                			</div> </td>
-	                                	</tr>
-	                                	@endforeach -->
 
 	                                </tbody>
 	                            </table>
@@ -128,10 +110,7 @@
 										loaderBg: '#fdcb6e',
 										icon: 'info'
 									});
-
-									setTimeout(function(){
-			                         location.reload();
-			                            },200);
+									tb_barang.ajax.reload();
 								}
 							})
 				        }
@@ -145,7 +124,6 @@
 			    }
 			});
 	}
-
 
   // data-table -> function to retrieve DataTable server side
 	var tb_barang;

@@ -71,9 +71,8 @@
                                 <select class="form-control form-control-sm data" name="kelompok_barang" required="">
                                   <option value="" selected="" disabled="">--Pilih Kelompok Barang--</option>
                                   @foreach($data['group'] as $group)
-                                  <option value="{{ $group->g_code }}">{{ $group->g_name }}</option>
+                                  <option value="{{ $group->m_gid }}">{{ $group->m_gname }}</option>
                                   @endforeach
-                                  <!-- <option value="BJD">Barang Jadi</option> -->
                                 </select>
                               </div>
                             </div>
