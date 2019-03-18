@@ -6,12 +6,48 @@ use Illuminate\Http\Request;
 use DB;
 use carbon\Carbon;
 use App\MasterBarang;
+use Yajra\DataTables\DataTables;
 
 class MasterBarangController extends Controller
 {
+    /**
+     * Return DataTable list for view.
+     *
+     * @return Yajra/DataTables
+     */
+    public function getList()
+    {
+      $datas = DB::table('m_item')
+        ->join('m_satuan' , 's_id' , '=' , 'i_sat1')
+        ->join('m_group', 'g_code', '=', 'i_code_group')
+        ->orderBy('i_id' , 'desc')
+        ->get();
+      return Datatables::of($datas)
+        ->addIndexColumn()
+        ->addColumn('satuan', function($datas) {
+          return $datas->s_name;
+        })
+        ->addColumn('group', function($datas) {
+          return $datas->g_name;
+        })
+        ->addColumn('action', function($datas) {
+          if ($datas->i_isactive == 'Y') {
+            return '<div class="btn-group btn-group-sm">
+            <button class="btn btn-warning btn-edit" onclick="window.location.href=\''. url("master/databarang/edit/".$datas->i_id) .'\'" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
+            <button class="btn btn-primary btn-dsable" type="button" title="Disable" onclick="status(\'' .$datas->i_id .'\',\''. $datas->i_isactive .'\')"><i class="fa fa-check-square"></i></button>
+            </div>';
+          } elseif ($datas->i_isactive == 'T') {
+            return '<div class="btn-group btn-group-sm">
+            <button class="btn btn-danger btn-disable" type="button" title="Enable" onclick="status(\'' .$datas->i_id .'\',\''. $datas->i_isactive .'\')"><i class="fa fa-minus-square"></i></button>
+            </div>';
+          }
+        })
+        ->rawColumns(['group', 'satuan', 'action'])
+        ->make(true);
+    }
+
     public function databarang()
     {
-
         $data = DB::table('m_item')
                 ->join('m_satuan' , 's_id' , '=' , 'i_sat1')
                 ->orderBy('i_id' , 'desc')

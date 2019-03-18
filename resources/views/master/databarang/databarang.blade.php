@@ -39,17 +39,16 @@
 	                                <thead class="bg-primary">
 	                                    <tr>
 	                                    	<th>No</th>
-	                                		<th>Kode Barang</th>
-	                                		<th>Nama Barang</th>
-	                                		<th>Satuan</th>
-	                                		<th>Kelompok Barang</th>
-	                                		<th>Harga Beli</th>
-	                                		<th>Aksi</th>
-	                                	</tr>
+		                                		<th>Kode Barang</th>
+		                                		<th>Nama Barang</th>
+		                                		<th>Satuan</th>
+		                                		<th>Kelompok Barang</th>
+		                                		<!-- <th>Harga Beli</th> -->
+		                                		<th>Aksi</th>
+		                                	</tr>
 	                                </thead>
 	                                <tbody>
-
-	                                	@foreach($data as $index=>$barang)
+	                                	<!-- @foreach($data as $index=>$barang)
 	                                	<tr>
 	                                		<td> {{$index + 1}} </td>
 	                                		<td> {{$barang->i_code}} </td>
@@ -60,13 +59,13 @@
 	                                		<td> <div class="btn-group btn-group-sm">
 	                                			@if($barang->i_isactive == 'Y')
 	                                				<button class="btn btn-warning btn-edit" onclick="window.location.href='{{url('master/databarang/edit/'.$barang->i_id.'')}}'" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
-																					<button class="btn btn-danger btn-disable" type="button" title="Disable" onclick="status('{{$barang->i_id}},{{$barang->i_isactive}}')"><i class="fa fa-times-circle"></i></button>
+																					<button class="btn btn-danger btn-dsable" type="button" title="Disable" onclick="status('{{$barang->i_id}},{{$barang->i_isactive}}')"><i class="fa fa-times-circle"></i></button>
 																				@else
 																					<button class="btn btn-primary btn-disable" type="button" title="Enable" onclick="status('{{$barang->i_id}},{{$barang->i_isactive}}')"><i class="fa fa-check-square"></i></button>
 	                                			@endif
 	                                			</div> </td>
 	                                	</tr>
-	                                	@endforeach
+	                                	@endforeach -->
 
 	                                </tbody>
 	                            </table>
@@ -87,9 +86,13 @@
 
 @section('extra_script')
 <script type="text/javascript">
-	var table1 = $('#table_barang').DataTable();
+	// var table1 = $('#table_barang').DataTable();
+	$(document).ready(function() {
+		TableBarang();
+	});
 
-	function status(id){
+	function status(id, x){
+		console.log(id, x);
 		split = id.split(",");
 		data_id = split[0];
 		active = split[1];
@@ -144,6 +147,33 @@
 	}
 
 
+  // data-table -> function to retrieve DataTable server side
+	var tb_barang;
+	function TableBarang()
+	{
+		$('#table_barang').dataTable().fnDestroy();
+		tb_barang = $('#table_barang').DataTable({
+			responsive: true,
+			serverSide: true,
+			ajax: {
+				url: "{{ route('list_databarang') }}",
+				type: "get",
+				data: {
+					"_token": "{{ csrf_token() }}"
+				}
+			},
+			columns: [
+				{data: 'DT_RowIndex'},
+				{data: 'i_code'},
+				{data: 'i_name'},
+				{data: 'satuan'},
+				{data: 'group'},
+				{data: 'action'}
+			],
+			pageLength: 10,
+			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
+		});
+	}
 
 </script>
 @endsection

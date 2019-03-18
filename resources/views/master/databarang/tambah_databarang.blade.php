@@ -41,7 +41,7 @@
 
                             <div class="col-md-9 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm data" name="nama_barang" required="">
+                                <input type="text" class="form-control form-control-sm data" name="nama_barang" required="" autocomplete="off">
                               </div>
                             </div>
 
@@ -71,7 +71,7 @@
                                 <select class="form-control form-control-sm data" name="kelompok_barang" required="">
                                   <option value="" selected="" disabled="">--Pilih Kelompok Barang--</option>
                                   @foreach($data['group'] as $group)
-                                  <option value="{{ $group->g_id }}">{{ $group->g_name }}</option>
+                                  <option value="{{ $group->g_code }}">{{ $group->g_name }}</option>
                                   @endforeach
                                   <!-- <option value="BJD">Barang Jadi</option> -->
                                 </select>
