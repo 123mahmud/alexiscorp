@@ -64,6 +64,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 
 	Route::get('/master/datasatuan/datasatuan', 'MasterController@datasatuan')->name('datasatuan');
+	Route::get('/master/datasatuan/getlist', 'MasterController@list_datasatuan')->name('list_datasatuan');
 	Route::get('/master/datasatuan/tambah_datasatuan', 'MasterController@tambah_datasatuan')->name('tambah_datasatuan');
 	Route::get('/master/datasatuan/edit_datasatuan/{id}', 'MasterController@edit_datasatuan');
 	Route::post('/master/datasatuan/save', 'MasterController@save_datasatuan');

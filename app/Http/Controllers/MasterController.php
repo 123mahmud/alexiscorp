@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Yajra\DataTables\DataTables;
 
 class MasterController extends Controller
 {
@@ -38,7 +39,7 @@ class MasterController extends Controller
         return view('master/datasuplier/edit_datasuplier');
     }
 
-    
+
     public function datacustomer()
     {
     	return view('master/datacustomer/datacustomer');
@@ -50,7 +51,7 @@ class MasterController extends Controller
     public function edit_datacustomer()
     {
         return view('master/datacustomer/edit_datacustomer');
-    }    
+    }
     public function datacustomerkontraktor()
     {
     	return view('master/datacustomerkontraktor/datacustomerkontraktor');
@@ -67,21 +68,43 @@ class MasterController extends Controller
     {
         return view('master/datapegawai/edit_datapegawai');
     }
-  
-   
+
+
+
+    /**
+    * Return DataTable list for view.
+    *
+    * @return Yajra/DataTables
+    */
+    public function list_datasatuan()
+    {
+      $datas = DB::table('m_satuan')
+      ->orderBy('s_id', 'desc')
+      ->get();
+      return Datatables::of($datas)
+      ->addIndexColumn()
+      ->addColumn('action', function($datas) {
+        if ($datas->s_status == 'Y') {
+          return '<button class="btn btn-warning btn-edit btn-sm" onclick="window.location.href=\''. url("master/datasatuan/edit_datasatuan/".$datas->s_id) .'\'" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
+          <button class="btn btn-primary btn-disable btn-sm" type="button" title="Disable" onclick="status(\'' .$datas->s_id .'\',\''. $datas->s_status .'\')"><i class="fa fa-check-square"></i></button>';
+        } else {
+          return '<button class="btn btn-danger btn-enable btn-sm" type="button" title="Enable" onclick="status(\'' .$datas->s_id .'\',\''. $datas->s_status .'\')"><i class="fa fa-minus-square"></i></button>';
+        }
+      })
+      ->rawColumns(['action'])
+      ->make(true);
+    }
+
     public function datasatuan()
-    {   
+    {
         $data['satuan']= DB::table('m_satuan')
                     ->get();
-   
         return view('master/datasatuan/datasatuan', compact('data'));
     }
-   
+
     public function tambah_datasatuan()
     {
         $datasatuan = DB::select("select max(s_id) as s_id from m_satuan");
-
-       
 
         $index = (integer)$datasatuan[0]->s_id + 1;
         $index = str_pad($index, 4, '0' , STR_PAD_LEFT);
@@ -90,14 +113,12 @@ class MasterController extends Controller
         return view('master/datasatuan/tambah_datasatuan', compact('data'));
     }
 
-
-      public function save_datasatuan(Request $request)
+    public function save_datasatuan(Request $request)
     {
         return DB::transaction(function() use ($request){
             $data = DB::table('m_satuan')
                 ->max('s_id');
             $urut = $data + 1;
-
 
             DB::table('m_satuan')
             ->insert([
@@ -106,14 +127,10 @@ class MasterController extends Controller
                 's_name' => $request->nama_satuan,
                 's_status' => 'Y',
             ]);
-
-
             return json_encode('sukses');
-
         });
-        
     }
-    
+
     public function update_satuan(Request $request){
         return DB::transaction(function() use ($request){
             $idtransaksi = $request->idtransaksi;
@@ -130,14 +147,14 @@ class MasterController extends Controller
 
     public function edit_datasatuan($id)
     {
-        
+
 
         $data['satuan'] = DB::table('m_satuan')
                         ->where('s_id' , $id)
                         ->first();
         return view('master/datasatuan/edit_datasatuan' , compact('data'));
     }
-    
+
     public function disabeld_satuan(Request $request){
         $id = $request->a;
         $data['satuan'] = DB::table('m_satuan')
@@ -156,7 +173,7 @@ class MasterController extends Controller
             ->where('s_id' , $id)
             ->update([
                 's_status' => 'Y'
-            ]); 
+            ]);
         }
 
 
@@ -223,12 +240,11 @@ class MasterController extends Controller
     public function tambah_datajabatan()
     {
         return view('master.datajabatan.tambah_datajabatan');
-    }    
+    }
 
     public function edit_datajabatan()
     {
         return view('master.datajabatan.edit_datajabatan');
-    }    
+    }
 
 }
-

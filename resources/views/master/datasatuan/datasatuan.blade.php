@@ -7,8 +7,8 @@
 	<div class="title-block text-primary">
 	    <h1 class="title"> Data Satuan </h1>
 	    <p class="title-description">
-	    	<i class="fa fa-home"></i>&nbsp;<a href="{{url('/home')}}">Home</a> 
-	    	/ <span>Master Data</span> 
+	    	<i class="fa fa-home"></i>&nbsp;<a href="{{url('/home')}}">Home</a>
+	    	/ <span>Master Data</span>
 	    	/ <span class="text-primary font-weight-bold">Data Satuan</span>
 	     </p>
 	</div>
@@ -18,20 +18,20 @@
 		<div class="row">
 
 			<div class="col-12">
-				
+
 				<div class="card">
                     <div class="card-header bordered p-2">
                     	<div class="header-block">
 	                        <h3 class="title"> Data Satuan </h3>
 	                    </div>
 	                    <div class="header-block pull-right">
-	                    	
+
                     			<button class="btn btn-primary" onclick="window.location.href='{{ route('tambah_datasatuan') }}'"><i class="fa fa-plus"></i>&nbsp;Tambah Data</button>
 	                    </div>
                     </div>
                     <div class="card-block">
                         <section>
-                        	
+
                         	<div class="table-responsive">
 	                            <table class="table table-striped table-hover" cellspacing="0" id="table_satuan">
 	                                <thead class="bg-primary">
@@ -43,12 +43,12 @@
 							            </tr>
 	                                </thead>
 	                                <tbody>
-	                                	@foreach($data['satuan'] as $index=>$satuan)
+	                                	<!-- @foreach($data['satuan'] as $index=>$satuan)
 	                                		<tr>
 	                                			<td> {{$index + 1}} </td>
 	                                			<td> {{$satuan->s_code}} </td>
 	                                			<td> {{$satuan->s_name}} </td>
-	                                		
+
 	                                			<td>
 	                                				<div class="btn-group btn-group-sm">
 	                                				@if($satuan->s_status == 'Y')
@@ -61,8 +61,8 @@
 
 	                                			</td>
 	                                		</tr>
-	                                	@endforeach
-	                                	
+	                                	@endforeach -->
+
 							        </tbody>
 	                            </table>
 	                        </div>
@@ -81,7 +81,14 @@
 @endsection
 @section('extra_script')
 <script type="text/javascript">
-	var table = $('#table_satuan').DataTable();
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+	});
+	$(document).ready(function() {
+		TableSatuan();
+	})
 	function hapus(a){
 		split = a.split(",");
 		a = split[0];
@@ -121,7 +128,7 @@
 									})
 
 									setTimeout(function(){
-			                         location.reload();	                            
+			                         location.reload();
 			                            },200);
 								}
 							})
@@ -138,11 +145,31 @@
 	}
 
 
-$.ajaxSetup({
-     headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-    });
+	// data-table -> function to retrieve DataTable server side
+	var tb_satuan;
+	function TableSatuan()
+	{
+		$('#table_satuan').dataTable().fnDestroy();
+		tb_satuan = $('#table_satuan').DataTable({
+			responsive: true,
+			serverSide: true,
+			ajax: {
+				url: "{{ route('list_datasatuan') }}",
+				type: "get",
+				data: {
+					"_token": "{{ csrf_token() }}"
+				}
+			},
+			columns: [
+				{data: 'DT_RowIndex'},
+				{data: 's_id'},
+				{data: 's_name'},
+				{data: 'action'}
+			],
+			pageLength: 10,
+			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
+		});
+	}
 
 	/*$(document).ready(function(){
 		var table = $('#table_satuan').DataTable();
