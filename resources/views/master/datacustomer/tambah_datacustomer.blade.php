@@ -143,9 +143,9 @@
                               <tbody>
                                 <tr>
                                   <td align="center">#</td>
-                                  <td><input type="text" class="form-control form-control-sm" id="nomor_polisi" name="nopol[]"></td>
+                                  <td><input type="text" class="form-control form-control-sm" id="nomor_polisi" name="nopol[]" tabindex="10"></td>
                                   <td align="center">
-                                    <button class="btn btn-primary" id="btn-tambah" type="button"><i class="fa fa-plus-square"></i></button>
+                                    <button class="btn btn-primary" id="btn-tambah" type="button"><i class="fa fa-plus-square" tabindex="11"></i></button>
                                   </td>
                                 </tr>
                               </tbody>
@@ -157,7 +157,7 @@
                         </section>
                       </div>
                       <div class="card-footer text-right">
-                        <button class="btn btn-primary" id="btn_simpan" type="button">Simpan</button>
+                        <button class="btn btn-primary" id="btn_simpan" type="button" tabindex="12">Simpan</button>
                         <a href="{{route('datacustomer')}}" class="btn btn-secondary">Kembali</a>
                       </div>
                   </form>
@@ -203,55 +203,6 @@
       }
     });
 
-    $( '#xxx_simpan' ).on('click', function(){
-			$.toast({
-				heading: 'Success',
-				text: 'Data Berhasil di Simpan',
-				bgColor: '#00b894',
-				textColor: 'white',
-				loaderBg: '#55efc4',
-				icon: 'success'
-			});
-
-      $.confirm({
-        animation: 'RotateY',
-        closeAnimation: 'scale',
-        animationBounce: 1.5,
-        icon: 'fa fa-question-circle',
-        title: 'Pilih',
-        content: 'Pilih Pindah Halaman',
-        theme: 'dark',
-        columnClass:'col-md-6 col-sm-12 col-12',
-          buttons: {
-              cutomer: {
-                btnClass: 'btn-blue',
-                text:'Data Customer',
-                action : function(){
-                  window.location.href = '{{route('datacustomer')}}';
-                }
-              },
-              armada:{
-                text: 'Data Armada',
-                btnClass: 'btn-info',
-                action: function(){
-                  window.location.href = '{{route('dataarmada')}}';
-                }
-              },
-              tetap: {
-                text:'Tetap dihalaman',
-                btnClass:'btn-default',
-                action: function(){
-                  location.reload();
-                }
-              }
-        },
-        backgroundDismiss: function(){
-            location.reload();
-        }
-      });
-
-		});
-
     $('#tabel_nopol tbody').on('click', '.btn-hapus', function(){
       $(this).parents('tr').remove();
     });
@@ -267,7 +218,7 @@
         );
     });
 
-    $('#btn_simpan').on('click', function() {
+    $('#btn_simpan').one('click', function() {
       SubmitForm(event);
     });
   });
@@ -286,15 +237,24 @@
       success: function(response) {
         if (response.status == 'berhasil') {
           messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
-          // changePage();
+          changePage();
         } else if (response.status == 'invalid') {
           messageFailed('Perhatian', response.message);
+          $('#btn_simpan').one('click', function() {
+            SubmitForm(event);
+          });
         } else if (response.status == 'gagal') {
           messageWarning('Error', response.message);
+          $('#btn_simpan').one('click', function() {
+            SubmitForm(event);
+          });
         }
       },
       error: function(e) {
         messageWarning('Gagal', 'Data gagal ditambahkan, hubungi pengembang !');
+        $('#btn_simpan').one('click', function() {
+          SubmitForm(event);
+        });
       }
     });
   }
@@ -319,15 +279,15 @@
               }
             },
             armada:{
-              text: 'Data Armada',
               btnClass: 'btn-info',
+              text: 'Data Armada',
               action: function(){
                 window.location.href = "{{route('dataarmada')}}";
               }
             },
             tetap: {
-              text:'Tetap dihalaman',
               btnClass:'btn-default',
+              text:'Tetap dihalaman',
               action: function(){
                 location.reload();
               }

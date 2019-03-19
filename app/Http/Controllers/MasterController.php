@@ -86,9 +86,9 @@ class MasterController extends Controller
       ->addColumn('action', function($datas) {
         if ($datas->s_status == 'Y') {
           return '<button class="btn btn-warning btn-edit btn-sm" onclick="window.location.href=\''. url("master/datasatuan/edit_datasatuan/".$datas->s_id) .'\'" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
-          <button class="btn btn-primary btn-disable btn-sm" type="button" title="Disable" onclick="status(\'' .$datas->s_id .'\',\''. $datas->s_status .'\')"><i class="fa fa-check-square"></i></button>';
+          <button class="btn btn-primary btn-disable btn-sm" type="button" title="Disable" onclick="Hapus(\'' .$datas->s_id .'\',\''. $datas->s_status .'\')"><i class="fa fa-check-square"></i></button>';
         } else {
-          return '<button class="btn btn-danger btn-enable btn-sm" type="button" title="Enable" onclick="status(\'' .$datas->s_id .'\',\''. $datas->s_status .'\')"><i class="fa fa-minus-square"></i></button>';
+          return '<button class="btn btn-danger btn-enable btn-sm" type="button" title="Enable" onclick="Hapus(\'' .$datas->s_id .'\',\''. $datas->s_status .'\')"><i class="fa fa-minus-square"></i></button>';
         }
       })
       ->rawColumns(['action'])
@@ -98,7 +98,8 @@ class MasterController extends Controller
     public function datasatuan()
     {
         $data['satuan']= DB::table('m_satuan')
-                    ->get();
+          ->orderBy('s_code', 'desc')
+          ->get();
         return view('master/datasatuan/datasatuan', compact('data'));
     }
 
@@ -147,8 +148,6 @@ class MasterController extends Controller
 
     public function edit_datasatuan($id)
     {
-
-
         $data['satuan'] = DB::table('m_satuan')
                         ->where('s_id' , $id)
                         ->first();
@@ -156,7 +155,7 @@ class MasterController extends Controller
     }
 
     public function disabeld_satuan(Request $request){
-        $id = $request->a;
+        $id = $request->id;
         $data['satuan'] = DB::table('m_satuan')
                           ->where('s_id' , $id)
                           ->first();

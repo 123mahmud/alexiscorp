@@ -36,34 +36,14 @@
 	                            <table class="table table-striped table-hover" cellspacing="0" id="table_satuan">
 	                                <thead class="bg-primary">
 	                                    <tr>
-	                                    	<th width="1%">No</th>
-							                <th>Kode Satuan</th>
-							                <th>Nama Satuan</th>
-							                <th width="15%">Aksi</th>
-							            </tr>
+		                                    	<th width="1%">No</th>
+													                <th>Kode Satuan</th>
+													                <th>Nama Satuan</th>
+													                <th width="15%">Aksi</th>
+													            </tr>
 	                                </thead>
 	                                <tbody>
-	                                	<!-- @foreach($data['satuan'] as $index=>$satuan)
-	                                		<tr>
-	                                			<td> {{$index + 1}} </td>
-	                                			<td> {{$satuan->s_code}} </td>
-	                                			<td> {{$satuan->s_name}} </td>
-
-	                                			<td>
-	                                				<div class="btn-group btn-group-sm">
-	                                				@if($satuan->s_status == 'Y')
-	                                				<a class="btn btn-warning btn-edit" href="{{url('master/datasatuan/edit_datasatuan/'.$satuan->s_id.'')}}" type="button" title="Edit"><i class="fa fa-pencil"></i></a>
-	                                				@endif
-
-	                                				<button class="btn btn-danger btn-disable" type="button" title="Disable" onclick="hapus('{{$satuan->s_id}},{{$satuan->s_status}}')"><i class="fa fa-eye-slash"></i></button>
-	                                			</div>
-
-
-	                                			</td>
-	                                		</tr>
-	                                	@endforeach -->
-
-							        </tbody>
+																	</tbody>
 	                            </table>
 	                        </div>
                         </section>
@@ -89,14 +69,11 @@
 	$(document).ready(function() {
 		TableSatuan();
 	})
-	function hapus(a){
-		split = a.split(",");
-		a = split[0];
-		status = split[1];
+
+	function Hapus(id, status){
 		if(status == 'Y'){
-			datastatus = 'Disabled';
-		}
-		else {
+			datastatus = 'Disable';
+		} else {
 			datastatus = 'Enable';
 		}
 		$.confirm({
@@ -104,41 +81,32 @@
 				closeAnimation: 'scale',
 				animationBounce: 1.5,
 				icon: 'fa fa-exclamation-triangle',
-			    title: datastatus,
-				content: 'Apa anda yakin mau ' + status + ' data ini?',
+		    title: datastatus,
+				content: 'Apa anda yakin mau ' + datastatus + ' data ini?',
 				theme: 'disable',
 			    buttons: {
 			        info: {
-						btnClass: 'btn-blue',
+								btnClass: 'btn-blue',
 			        	text:'Ya',
 			        	action : function(){
-							$.ajax({
-								data : {a},
-								type : "post",
-								url : baseUrl + '/master/datasatuan/disabled',
-								dataType : "json",
-								success : function(response){
-									$.toast({
-										heading: 'Information',
-										text: 'Data Berhasil di Disable.',
-										bgColor: '#0984e3',
-										textColor: 'white',
-										loaderBg: '#fdcb6e',
-										icon: 'info'
+									$.ajax({
+										data : {id},
+										type : "post",
+										url : baseUrl + '/master/datasatuan/disabled',
+										dataType : "json",
+										success : function(response)
+										{
+											messageSuccess('Berhasil', 'Data berhasil di-'+ datastatus +' !');
+											tb_satuan.ajax.reload();
+						        }
 									})
-
-									setTimeout(function(){
-			                         location.reload();
-			                            },200);
 								}
-							})
-				        }
 			        },
-			        cancel:{
+			        cancel: {
 			        	text: 'Tidak',
-					    action: function () {
-    			            // tutup confirm
-    			        }
+					    	action: function () {
+									// tutup confirm
+								}
     			    }
 			    }
 			});

@@ -44,7 +44,7 @@
 							                <th>E-mail</th>
 							                <th>No HP</th>
 							                <th>Tipe Customer</th>
-							                <th>Aksi</th>
+							                <th width="20%">Aksi</th>
 							            </tr>
 	                                </thead>
 	                                <tbody>

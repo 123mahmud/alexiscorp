@@ -7,6 +7,7 @@ use DB;
 use Validator;
 use carbon\Carbon;
 use App\m_customer;
+use App\m_kendaraan;
 use Yajra\DataTables\DataTables;
 
 class MasterCustomerController extends Controller
@@ -24,7 +25,6 @@ class MasterCustomerController extends Controller
         'name' => 'required',
         'email' => 'sometimes|nullable|email',
         'telp1' => 'required|numeric',
-        'telp2' => 'sometimes|numeric',
         'type' => 'required'
       ],
       [
@@ -112,6 +112,7 @@ class MasterCustomerController extends Controller
       try {
         $id = m_customer::max('c_id') + 1;
 
+        // insert customer
         $customer = new m_customer;
         $customer->c_id = $id;
         $customer->c_code = $id;
@@ -122,6 +123,20 @@ class MasterCustomerController extends Controller
         $customer->c_hp2 = $request->telp2;
         $customer->c_address = $request->address;
         $customer->save();
+
+        // insert Kendaraan
+        $nopols = $request->nopol;
+        foreach ($nopols as $nopol) {
+          if ($nopol != null) {
+            $k_id = m_kendaraan::max('k_id') + 1;
+            $kendaraan = new m_kendaraan;
+            $kendaraan->k_id = $k_id;
+            $kendaraan->k_pemilik = $id;
+            $kendaraan->k_flag = 'CUSTOMER';
+            $kendaraan->k_nopol = $nopol;
+            $kendaraan->save();
+          }
+        }
 
         DB::commit();
         return response()->json([
