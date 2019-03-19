@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="number" class="form-control form-control-sm" name="telp1" tabindex="3">
+                                <input type="text" class="form-control form-control-sm input-hp" name="telp1" tabindex="3">
                               </div>
                             </div>
 
@@ -68,7 +68,7 @@
                             </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="number" class="form-control form-control-sm" name="telp2" tabindex="4">
+                                <input type="text" class="form-control form-control-sm input-hp" name="telp2" tabindex="4">
                               </div>
                             </div>
 
@@ -79,8 +79,8 @@
                               <div class="form-group">
                                 <select class="form-control form-control-sm" id="type_cus" name="type" tabindex="5">
                                   <option value="" disabled selected>-Pilih-</option>
-                                  <option value="kontrak">Kontraktor</option>
-                                  <option value="harian">Harian</option>
+                                  <option value="KONTRAK">Kontraktor</option>
+                                  <option value="HARIAN">Harian</option>
                                 </select>
                               </div>
                             </div>
@@ -221,6 +221,8 @@
     $('#btn_simpan').one('click', function() {
       SubmitForm(event);
     });
+
+    $('.input-hp').inputmask('9999 9999 9999');
   });
 
   // submit form to store data in db

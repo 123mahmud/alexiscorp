@@ -8,6 +8,7 @@ use Validator;
 use carbon\Carbon;
 use App\m_customer;
 use App\m_kendaraan;
+use CodeGenerator;
 use Yajra\DataTables\DataTables;
 
 class MasterCustomerController extends Controller
@@ -24,7 +25,7 @@ class MasterCustomerController extends Controller
       $validator = Validator::make($request->all(), [
         'name' => 'required',
         'email' => 'sometimes|nullable|email',
-        'telp1' => 'required|numeric',
+        'telp1' => 'required',
         'type' => 'required'
       ],
       [
@@ -111,16 +112,21 @@ class MasterCustomerController extends Controller
       DB::beginTransaction();
       try {
         $id = m_customer::max('c_id') + 1;
+        $c_code = CodeGenerator::code('m_customer', 'c_code', 5, 'CUS');
+        $hp1 = str_replace('_', '', $request->telp1);
+        $hp1 = str_replace(' ', '', $hp1);
+        $hp2 = str_replace('_', '', $request->telp2);
+        $hp2 = str_replace(' ', '', $hp2);
 
         // insert customer
         $customer = new m_customer;
         $customer->c_id = $id;
-        $customer->c_code = $id;
+        $customer->c_code = $c_code;
         $customer->c_name = $request->name;
         $customer->c_email = $request->email;
         $customer->c_type = $request->type;
-        $customer->c_hp1 = $request->telp1;
-        $customer->c_hp2 = $request->telp2;
+        $customer->c_hp1 = $hp1;
+        $customer->c_hp2 = $hp2;
         $customer->c_address = $request->address;
         $customer->save();
 
