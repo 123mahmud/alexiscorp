@@ -19,7 +19,7 @@
     <div class="row">
 
       <div class="col-12">
-        
+
         <div class="card">
 
                     <div class="card-header bordered p-2">
@@ -31,70 +31,73 @@
                       </div>
                     </div>
 
-                    <div class="card-block">
+                    <form action="{{ route('update_datacustomer', $data['customer']->c_id) }}" method="post" id="myForm">
+                      <div class="card-block">
                         <section>
-                          
+
                           <div class="row">
-                            
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>ID Customer</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" readonly="" name="">
+                                <input type="text" class="form-control form-control-sm" readonly="" name="id" value="{{ $data['customer']->c_id }}">
                               </div>
                             </div>
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Nama Customer</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" name="">
+                                <input type="text" class="form-control form-control-sm" name="name" value="{{ $data['customer']->c_name }}">
                               </div>
                             </div>
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>E-mail</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" name="">
+                                <input type="text" class="form-control form-control-sm" name="email" value="{{ $data['customer']->c_email }}">
                               </div>
                             </div>
 
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>No HP</label>
-                            </div> 
-
+                              <label>No HP 1</label>
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" name="">
+                                <input type="text" class="form-control form-control-sm" name="telp1" value="{{ $data['customer']->c_hp1 }}">
+                              </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                              <label>No HP 2</label>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                              <div class="form-group">
+                                <input type="text" class="form-control form-control-sm" name="telp2" value="{{ $data['customer']->c_hp2 }}">
                               </div>
                             </div>
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Type Customer</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <select class="form-control form-control-sm" id="type_cus">
+                                <select class="form-control form-control-sm" id="type_cus" name="type">
                                   <option value="">-Pilih-</option>
                                   <option value="kontrak">Kontraktor</option>
                                   <option value="harian">Harian</option>
                                 </select>
                               </div>
-                            </div>                            
+                            </div>
 
                             <div class="col-md-offset-9 col-md-3 col-sm-6 col-xs-12 d-none 120mm">
                               <label id="label_type_cus"></label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12 d-none 120mm">
                               <div class="form-group">
                                 <input type="text" class="form-control form-control-sm" min="1" id="jumlah_hari_bulan" name="jumlah_hari_bulan">
@@ -103,18 +106,16 @@
 
                             <div class="col-md-offset-9 col-md-3 col-sm-6 col-xs-12 d-none 122mm">
                               <label>Pagu</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12 d-none 122mm">
                               <div class="form-group">
-                              <input type="text" style="text-align: right;"class="form-control form-control-sm  input-rupiah" id="pagu" name="pagu">
+                                <input type="text" style="text-align: right;"class="form-control form-control-sm  input-rupiah" id="pagu" name="pagu">
                               </div>
                             </div>
 
                             <div class="col-md-3 col-sm-6 col-xs-12 d-none 125mm">
                               <label>Armada</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12 d-none 125mm">
                               <div class="form-group">
                                 <select class="form-control form-control-sm select2" id="armada">
@@ -125,22 +126,22 @@
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Alamat</label>
-                            </div> 
-
-                            <div class="col-md-3 col-sm-6 col-xs-12">
+                            </div>
+                            <div class="col-md-9 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <textarea class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                                <textarea class="form-control" name="address" cols="30" rows="3">{{ $data['customer']->c_address }}</textarea>
                               </div>
                             </div>
 
                           </div>
-                        
+
                         </section>
-                    </div>
-                    <div class="card-footer text-right">
-                      <button class="btn btn-primary btn-submit" type="button">Simpan</button>
-                      <a href="{{route('datacustomer')}}" class="btn btn-secondary">Kembali</a>
-                    </div>
+                      </div>
+                      <div class="card-footer text-right">
+                        <button class="btn btn-primary" id="btn_simpan" type="button">Simpan</button>
+                        <a href="{{route('datacustomer')}}" class="btn btn-secondary">Kembali</a>
+                      </div>
+                    </form>
                 </div>
 
       </div>
@@ -183,16 +184,47 @@
       }
     });
 
-    $(document).on('click', '.btn-submit', function(){
-			$.toast({
-				heading: 'Success',
-				text: 'Data Berhasil di Edit',
-				bgColor: '#00b894',
-				textColor: 'white',
-				loaderBg: '#55efc4',
-				icon: 'success'
-			})
-		})
+    $('#btn_simpan').on('click', function() {
+      SubmitForm(event);
+    });
+
+    // $(document).on('click', '.btn-submit', function(){
+		// 	$.toast({
+		// 		heading: 'Success',
+		// 		text: 'Data Berhasil di Edit',
+		// 		bgColor: '#00b894',
+		// 		textColor: 'white',
+		// 		loaderBg: '#55efc4',
+		// 		icon: 'success'
+		// 	})
+		// })
   });
+
+  // submit form to store data in db
+  function SubmitForm(event)
+  {
+    event.preventDefault();
+    form_data = $('#myForm').serialize();
+
+    $.ajax({
+      data: form_data,
+      type: "post",
+      url: $("#myForm").attr('action'),
+      dataType: 'json',
+      success: function(response) {
+        if (response.status == 'berhasil') {
+          messageSuccess('Berhasil', 'Data berhasil diperbarui !');
+          // changePage();
+        } else if (response.status == 'invalid') {
+          messageFailed('Perhatian', response.message);
+        } else if (response.status == 'gagal') {
+          messageWarning('Error', response.message);
+        }
+      },
+      error: function(e) {
+        messageWarning('Gagal', 'Data gagal diperbarui, hubungi pengembang !');
+      }
+    });
+  }
 </script>
 @endsection

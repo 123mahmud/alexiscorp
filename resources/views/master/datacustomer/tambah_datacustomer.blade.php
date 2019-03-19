@@ -19,7 +19,7 @@
     <div class="row">
 
       <div class="col-12">
-        
+
         <div class="card">
 
                     <div class="card-header bordered p-2">
@@ -30,61 +30,55 @@
                         <a href="{{route('datacustomer')}}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i></a>
                       </div>
                     </div>
-
-                    <div class="card-block">
+                    <form id="myForm" action="{{ route('save_datacustomer') }}" method="post" autocomplete="off">
+                      <div class="card-block">
                         <section>
-                          
-                          <div class="row">
-                            
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>ID Customer</label>
-                            </div> 
 
-                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" readonly="" name="">
-                              </div>
-                            </div>
+                          <div class="row">
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Nama Customer</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" name="">
+                                <input type="text" class="form-control form-control-sm" name="name" tabindex="1">
                               </div>
                             </div>
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>E-mail</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" name="">
+                                <input type="text" class="form-control form-control-sm" name="email" tabindex="2">
                               </div>
                             </div>
 
-
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>No HP</label>
-                            </div> 
-
+                              <label>No HP 1</label>
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" name="">
+                                <input type="number" class="form-control form-control-sm" name="telp1" tabindex="3">
+                              </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                              <label>No HP 2</label>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                              <div class="form-group">
+                                <input type="number" class="form-control form-control-sm" name="telp2" tabindex="4">
                               </div>
                             </div>
 
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Type Customer</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <select class="form-control form-control-sm" id="type_cus">
-                                  <option value="">-Pilih-</option>
+                                <select class="form-control form-control-sm" id="type_cus" name="type" tabindex="5">
+                                  <option value="" disabled selected>-Pilih-</option>
                                   <option value="kontrak">Kontraktor</option>
                                   <option value="harian">Harian</option>
                                 </select>
@@ -93,76 +87,65 @@
 
                             <div class="col-md-offset-9 col-md-3 col-sm-6 col-xs-12 d-none 120mm">
                               <label id="label_type_cus"></label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12 d-none 120mm">
                               <div class="form-group">
-                                <input type="text" class="form-control form-control-sm" min="1" id="jumlah_hari_bulan" name="jumlah_hari_bulan">
+                                <input type="text" class="form-control form-control-sm" min="1" id="jumlah_hari_bulan" name="jumlah_hari_bulan" tabindex="6">
                               </div>
                             </div>
 
                             <div class="col-md-offset-9 col-md-3 col-sm-6 col-xs-12 d-none 122mm">
                               <label>Pagu</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12 d-none 122mm">
                               <div class="form-group">
-                                <input type="text" style="text-align: right;"class="form-control form-control-sm  input-rupiah" id="pagu" name="pagu">
+                                <input type="text" style="text-align: right;"class="form-control form-control-sm  input-rupiah" id="pagu" name="pagu" tabindex="7">
                               </div>
                             </div>
 
                             <div class="col-md-3 col-sm-6 col-xs-12 d-none 125mm">
                               <label>Armada</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-3 col-sm-6 col-xs-12 d-none 125mm">
                               <div class="form-group">
-                                <select class="form-control form-control-sm select2" id="armada">
+                                <select class="form-control form-control-sm select2" id="armada" tabindex="8">
                                   <option value="">--Pilih--</option>
                                 </select>
                               </div>
                             </div>
 
-
                           </div>
                           <div class="row">
-
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Alamat</label>
-                            </div> 
-
+                            </div>
                             <div class="col-md-9 col-sm-6 col-xs-12">
                               <div class="form-group">
-                                <textarea class="form-control" name="" id="" cols="30" rows="3"></textarea>
+                                <textarea class="form-control" name="address" id="" cols="30" rows="3" tabindex="9"></textarea>
                               </div>
                             </div>
 
                           </div>
 
-                          <div class="table-responsive">
-                            
+                          <div class="table-responsive col-sm-6">
                             <table class="table table-bordered table-striped table-hover" id="tabel_nopol" cellspacing="0">
-                              
+
                               <thead class="bg-primary">
                                 <tr>
                                   <th rowspan="2" align="center" valign="middle">No</th>
-                                  <th colspan="3">Plat Nomor Kendaraan</th>
+                                  <th>Plat Nomor Kendaraan</th>
                                   <th rowspan="2" align="center" valign="middle">Aksi</th>
                                 </tr>
                                 <tr>
-                                  <th>Kode Wilayah</th>
                                   <th>Nomor Polisi</th>
-                                  <th>Huruf Belakang</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr>
                                   <td align="center">#</td>
-                                  <td><input type="text" class="form-control form-control-sm" id="kode_wilayah" name=""></td>
-                                  <td><input type="text" class="form-control form-control-sm" id="nomor_polisi" name=""></td>
-                                  <td><input type="text" class="form-control form-control-sm" id="huruf_belakang" name=""></td>
+                                  <td><input type="text" class="form-control form-control-sm" id="nomor_polisi" name="nopol[]" tabindex="10"></td>
                                   <td align="center">
-                                    <button class="btn btn-primary" id="btn-tambah"><i class="fa fa-plus-square"></i></button>
+                                    <button class="btn btn-primary" id="btn-tambah" type="button"><i class="fa fa-plus-square" tabindex="11"></i></button>
                                   </td>
                                 </tr>
                               </tbody>
@@ -170,13 +153,14 @@
                             </table>
 
                           </div>
-                        
+
                         </section>
-                    </div>
-                    <div class="card-footer text-right">
-                      <button class="btn btn-primary" id="btn-submit" type="button">Simpan</button>
-                      <a href="{{route('datacustomer')}}" class="btn btn-secondary">Kembali</a>
-                    </div>
+                      </div>
+                      <div class="card-footer text-right">
+                        <button class="btn btn-primary" id="btn_simpan" type="button" tabindex="12">Simpan</button>
+                        <a href="{{route('datacustomer')}}" class="btn btn-secondary">Kembali</a>
+                      </div>
+                  </form>
                 </div>
 
       </div>
@@ -192,7 +176,7 @@
 @section('extra_script')
 <script type="text/javascript">
   $(document).ready(function(){
-    $('#type_cus').change(function(){
+    $('#type_cus').on('change', function(){
       if($(this).val() === 'kontrak'){
         $('#label_type_cus').text('Jatuh tempo');
         $('#jumlah_hari_bulan').val('');
@@ -218,54 +202,6 @@
         $('.125mm').addClass('d-none');
       }
     });
-    $( '#btn-submit' ).on('click', function(){
-			$.toast({
-				heading: 'Success',
-				text: 'Data Berhasil di Simpan',
-				bgColor: '#00b894',
-				textColor: 'white',
-				loaderBg: '#55efc4',
-				icon: 'success'
-			});
-
-      $.confirm({
-        animation: 'RotateY',
-        closeAnimation: 'scale',
-        animationBounce: 1.5,
-        icon: 'fa fa-question-circle',
-          title: 'Pilih',
-        content: 'Pilih Pindah Halaman',
-        theme: 'dark',
-        columnClass:'col-md-6 col-sm-12 col-12',
-          buttons: {
-              cutomer: {
-                btnClass: 'btn-blue',
-                text:'Data Customer',
-                action : function(){
-                  window.location.href = '{{route('datacustomer')}}';
-                }
-              },
-              armada:{
-                text: 'Data Armada',
-                btnClass: 'btn-info',
-                action: function(){
-                  window.location.href = '{{route('dataarmada')}}';
-                }
-              },
-              tetap: {
-                text:'Tetap dihalaman',
-                btnClass:'btn-default',
-                action: function(){
-                  location.reload();
-                }
-              }
-          
-        },
-        backgroundDismiss: function(){
-            location.reload();
-        }
-      });
-		});
 
     $('#tabel_nopol tbody').on('click', '.btn-hapus', function(){
       $(this).parents('tr').remove();
@@ -276,14 +212,91 @@
       .append(
         '<tr>'+
           '<td align="center">#</td>'+
-          '<td><input type="text" class="form-control form-control-sm" name=""></td>'+
-          '<td><input type="text" class="form-control form-control-sm" name=""></td>'+
-          '<td><input type="text" class="form-control form-control-sm" name=""></td>'+
+          '<td><input type="text" class="form-control form-control-sm" name="nopol[]"></td>'+
           '<td align="center"><button class="btn btn-danger btn-hapus" type="button"><i class="fa fa-trash-o"></i></button></td>'+
         '</tr>'
         );
     });
 
+    $('#btn_simpan').one('click', function() {
+      SubmitForm(event);
+    });
   });
+
+  // submit form to store data in db
+  function SubmitForm(event)
+  {
+    event.preventDefault();
+    form_data = $('#myForm').serialize();
+
+    $.ajax({
+      data: form_data,
+      type: "post",
+      url: $("#myForm").attr('action'),
+      dataType: 'json',
+      success: function(response) {
+        if (response.status == 'berhasil') {
+          messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
+          changePage();
+        } else if (response.status == 'invalid') {
+          messageFailed('Perhatian', response.message);
+          $('#btn_simpan').one('click', function() {
+            SubmitForm(event);
+          });
+        } else if (response.status == 'gagal') {
+          messageWarning('Error', response.message);
+          $('#btn_simpan').one('click', function() {
+            SubmitForm(event);
+          });
+        }
+      },
+      error: function(e) {
+        messageWarning('Gagal', 'Data gagal ditambahkan, hubungi pengembang !');
+        $('#btn_simpan').one('click', function() {
+          SubmitForm(event);
+        });
+      }
+    });
+  }
+
+  function changePage()
+  {
+    $.confirm({
+      animation: 'RotateY',
+      closeAnimation: 'scale',
+      animationBounce: 1.5,
+      icon: 'fa fa-question-circle',
+      title: 'Pilih',
+      content: 'Pilih Pindah Halaman',
+      theme: 'dark',
+      columnClass:'col-md-6 col-sm-12 col-12',
+        buttons: {
+            cutomer: {
+              btnClass: 'btn-blue',
+              text:'Data Customer',
+              action : function(){
+                window.location.href = "{{route('datacustomer')}}";
+              }
+            },
+            armada:{
+              btnClass: 'btn-info',
+              text: 'Data Armada',
+              action: function(){
+                window.location.href = "{{route('dataarmada')}}";
+              }
+            },
+            tetap: {
+              btnClass:'btn-default',
+              text:'Tetap dihalaman',
+              action: function(){
+                location.reload();
+              }
+            }
+      },
+      backgroundDismiss: function(){
+          location.reload();
+      }
+    });
+  }
 </script>
 @endsection
