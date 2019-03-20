@@ -88,7 +88,7 @@
                             <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
                                 <select class="form-control form-control-sm" id="type_cus" name="type">
-                                  <option value="">-Pilih-</option>
+                                  <option value="" disabled>-Pilih-</option>
                                   <option value="kontrak">Kontraktor</option>
                                   <option value="harian">Harian</option>
                                 </select>
