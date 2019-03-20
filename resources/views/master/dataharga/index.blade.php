@@ -2,9 +2,8 @@
 
 @section('content')
 
-@include('purchasing.rencanapembelian.modal_detail')
-@include('purchasing.rencanapembelian.modal_edit')
-
+@include('master.dataharga.mastergroup.create')
+@include('master.dataharga.mastergroup.edit')
 <article class="content">
 
 	<div class="title-block text-primary">
@@ -47,22 +46,10 @@
 
 @endsection
 @section('extra_script')
-
-@include('purchasing/rencanapembelian/includes/modal_update_status')
-<script type="text/javascript">
-	$('.rencana_detail').click(function(){
-		$('#detail_rencana').modal('show');
-	});
-	$('.rencana_edit').click(function(){
-		$('#detail_rencana_edit').modal('show');
-	});
-</script>
 <script>
     $(document).ready( function () {
         $('#table_harga_khusus').DataTable();
         $('#table_mastergroup').DataTable();
     } );
 </script>
-@include('purchasing/rencanapembelian/js/commander')
-  @include('purchasing/rencanapembelian/js/functions')
 @endsection

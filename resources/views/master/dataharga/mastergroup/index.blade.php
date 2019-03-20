@@ -6,7 +6,7 @@
 	                        <h3 class="title">Master Group</h3>
 	                    </div>
 	                    <div class="header-block pull-right">
-                			<button class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Tambah Data</button>
+                			<button class="btn btn-primary" data-toggle="modal" data-target="#create"><i class="fa fa-plus"></i>&nbsp;Tambah Data</button>
 	                    </div>
                     </div>
                     <div class="card-block">
@@ -26,7 +26,7 @@
                                             <td>1</td>
                                             <td>Harga Normal</td>
                                             <td style="text-align:center;">
-                                                <button class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-warning" title="Edit" data-toggle="modal" data-target="#edit"><i class="fa fa-pencil"></i></button>
                                                 <button class="btn btn-sm btn-primary" title="Aktif"><i class="fa fa-check-square"></i></button>
                                             </td>
                                         </tr>
