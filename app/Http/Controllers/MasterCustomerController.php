@@ -134,6 +134,8 @@ class MasterCustomerController extends Controller
         $nopols = $request->nopol;
         foreach ($nopols as $nopol) {
           if ($nopol != null) {
+            $nopol =  str_replace('_', '', $nopol);
+
             $k_id = m_kendaraan::max('k_id') + 1;
             $kendaraan = new m_kendaraan;
             $kendaraan->k_id = $k_id;
