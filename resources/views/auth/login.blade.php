@@ -53,44 +53,26 @@
                     </div>
                 </div>
                 <div class="ar-card-body">
-                    <form method="POST" action="{{ url('login') }}">
+                    <form class="login100-form">
                         {{ csrf_field() }}
                         <div class="form-group">
                             <h5 class="form-label">Username</h5>
-                            <input type="text" class="form-control" name="email" id="email">
-                            @if ($errors->has('email'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
-                            @endif
+                            <input type="text" class="form-control" name="username" id="email">
                         </div>
 
                         <div class="form-group">
                             <h5 class="form-label">Password</h5>
                             <input type="password" class="form-control" name="password" id="password">
-                            @if ($errors->has('password'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </span>
-                            @endif
                         </div>
-                        <label for="remember" class="text-primary ">
-                            <input class="checkbox" id="remember" name="remember" type="checkbox">
-                            <span>Remember me</span>
-                        </label>
-                        <a class="anchor-link pull-right" href="javascript:void(0);">Forgot your password?</a>
-                        <button class="btn w-100 bg-primary" type="submit">Login</button>
-                        <label>
-                            <span class="span-underbutton">Need an account?</span>
-                            <a class="anchor-link" href="javascript:void(0);">Register</a>
-                        </label>
                     </form>
+                        <button class="btn w-100 bg-primary" type="submit" onclick="loginUser()">Login</button>
+                     {{-- onclick="loginUser()" --}}
                 </div>
             </div>
         </div>
 
     <footer>
-        <span>Created by Ari Akbar Ind. 2019 Made with Ɛ>.</span>
+        <span>Created by Alamraya Sebar Barokah.</span>
     </footer>
     <script src="{{asset('assets/login-mirip-discrottt/js/jquery/jquery-3.3.1.js')}}"></script>
     <script src="{{asset('assets/login-mirip-discrottt/js/parallax-mousehover/parallax.js')}}"></script>
@@ -110,8 +92,6 @@
 
     $(document).ready(function(){
         // setTimeout(function(){
-
-
             $(window).resize(function(){
 
                 console.log('resize');
@@ -165,6 +145,52 @@
         $('body').addClass(themeName);
     } else {
         console.log('nothing');
+    }
+
+    var baseUrl = '{{url('/')}}';
+        $("#username").load("Auth/login", function(){
+        $("#username").focus();
+    });
+
+    function loginUser(){  
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: baseUrl + '/login',
+            data: $('.login100-form').serialize(),
+                success : function(response){  
+                        if(response.status=='sukses'){
+                            window.location = baseUrl+'/home';
+                        }else if(response.status=='gagal'){
+                            alert(response.data);
+
+                        }
+          },
+
+          error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
+            }
+        }
+
+
+      });
     }
 </script>
 </body>
