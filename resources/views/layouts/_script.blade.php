@@ -256,6 +256,18 @@ $.ajaxSetup({
 
     $(".persentase").inputmask({"regex": "^[1-9][0-9]?$|^100$" });
 	});
+
+    function regeneratedSession(){
+        $.ajax({
+            url: baseUrl+'/session-set-comp/'+$('.mem_comp').val(),
+            type: 'get',
+            timeout: 5000,
+            success: function(response){
+                location.reload();
+            }
+        })
+    }
+
 </script>
 <script type="text/javascript">
     $(document).ready(function(){

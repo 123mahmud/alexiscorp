@@ -11,16 +11,22 @@
 |
 */
 
+Route::group(['middleware' => ['guest', 'web']], function() {
 Route::get('/', function () {
-    return redirect('home');
+	return view('auth.login');
+})->name('login');
+	Route::post('login', 'loginController@authenticate');
+	Route::get('recruitment', 'RecruitmentController@recruitment');
+	Route::post('recruitment/save', 'RecruitmentController@save');
+	Route::get('recruitment/cek-email', 'RecruitmentController@cekEmail');
+	Route::get('recruitment/cek-wa', 'RecruitmentController@cekWa');
 });
 
-Auth::routes();
-
-Route::group(['middleware' => 'auth'], function(){
-
+Route::group(['middleware' => ['auth', 'web']], function() {
+	Route::get('/session-set-comp/{id}','mMemberController@setComp');
+	Route::get('not-allowed', 'mMemberController@notAllowed');
+	Route::post('logout', 'mMemberController@logout')->middleware('auth');;
 	Route::get('/home', 'HomeController@index')->name('home');
-
 	// Master
 	Route::get('/master/databarang/index', 'MasterBarangController@databarang')->name('databarang');
 	Route::get('/master/databarang/list', 'MasterBarangController@getList')->name('list_databarang');
@@ -50,13 +56,6 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/master/dataarmada/suplier/edit', 'MasterArmadaController@edit_dataarmada')->name('edit_dataarmada');
 	Route::get('/master/dataarmada/customer/create', 'MasterArmadaController@tambah_dataarmada_customer')->name('tambah_dataarmada_customer');
 	Route::get('/master/dataarmada/modal_dataarmada', 'MasterArmadaController@modal_dataarmada')->name('modal_dataarmada');
-
-
-	// Route::get('/master/datacustomer/datacustomer', 'MasterCustomerController@index')->name('datacustomer');
-	// Route::get('/master/datacustomer/tambah_datacustomer', 'MasterCustomerController@create')->name('tambah_datacustomer');
-	// Route::get('/master/datacustomer/save_datacustomer', 'MasterCustomerController@store')->name('save_datacustomer');
-	// Route::get('/master/datacustomer/edit_datacustomer', 'MasterCustomerController@edit')->name('edit_datacustomer');
-	// Route::get('/master/datacustomer/update_datacustomer', 'MasterCustomerController@update')->name('update_datacustomer');
 
 	Route::get('/master/datapegawai/datapegawai', 'MasterController@datapegawai')->name('datapegawai');
 	Route::get('/master/datapegawai/tambah_datapegawai', 'MasterController@tambah_datapegawai')->name('tambah_datapegawai');

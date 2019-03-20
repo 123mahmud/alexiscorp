@@ -1,127 +1,31 @@
 <header class="header">
-    <div class="header-block header-block-collapse
-     {{-- d-lg-none d-sm-block --}}
-     ">
+    <div class="header-block header-block-collapse">
         <button class="collapse-btn" id="sidebar-collapse-btn">
-            <i class="fa fa-bars"></i>
+        <i class="fa fa-bars"></i>
         </button>
     </div>
-{{--     <div class="header-block header-block-collapse d-lg-block d-sm-none d-none">
-        <button class="collapse-btn" id="sidebar-collapse-btn-lg"  style="color:rosybrown;">
-            <i class="fa fa-bars"></i>
-        </button>
-    </div>   --}}  
-{{--     <div id="search-container" class="header-block header-block-search">
-        <form role="search">
-            <div class="input-container">
-                <i class="fa fa-search"></i>
-                <input type="search" placeholder="Search" id="filterInput">
-                <button type="button" class="btn btn-secondary btn-sm d-none" id="btn-reset">
-                    <i class="fa fa-times"></i>
-                </button>
-                <div class="underline"></div>
-            </div>
-        </form>
-    </div> --}}
-    <!-- <div class="header-block header-block-buttons">
-        <a href="https://github.com/modularcode/modular-admin-html" class="btn btn-sm header-btn">
-            <i class="fa fa-github-alt"></i>
-            <span>View on GitHub</span>
-        </a>
-        <a href="https://github.com/modularcode/modular-admin-html/stargazers" class="btn btn-sm header-btn">
-            <i class="fa fa-star"></i>
-            <span>Star Us</span>
-        </a>
-        <a href="https://github.com/modularcode/modular-admin-html/releases" class="btn btn-sm header-btn">
-            <i class="fa fa-cloud-download"></i>
-            <span>Download .zip</span>
-        </a>
-    </div> -->
     <div class="header-block header-block-nav">
         <ul class="nav-profile">
-            {{-- <li class="d-block d-sm-block d-md-none">
-                <a id="search-mobile" href="javascript:void(0);"><i class="fa fa-search"></i></a>
-            </li> --}}
-            <li class="notifications new">
-                <a href="" data-toggle="dropdown">
-                    <i class="fa fa-bell-o"></i>
-                    <sup>
-                        <span class="counter">8</span>
-                    </sup>
-                </a>
-                <div class="dropdown-menu notifications-dropdown-menu">
-                    <ul class="notifications-container">
-                        <li>
-                            <a href="" class="notification-item">
-                                <div class="img-col">
-                                    <div class="img" style="background-image: url('assets/assets/faces/3.jpg')"></div>
-                                </div>
-                                <div class="body-col">
-                                    <p>
-                                        <span class="accent">Zack Alien</span> pushed new commit:
-                                        <span class="accent">Fix page load performance issue</span>. </p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="notification-item">
-                                <div class="img-col">
-                                    <div class="img" style="background-image: url('assets/assets/faces/5.jpg')"></div>
-                                </div>
-                                <div class="body-col">
-                                    <p>
-                                        <span class="accent">Amaya Hatsumi</span> started new task:
-                                        <span class="accent">Dashboard UI design.</span>. </p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="notification-item">
-                                <div class="img-col">
-                                    <div class="img" style="background-image: url('assets/assets/faces/8.jpg')"></div>
-                                </div>
-                                <div class="body-col">
-                                    <p>
-                                        <span class="accent">Andy Nouman</span> deployed new version of
-                                        <span class="accent">NodeJS REST Api V3</span>
-                                    </p>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <footer>
-                        <ul>
-                            <li>
-                                <a href=""> View All </a>
-                            </li>
-                        </ul>
-                    </footer>
-                </div>
+            <li class="dropdown" style="max-width: 200px;min-width: 100px;">
+                <select class="form-control input-xm mem_comp" onchange="regeneratedSession()" name="mem_comp">
+                    @foreach(App\mMember::perusahaan() as $data)
+                    <option @if(Session::get('user_comp')==$data->c_id) selected="" @endif
+                    value="{{$data->c_id}}">{{$data->c_name}}</option>
+                    @endforeach
+                </select>
             </li>
-            <li class="profile dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    <div class="img" style="background-image: url('https://avatars3.githubusercontent.com/u/3959008?v=3&s=40')"> </div>
-                    <span class="name"> Administrator {{-- {{Auth::user()->name}} --}} </span>
-                </a>
-                <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <a class="dropdown-item" href="#">
-                        <i class="fa fa-user icon"></i> Profile </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fa fa-bell icon"></i> Notifications </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fa fa-gear icon"></i> Settings </a>
-                    <div class="dropdown-divider"></div>
-                    <a id="btn-logout" class="dropdown-item"
-                    href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     // document.getElementById('logout-form').submit();
-                                                     "
-                                                     >
-                        <i class="fa fa-power-off icon"></i> Logout </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                </div>
+            <li class="dropdown topbar-user"><a href="#"><img alt=""
+                class="img-responsive img-circle">&nbsp;<span class="hidden-xs">{{ Auth::user()->m_name }}</span></a>
+            </li>
+            <li class="dropdown">
+                
+                <div class="dropdown-divider"></div>
+                <a id="btn-logout" class="dropdown-item"
+                    href="{{url('logout')}}" onclick="event.preventDefault();">
+                <i class="fa fa-power-off icon"></i> Logout </a>
+                <form id="logout-form" action="{{url('logout')}}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
             </li>
         </ul>
     </div>
@@ -131,25 +35,18 @@
         <div class="sidebar-header">
             <div class="brand">
                 <img src="{{asset('assets/img/games.ico')}}" height="45px" width="45px" class="mr-2">
-                {{-- <div class="logo">
-                    <span class="l l1"></span>
-                    <span class="l l2"></span>
-                    <span class="l l3"></span>
-                    <span class="l l4"></span>
-                    <span class="l l5"></span>
-                </div>  --}}
                 <span class="brand-title">Alexis</span>
             </div>
             <form role="search">
                 <div class="input-container">
                     <div class="input-container-prepend">
                         <button class="btn btn-secondary btn-sm" type="button" id="btn-search-menu">
-                            <i class="fa fa-search"></i>
+                        <i class="fa fa-search"></i>
                         </button>
                     </div>
                     <input type="search" placeholder="Cari Menu" id="filterInput">
                     <button type="button" class="btn btn-secondary btn-sm d-none" id="btn-reset">
-                        <i class="fa fa-times"></i>
+                    <i class="fa fa-times"></i>
                     </button>
                     <div class="underline"></div>
                 </div>
@@ -157,16 +54,15 @@
         </div>
         <nav class="menu" id="sidebar">
             <ul class="sidebar-menu metismenu" id="sidebar-menu">
-
                 <li class="{{Request::is('home') ? 'active' : ''  || Request::is('/') ? 'active' : ''}}">
                     <a href="{{url('/')}}">
-                        <i class="fa fa-home"></i> 
+                        <i class="fa fa-home"></i>
                         <span class="menu-title">Dashboard </span>
                     </a>
                 </li>
                 <li class="{{Request::is('master/*') ? 'active open' : ''}}">
                     <a href="#">
-                        <i class="fa fa-th-large"></i> 
+                        <i class="fa fa-th-large"></i>
                         <span class="menu-title">Master Data</span>
                         <i class="fa arrow"></i>
                     </a>
@@ -246,7 +142,7 @@
                 </li>
                 <li class="{{Request::is('stok/*') ? 'active open' : ''}}">
                     <a href="#">
-                        <i class="fa fa-desktop"></i> 
+                        <i class="fa fa-desktop"></i>
                         <span class="menu-title">Stok</span>
                         <i class="fa arrow"></i>
                     </a>
@@ -270,7 +166,7 @@
                 </li>
                 <li class="{{Request::is('produksi/*') ? 'active open' : ''}}">
                     <a href="#">
-                        <i class="fa fa-product-hunt"></i> 
+                        <i class="fa fa-product-hunt"></i>
                         <span class="menu-title">Produksi</span>
                         <i class="fa arrow"></i>
                     </a>
@@ -345,7 +241,6 @@
                         <li class="{{Request::is('pengiriman/upahboronganpengiriman/*') ? 'active' : ''}}">
                             <a href="{{route('upahboronganpengiriman')}}"> Upah Borongan Pengiriman</a>
                         </li>
-
                         <li class="{{Request::is('pengiriman/suratjalan/*') ? 'active' : ''}}">
                             <a href="{{route('suratjalan')}}"> Surat Jalan</a>
                         </li>
@@ -370,7 +265,7 @@
                         {{-- <li class="{{Request::is('biayadanbeban/sewalahan/*') ? 'active' : ''}}">
                             <a href="{{route('sewalahan')}}"> Sewa Lahan</a>
                         </li> --}}
-                       {{--  <li class="{{Request::is('biayadanbeban/biayaoperasional/*') ? 'active' : ''}}">
+                        {{--  <li class="{{Request::is('biayadanbeban/biayaoperasional/*') ? 'active' : ''}}">
                             <a href="{{route('biayaoperasional')}}"> Biaya Operasional</a>
                         </li>
                         <li class="{{Request::is('biayadanbeban/biayabahanbakar/*') ? 'active' : ''}}">
@@ -394,7 +289,7 @@
                         
                     </ul>
                 </li>
-{{--                 <li class="{{Request::is('danasosial/*') ? 'active' : ''}}">
+                {{--                 <li class="{{Request::is('danasosial/*') ? 'active' : ''}}">
                     <a href="{{route('danasosial')}}">
                         <i class="fa fa-users"></i><span class="menu-title"> Dana Sosial</span>
                     </a>
@@ -423,14 +318,12 @@
                         <li class="{{Request::is('keuangan/prosesinputtransaksi/*') ? 'active' : ''}}">
                             <a href="{{route('pilih_prosesinputtransaksi')}}"> Proses Input Transaksi</a>
                         </li>
-
                         <li class="{{Request::is('keuangan/laporankeuangan/*') ? 'active' : ''}}">
                             <a href="{{route('laporankeuangan')}}"> Laporan Keuangan</a>
                         </li>
                         <li class="{{Request::is('keuangan/analisa/*') ? 'active' : ''}}">
                             <a href="{{route('analisa')}}">Analisa</a>
                         </li>
-
                         
                     </ul>
                 </li>
@@ -550,7 +443,7 @@
                     </li>
                 </ul>
                 <a href="#">
-                    <i class="fa fa-cog"></i> 
+                    <i class="fa fa-cog"></i>
                     <span class="customize-menu-title">Customize </span>
                 </a>
             </li>
