@@ -212,6 +212,10 @@ class MasterController extends Controller
     {
         return view('master/barangsuplier/edit_suplier');
     }
+    public function harga()
+    {
+        return view('master/dataharga/index');
+    }
     public function upah()
     {
         return view('master.upah.upah');
