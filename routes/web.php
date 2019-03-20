@@ -105,7 +105,8 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/master/barangsuplier/tambah_barang', 'MasterController@tambah_barang')->name('tambah_barang');
 	Route::get('/master/barangsuplier/edit_barang', 'MasterController@edit_barang')->name('edit_barang');
 	Route::get('/master/barangsuplier/tambah_suplier', 'MasterController@tambah_suplier')->name('tambah_suplier');
-	Route::get('/master/barangsuplier/edit_suplier', 'MasterController@edit_suplier')->name('edit_suplier');
+    Route::get('/master/barangsuplier/edit_suplier', 'MasterController@edit_suplier')->name('edit_suplier');
+    Route::get('/master/dataharga/index', 'MasterController@harga')->name('dataharga');
 	Route::get('/master/upah/index', 'MasterController@upah')->name('upah');
 	Route::get('/master/upah/create', 'MasterController@tambah_upah')->name('tambah_upah');
 

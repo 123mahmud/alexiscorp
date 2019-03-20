@@ -91,6 +91,9 @@
                         <li class="{{Request::is('master/barangsuplier/*') ? 'active' : ''}}">
                             <a href="{{route('barangsuplier')}}">Item Barang Suplier</a>
                         </li>
+                        <li class="{{Request::is('master/dataharga/*') ? 'active' : ''}}">
+                            <a href="{{route('dataharga')}}">Data Harga</a>
+                        </li>
                         <li class="{{Request::is('master/upah/*') ? 'active' : ''}}">
                             <a href="{{route('upah')}}">Data Upah</a>
                         </li>
