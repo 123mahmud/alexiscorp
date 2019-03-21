@@ -364,7 +364,7 @@
 	      success : function(response){
 	      	$('#pg_code').val(response.status.pg_code);
 	      	$('#pg_id').val(response.status.pg_id);
-	      	$('#pg_name').val(response.status.pg_name);
+	      	$('.pg_name').val(response.status.pg_name);
 	      	$('#edit').modal('show');
 	      },
 	      error: function (jqXHR, textStatus, errorThrown)
