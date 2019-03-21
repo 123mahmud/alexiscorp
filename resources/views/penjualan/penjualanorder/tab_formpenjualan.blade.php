@@ -12,9 +12,9 @@
             				<input type="text" class="form-control form-control-lg text-right" value="0,00" readonly="" name="">
             			</div>
             		</div>
-            		
+
             	</div>
-            	
+
             	<fieldset class="mb-3">
                 	<div class="row">
                 		<div class="col-md-9 col-sm-12">
@@ -23,9 +23,8 @@
                         			<label>Nama Customer</label>
                         			<div class="form-group">
                         				<div class="input-group">
-	                        				<select class="form-control form-control-sm select2">
-	                        					<option value="">--Pilih--</option>
-	                        				</select>
+																	<input type="hidden" name="idCustomer" id="idCustomer">
+																	<input type="text" class="form-control form-control-sm" name="customer" id="customer">
 	                        				<div class="input-group-append">
 	                        					<button class="btn btn-primary btn-sm" id="btn-modal-customer"><i class="fa fa-plus-square"></i></button>
 	                        				</div>
@@ -36,14 +35,14 @@
                         		<div class="col-lg-12">
                         			<label>Alamat</label>
                         			<div class="form-group">
-                        				<input type="text" class="form-control form-control-sm" name="" readonly="">
+                        				<input type="text" class="form-control form-control-sm" name="address" id="address" readonly="">
                         			</div>
                         		</div>
 
                         		<div class="col-lg-12">
                         			<label>Keterangan Project</label>
                         			<div class="form-group">
-                        				<textarea class="form-control" name=""></textarea>
+                        				<textarea class="form-control" name="keterangan" id="ket-project"></textarea>
                         			</div>
                         		</div>
                         	</div>
@@ -68,6 +67,19 @@
                         				<input type="text" class="form-control form-control-sm datepicker" name="">
                         			</div>
                         		</div>
+
+														<div class="col-lg-12">
+															<label>Group Harga</label>
+															<div class="form-group">
+																<select class="select2 form-control-sm form-control" id="group_price" name="group_price">
+				                					<option value="" disabled>- -Pilih- -</option>
+																	@foreach($data['group_harga'] as $group)
+																		<option value="{{ $group->pg_id }}">{{ $group->pg_name }}</option>
+																	@endforeach
+				                				</select>
+															</div>
+														</div>
+
                         	</div>
                     	</div>
 
@@ -80,15 +92,20 @@
                 		<div class="col-md-6 col-sm-12">
                 			<label>Pilih Barang / Jasa</label>
                 			<div class="form-group">
-                				<select class="select2 form-control-sm form-control" id="barang">
-                					<option value="">--Pilih--</option>
+												<input type="hidden" name="itemId" id="itemId">
+												<input type="hidden" name="itemName" id="itemName">
+												<input type="hidden" name="itemSatId" id="itemSatId">
+												<input type="hidden" name="itemSatName" id="itemSatName">
+												<input type="text" class="form-control form-control-sm" name="barang" id="barang">
+                				<!-- <select class="select2 form-control-sm form-control" id="barang">
+                					<option value="">- -Pilih- -</option>
                 					<optgroup label="Barang">
                 						<option value="1">Semen</option>
                 					</optgroup>
                 					<optgroup label="Jasa">
                 						<option value="2">Pasang</option>
                 					</optgroup>
-                				</select>
+                				</select> -->
                 			</div>
                 		</div>
 
@@ -96,7 +113,7 @@
                 			<label>Qty</label>
                 			<div class="form-group">
                 				<div class="input-group">
-                    				<input type="number" min="0" id="qty" class="form-control form-control-sm" name="">
+                    				<input type="text" min="0" id="qty" class="form-control form-control-sm" name="">
                     				<div class="input-group-append">
                     					<button class="btn btn-primary btn-sm btn-tambah" type="button" title="Tambah"><i class="fa fa-plus"></i></button>
                     				</div>
@@ -107,7 +124,7 @@
                 		<div class="col-md-3 col-sm-12">
                 			<label>Kuantitas Stok</label>
                 			<div class="form-group">
-                				<input type="text" readonly="" class="form-control form-control-sm" name="">
+                				<input type="text" readonly="" class="form-control form-control-sm" name="stock" id="stock">
                 			</div>
                 		</div>
 
@@ -138,7 +155,7 @@
                 				<div class="col-md-12">
                 					<label>Total Penjualan</label>
                 					<div class="form-group">
-                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="">
+                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalPenjualan" id="totalPenjualan">
                 					</div>
                 				</div>
                 				<div class="col-md-12">
