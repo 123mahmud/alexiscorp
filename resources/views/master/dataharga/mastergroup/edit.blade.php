@@ -22,7 +22,7 @@
                                 <label>Nama Group</label>
                             </div>
                             <div class="col-md-7 col-sm-12">
-                                <input type="text" value="" name="pg_name" id="pg_name" class="form-control form-control-sm"/>
+                                <input type="text" value="" name="pg_name" id="pg_name" class="form-control form-control-sm pg_name"/>
                             </div>
                         </div>
                         </form>
