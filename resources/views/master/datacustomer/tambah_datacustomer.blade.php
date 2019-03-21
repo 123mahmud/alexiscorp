@@ -120,7 +120,6 @@
                                  </tr>
                               </thead>
                               <tbody>
-<<<<<<< HEAD
                                 <tr>
                                   <td align="center">#</td>
                                   <td><input type="text" class="form-control form-control-sm in-nopol" id="nomor_polisi" name="nopol[]" tabindex="10"></td>
@@ -128,15 +127,6 @@
                                     <button class="btn btn-primary" id="btn-tambah" type="button"><i class="fa fa-plus-square" tabindex="11"></i></button>
                                   </td>
                                 </tr>
-=======
-                                 <tr>
-                                    <td align="center">#</td>
-                                    <td><input type="text" class="form-control form-control-sm" id="nomor_polisi" name="nopol[]" tabindex="10"></td>
-                                    <td align="center">
-                                       <button class="btn btn-primary" id="btn-tambah" type="button"><i class="fa fa-plus-square" tabindex="11"></i></button>
-                                    </td>
-                                 </tr>
->>>>>>> c487134e3c7f9ad1be996d4b1295d3e0abd56f6d
                               </tbody>
                            </table>
                         </div>
@@ -201,7 +191,6 @@
       setNopolMask();
     });
 
-<<<<<<< HEAD
     $('#btn_simpan').one('click', function() {
       SubmitForm(event);
     });
@@ -220,10 +209,6 @@
   {
     event.preventDefault();
     form_data = $('#myForm').serialize();
-=======
-  });
-
->>>>>>> c487134e3c7f9ad1be996d4b1295d3e0abd56f6d
 
 
    function simpan()
