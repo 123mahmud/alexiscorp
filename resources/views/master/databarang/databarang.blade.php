@@ -38,7 +38,6 @@
 	                            <table class="table table-striped table-hover" cellspacing="0" id="table_barang">
 	                                <thead class="bg-primary">
 	                                    <tr>
-	                                    	<th>No</th>
 		                                		<th>Kode Barang</th>
 		                                		<th>Nama Barang</th>
 		                                		<th>Satuan</th>
@@ -141,7 +140,6 @@
 				}
 			},
 			columns: [
-				{data: 'DT_RowIndex'},
 				{data: 'i_code'},
 				{data: 'i_name'},
 				{data: 'satuan'},
