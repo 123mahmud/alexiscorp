@@ -572,6 +572,9 @@ a.text-dark:hover,a.text-dark:focus{
 .card{
 	box-shadow: 1px 1px 5px rgba(126, 142, 159, .5);
 }
+.header .header-block-nav > ul > li > a {
+   margin-bottom: 19px;
+}
 @media (min-width: 992px) {
   .modal-full {
     max-width: 90%;
@@ -656,7 +659,6 @@ a.text-dark:hover,a.text-dark:focus{
             transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
         }
     }
-
 
 
 
