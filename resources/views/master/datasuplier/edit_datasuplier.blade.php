@@ -41,7 +41,7 @@
                               </div>
                            </div>
                            <div class="col-md-3 col-sm-6 col-xs-12">
-                              <label>Nama Suplier</label>
+                              <label>Nama Suplier<font color="red">*</font></label>
                            </div>
                            <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
@@ -182,20 +182,6 @@
 @section('extra_script')
 <script type="text/javascript">
    $(document).ready(function(){
-
-      $(".npwp").inputmask("99-999-999-9-999-999");
-
-      $('.hp').inputmask("9999 9999 9999");
-
-      //mask money
-      $('.currency').inputmask("currency", {
-        radixPoint: ".",
-        groupSeparator: ".",
-        digits: 2,
-        autoGroup: true,
-        prefix: '', //Space after $, this will not truncate the first character.
-        rightAlign: false,
-      });
 
       $(this).maskFunc();
 
