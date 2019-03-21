@@ -42,25 +42,6 @@
 							            </tr>
 	                                </thead>
 	                                <tbody>
-	                                	{{-- @foreach($data['supplier'] as $index=>$supplier)
-	                                	<tr>
-	                                		<td> {{$supplier->c_name}} </td>
-	                                		<td> {{$supplier->s_name}} </td>
-	                                		<td> {{$supplier->s_address}} </td>
-	                                		<td> {{$supplier->s_phone}} </td>
-	                                		<td> {{$supplier->s_fax}} </td>
-	                                		<td> {{$supplier->s_note}} </td>
-	                                		<td> 
-	                                			<div class="btn-group btn-group-sm">
-	                                				@if($supplier->s_isactive == 'Y')
-	                                				<a class="btn btn-warning btn-edit" href="{{url('/master/datasuplier/edit/'.$supplier->s_id.'')}}" type="button" title="Edit"><i class="fa fa-pencil"></i></a>
-	                                				@endif
-
-	                                				<button class="btn btn-danger btn-disable" type="button" title="Delete" onclick="status('{{$supplier->s_id}},{{$supplier->s_isactive}}')"><i class="fa fa-eye-slash"></i></button>
-	                                			</div>
-	                                		</td>
-	                                	</tr>
-	                                	@endforeach --}}
 
 	                                </tbody>
 	                            </table>
