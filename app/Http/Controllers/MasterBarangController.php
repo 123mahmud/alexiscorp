@@ -19,7 +19,7 @@ class MasterBarangController extends Controller
     {
       $datas = DB::table('m_item')
         ->join('m_satuan' , 's_id' , '=' , 'i_sat1')
-        ->join('m_group', 'm_gid', '=', 'i_group')
+        ->join('m_group', 'g_id', '=', 'i_group')
         ->orderBy('i_id' , 'desc')
         ->get();
       return Datatables::of($datas)
@@ -28,7 +28,7 @@ class MasterBarangController extends Controller
           return $datas->s_name;
         })
         ->addColumn('group', function($datas) {
-          return $datas->m_gname;
+          return $datas->g_name;
         })
         ->addColumn('action', function($datas) {
           if ($datas->i_isactive == 'Y') {
@@ -107,7 +107,7 @@ class MasterBarangController extends Controller
             $masterbarang->i_id = $urut;
             $masterbarang->i_code = $kode_barang;
             $masterbarang->i_type = $request->tipe_barang;
-            $masterbarang->i_code_group = $request->kelompok_barang;
+            $masterbarang->i_group = $request->kelompok_barang;
             $masterbarang->i_name = $request->nama_barang;
 
             $masterbarang->i_sat1 = $request->satuan_utama;
