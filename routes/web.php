@@ -105,10 +105,21 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/master/barangsuplier/edit_barang', 'MasterController@edit_barang')->name('edit_barang');
 	Route::get('/master/barangsuplier/tambah_suplier', 'MasterController@tambah_suplier')->name('tambah_suplier');
     Route::get('/master/barangsuplier/edit_suplier', 'MasterController@edit_suplier')->name('edit_suplier');
-    Route::get('/master/dataharga/index', 'MasterController@harga')->name('dataharga');
 	Route::get('/master/upah/index', 'MasterController@upah')->name('upah');
 	Route::get('/master/upah/create', 'MasterController@tambah_upah')->name('tambah_upah');
-
+// data harga
+	Route::get('/master/dataharga/index', 'Master\DataHargaController@index')->name('dataharga');
+	Route::get('/master/grouphargakhusus/tablegroup/{id}', 'Master\DataHargaController@tableGroup');
+    Route::get('/master/grouphargakhusus/mastergroup', 'Master\DataHargaController@tableMasterGroup');
+    Route::get('/master/grouphargakhusus/tambahgroup', 'Master\DataHargaController@tambahGroup');
+    Route::get('/master/grouphargakhusus/tambahgroup/baru', 'Master\DataHargaController@insertGroup');
+    Route::get('/master/grouphargakhusus/ubahstatusgrup/{id}', 'Master\DataHargaController@moveStatusGroup');
+    Route::get('/master/grouphargakhusus/updategroup/{id}', 'Master\DataHargaController@updateGroup');
+    Route::get('/master/grouphargakhusus/autocomplete', 'Master\DataHargaController@autocomplete');
+    Route::get('/master/grouphargakhusus/tambahItemHarga', 'Master\DataHargaController@saveHargaItem');
+    Route::get('/master/grouphargakhusus/itemharga/hapus/{id}', 'Master\DataHargaController@deleteItemHarga');
+    Route::get('/master/dataharga/edit', 'Master\DataHargaController@editGroup');
+    
 //mahmud jabatan
 	Route::get('/master/datajabatan/index', 'Master\JabatanController@index')->name('datajabatan');
 	Route::get('/master/datajabatan/create', 'Master\JabatanController@tambahJabatan')->name('tambah_datajabatan');

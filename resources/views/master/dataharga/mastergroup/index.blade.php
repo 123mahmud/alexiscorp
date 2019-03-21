@@ -13,23 +13,14 @@
                         <section>
                         	
                         	<div class="table-responsive">
-	                            <table class="table table-striped table-hover" cellspacing="0" id="table_mastergroup">
+	                            <table class="table table-striped table-hover" cellspacing="0" id="tb_group">
 	                                <thead class="bg-primary">
 	                                    <tr align="center">
-							                <th width="10%">No</th>
-				                            <th width="70%">Nama Group</th>
-				                            <th widht="20%">Aksi</th>
+				                            <th>Code - Nama Group</th>
+				                            <th>Aksi</th>
 							            </tr>
 	                                </thead>
 	                                <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Harga Normal</td>
-                                            <td style="text-align:center;">
-                                                <button class="btn btn-sm btn-warning" title="Edit" data-toggle="modal" data-target="#edit"><i class="fa fa-pencil"></i></button>
-                                                <button class="btn btn-sm btn-primary" title="Aktif"><i class="fa fa-check-square"></i></button>
-                                            </td>
-                                        </tr>
 	                                </tbody>
 	                            </table>
 	                        </div>

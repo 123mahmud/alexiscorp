@@ -39,6 +39,17 @@
       $('.background-loading').fadeOut('slow');
     },500);
 
+
+    //mask money
+    $('.currency').inputmask("currency", {
+      radixPoint: ".",
+      groupSeparator: ".",
+      digits: 2,
+      autoGroup: true,
+      prefix: '', //Space after $, this will not truncate the first character.
+      rightAlign: false,
+    });
+
   });
 
   function messageSuccess(title, message) {
