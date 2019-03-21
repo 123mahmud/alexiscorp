@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('not-allowed', 'mMemberController@notAllowed');
 	Route::post('logout', 'mMemberController@logout')->middleware('auth');;
 	Route::get('/home', 'HomeController@index')->name('home');
-	// Master
+// Master
 	Route::get('/master/databarang/index', 'MasterBarangController@databarang')->name('databarang');
 	Route::get('/master/databarang/list', 'MasterBarangController@getList')->name('list_databarang');
 	Route::get('/master/databarang/create', 'MasterBarangController@tambah_databarang')->name('tambah_databarang');
@@ -36,15 +36,14 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::post('/master/databarang/save', 'MasterBarangController@save_barang');
 	Route::post('/master/databarang/update', 'MasterBarangController@update');
 	Route::get('/master/databarang/disabled', 'MasterBarangController@disabled');
-
-
+// Master Supplier
 	Route::get('/master/datasuplier/index', 'MasterSupplierController@datasuplier')->name('datasuplier');
 	Route::get('/master/datasuplier/create', 'MasterSupplierController@tambah_datasuplier')->name('tambah_datasuplier');
-	Route::get('/master/datasuplier/edit/{id}', 'MasterSupplierController@edit_datasuplier')->name('edit_datasuplier');
-	Route::post('/master/datasuplier/save', 'MasterSupplierController@save_datasupplier')->name('edit_datasuplier');
+	Route::get('/master/datasuplier/edit', 'MasterSupplierController@edit_datasuplier')->name('edit_datasuplier');
+	Route::get('/master/datasuplier/save', 'MasterSupplierController@save_datasupplier')->name('edit_datasuplier');
 	Route::get('/master/datasuplier/disabled', 'MasterSupplierController@disabled');
-	Route::post('/master/datasuplier/update', 'MasterSupplierController@update');
-
+	Route::get('/master/datasuplier/update', 'MasterSupplierController@update');
+	Route::get('/master/datasuplier/table', 'MasterSupplierController@table');
 
 	Route::get('/master/dataarmada/index', 'MasterArmadaController@dataarmada')->name('dataarmada');
 	Route::get('/master/dataarmada/create', 'MasterArmadaController@tambah_dataarmada_own')->name('tambah_dataarmada_own');
