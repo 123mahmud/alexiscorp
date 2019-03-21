@@ -6,16 +6,15 @@
     </div>
     <div class="header-block header-block-nav">
         <ul class="nav-profile">
-            <li class="dropdown" style="max-width: 200px;min-width: 100px;">
-                <select class="form-control input-xm mem_comp" onchange="regeneratedSession()" name="mem_comp">
+            <li class="dropdown" style="max-width: 200px;min-width: 100px; padding: 0px 20px;">
+                <select class="form-control form-control-sm input-xm mem_comp col-12" onchange="regeneratedSession()" name="mem_comp">
                     @foreach(App\mMember::perusahaan() as $data)
                     <option @if(Session::get('user_comp')==$data->c_id) selected="" @endif
                     value="{{$data->c_id}}">{{$data->c_name}}</option>
                     @endforeach
                 </select>
             </li>
-            <li class="dropdown topbar-user"><a href="#"><img alt=""
-                class="img-responsive img-circle">&nbsp;<span class="hidden-xs">{{ Auth::user()->m_name }}</span></a>
+            <li class="dropdown topbar-user"><a href="#"><img alt="" class="img-responsive rounded-circle" src="assets/assets/faces/4.jpg" style="width:30px; height:30px;">&nbsp;<span class="hidden-xs">{{ Auth::user()->m_name }}</span></a>
             </li>
             <li class="dropdown">
                 
