@@ -79,13 +79,14 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/master/datamesin/status', 'Master\dataMesinController@ubahStatus');
 //end data mesin
 
-	Route::get('/master/datacustomer/index', 'MasterCustomerController@index')->name('datacustomer');
-	Route::get('/master/datacustomer/getlist', 'MasterCustomerController@getlist')->name('getlist_datacustomer');
-	Route::get('/master/datacustomer/create', 'MasterCustomerController@create')->name('tambah_datacustomer');
-	Route::post('/master/datacustomer/save', 'MasterCustomerController@store')->name('save_datacustomer');
-	Route::get('/master/datacustomer/edit/{id}', 'MasterCustomerController@edit')->name('edit_datacustomer');
-	Route::post('/master/datacustomer/update/{id}', 'MasterCustomerController@update')->name('update_datacustomer');
-	Route::post('/master/datacustomer/disable/{id}', 'MasterCustomerController@destroy')->name('disable_datacustomer');
+	Route::get('/master/datacustomer/index', 'Master\MasterCustomerController@index')->name('datacustomer');
+	Route::get('/master/datacustomer/getlist', 'Master\MasterCustomerController@getlist')->name('getlist_datacustomer');
+	Route::get('/master/datacustomer/create', 'Master\MasterCustomerController@create')->name('tambah_datacustomer');
+	Route::get('/master/datacustomer/save', 'Master\MasterCustomerController@store');
+;
+	Route::get('/master/datacustomer/update', 'Master\MasterCustomerController@update');
+	Route::get('/master/datacustomer/ubahstatus', 'Master\MasterCustomerController@ubahStatus');
+	Route::get('/master/datacustomer/edit', 'Master\MasterCustomerController@editCustomer');
 
 //mahmud pegawai
 	Route::get('/master/datapegawai/index', 'Master\PegawaiController@pegawai')->name('datapegawai');
