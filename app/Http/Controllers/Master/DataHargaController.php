@@ -199,9 +199,7 @@ class DataHargaController extends Controller
             ->where('i_name','like','%'.$search.'%')                                    
             ->orWhere('i_code','like','%'.$search.'%')
             ->get();
-               
-        $sql=$sql->get();
-        
+                     
 
         $results=[];
         foreach ($sql as $query)
