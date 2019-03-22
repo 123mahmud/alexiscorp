@@ -120,13 +120,13 @@
                                  </tr>
                               </thead>
                               <tbody>
-                                 <tr>
-                                    <td align="center">#</td>
-                                    <td><input type="text" class="form-control form-control-sm" id="nomor_polisi" name="nopol[]" tabindex="10"></td>
-                                    <td align="center">
-                                       <button class="btn btn-primary" id="btn-tambah" type="button"><i class="fa fa-plus-square" tabindex="11"></i></button>
-                                    </td>
-                                 </tr>
+                                <tr>
+                                  <td align="center">#</td>
+                                  <td><input type="text" class="form-control form-control-sm in-nopol" id="nomor_polisi" name="nopol[]" tabindex="10"></td>
+                                  <td align="center">
+                                    <button class="btn btn-primary" id="btn-tambah" type="button"><i class="fa fa-plus-square" tabindex="11"></i></button>
+                                  </td>
+                                </tr>
                               </tbody>
                            </table>
                         </div>
@@ -149,7 +149,7 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $('#type_cus').on('change', function(){
-      if($(this).val() === 'kontrak'){
+      if($(this).val() === 'KONTRAK'){
         $('#label_type_cus').text('Jatuh tempo');
         $('#jumlah_hari_bulan').val('');
         $('#pagu').val('');
@@ -157,7 +157,7 @@
         $('.120mm').removeClass('d-none');
         $('.125mm').addClass('d-none');
         $('.122mm').removeClass('d-none');
-      } else if($(this).val() === 'harian'){
+      } else if($(this).val() === 'HARIAN'){
         $('#label_type_cus').text('Jumlah Hari');
         $('#armada').prop('selectedIndex', 0).trigger('change');
         $('#pagu').val('');
@@ -184,14 +184,31 @@
       .append(
         '<tr>'+
           '<td align="center">#</td>'+
-          '<td><input type="text" class="form-control form-control-sm" name="nopol[]"></td>'+
+          '<td><input type="text" class="form-control form-control-sm in-nopol" name="nopol[]"></td>'+
           '<td align="center"><button class="btn btn-danger btn-hapus" type="button"><i class="fa fa-trash-o"></i></button></td>'+
         '</tr>'
         );
+      setNopolMask();
     });
 
+    $('#btn_simpan').one('click', function() {
+      SubmitForm(event);
+    });
+
+    $('.input-hp').inputmask('9999 9999 9999');
+    setNopolMask();
   });
 
+  function setNopolMask()
+  {
+    $('.in-nopol').inputmask('AA 9999 AAA');
+  }
+
+  // submit form to store data in db
+  function SubmitForm(event)
+  {
+    event.preventDefault();
+    form_data = $('#myForm').serialize();
 
 
    function simpan()
