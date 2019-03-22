@@ -39,6 +39,21 @@
       $('.background-loading').fadeOut('slow');
     },500);
 
+
+    //mask money
+    $('.currency').inputmask("currency", {
+      radixPoint: ".",
+      groupSeparator: ".",
+      digits: 2,
+      autoGroup: true,
+      prefix: '', //Space after $, this will not truncate the first character.
+      rightAlign: false,
+    });
+
+    $(".npwp").inputmask("99-999-999-9-999-999");
+
+    $('.hp').inputmask("9999 9999 9999");
+
   });
 
   function messageSuccess(title, message) {
@@ -173,7 +188,8 @@ $.ajaxSetup({
 
 		$('.datepicker').datepicker({
 			format:"dd-mm-yyyy",
-      enableOnReadonly:false
+      enableOnReadonly:false,
+      autoclose:true
 
 		});
 

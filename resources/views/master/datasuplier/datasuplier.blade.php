@@ -33,38 +33,15 @@
 	                            <table class="table table-striped table-hover" cellspacing="0" id="table_suplier">
 	                                <thead class="bg-primary">
 	                                    <tr align="center">
-							                <th width="1%">No</th>
-							                <th width="10%">Perusahaan</th>
-							                <th width="10%">Nama Suplier</th>
-							                <th width="10%">Alamat</th>
+	                                    	<th width="10%">Code</th>
+							                <th width="10%">Company</th>
 							                <th width="17%">No Hp</th>
-							                <th width="5%">Fax</th>
+							                <th width="10%">Alamat</th>
 											<th width="5%">Keterangan</th>
-											
 							                <th width="5%">Aksi</th>
 							            </tr>
 	                                </thead>
 	                                <tbody>
-	                                	@foreach($data['supplier'] as $index=>$supplier)
-	                                	<tr>
-	                                		<td> {{$index + 1}} </td>
-	                                		<td> {{$supplier->c_name}} </td>
-	                                		<td> {{$supplier->s_name}} </td>
-	                                		<td> {{$supplier->s_address}} </td>
-	                                		<td> {{$supplier->s_phone}} </td>
-	                                		<td> {{$supplier->s_fax}} </td>
-	                                		<td> {{$supplier->s_note}} </td>
-	                                		<td> 
-	                                			<div class="btn-group btn-group-sm">
-	                                				@if($supplier->s_isactive == 'Y')
-	                                				<a class="btn btn-warning btn-edit" href="{{url('/master/datasuplier/edit/'.$supplier->s_id.'')}}" type="button" title="Edit"><i class="fa fa-pencil"></i></a>
-	                                				@endif
-
-	                                				<button class="btn btn-danger btn-disable" type="button" title="Delete" onclick="status('{{$supplier->s_id}},{{$supplier->s_isactive}}')"><i class="fa fa-eye-slash"></i></button>
-	                                			</div>
-	                                		</td>
-	                                	</tr>
-	                                	@endforeach
 
 	                                </tbody>
 	                            </table>
@@ -84,66 +61,67 @@
 @endsection
 @section('extra_script')
 <script type="text/javascript">
-	var table = $('#table_suplier').DataTable();
+	$(document).ready(function(){
 
-	function status(a){
-		split = a.split(",");
-		id = split[0];
-		active = split[1];
+		$('#table_suplier').DataTable({
+	      processing: true,
+	      responsive:true,
+	      serverSide: true,
+	      ajax: {
+	        url: '{{ url("master/datasuplier/table") }}',
+	      },
+	      columnDefs: [
+	        {
+	          targets: 0,
+	          className: 'center d_id'
+	        },
+	      ],
+	      "columns": [
+	        { "data": "s_code", "width":"10%" },
+	        { "data": "s_company", "width":"15%" },
+	        { "data": "s_phone1", "width":"20%" },
+	        { "data": "s_address", "width":"25%" },
+	        { "data": "s_note", "width":"20%" },
+	        { "data": "action", "width":"10%" }
+	      ],
+	      "responsive": true,
+	      "pageLength": 10,
+	      "lengthMenu": [[10, 20, 50, - 1], [10, 20, 50, "All"]],
+	      "language": {
+	        "searchPlaceholder": "Cari Data",
+	        "emptyTable": "Tidak ada data",
+	        "sInfo": "Menampilkan _START_ - _END_ Dari _TOTAL_ Data",
+	        "sSearch": '<i class="fa fa-search"></i>',
+	        "sLengthMenu": "Menampilkan &nbsp; _MENU_ &nbsp; Data",
+	        "infoEmpty": "",
+	        "paginate": {
+	          "previous": "Sebelumnya",
+	          "next": "Selanjutnya",
+	        }
+	      }
+	   });
 
-		if(active == 'Y'){
-			$status = 'Disable';
-		}
-		else {
-			$status = 'Enable';
-		}
+	});
 
+	function edit(id)
+  	{
+    	$.ajax({
+         type: "GET",
+         url: baseUrl + '/master/datasuplier/edit',
+         data: {id:id},
+         success: function(response){
 
-		$.confirm({
-				animation: 'RotateY',
-				closeAnimation: 'scale',
-				animationBounce: 1.5,
-				icon: 'fa fa-exclamation-triangle',
-			    title: $status,
-				content: 'Apa anda yakin mau ' + $status +' data ini?',
-				theme: 'disable',
-			    buttons: {
-			        info: {
-						btnClass: 'btn-blue',
-			        	text:'Ya',
-			        	action : function(){
-			        		$.ajax({
-								data : {id,active},
-								type : "get",
-								url : baseUrl + '/master/datasuplier/disabled',
-								dataType : "json",
-								success : function(response){
-									$.toast({
-										heading: 'Information',
-										text: 'Data Berhasil di Disable.',
-										bgColor: '#0984e3',
-										textColor: 'white',
-										loaderBg: '#fdcb6e',
-										icon: 'info'
-									})
-							       
-							      setTimeout(function(){
-			                         location.reload();	                            
-			                            },200);
-								}
-							})
-							
-				        }
-			        },
-			        cancel:{
-			        	text: 'Tidak',
-					    action: function () {
-    			            // tutup confirm
-    			        }
-    			    }
-			    }
-			});
-	}
+         },
+         complete:function (argument) {
+            window.location=(this.url)
+         },
+         error: function(){
+            toastr["error"]("Terjadi Kesalahan", "Error");
+         },
+         // async: false
+      });
+  	}
+
 
 	
 </script>
