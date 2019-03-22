@@ -79,13 +79,6 @@
                            </div>
                            <div class="col-md-3 col-sm-6 col-xs-12">
                               <div class="form-group">
-<<<<<<< HEAD
-                                <select class="form-control form-control-sm" id="type_cus" name="type">
-                                  <option value="" disabled>-Pilih-</option>
-                                  <option value="kontrak">Kontraktor</option>
-                                  <option value="harian">Harian</option>
-                                </select>
-=======
                                  <select class="form-control form-control-sm" id="type_cus" name="c_type">
                                     @if ($customer->c_type == 'KT')
                                     <option value="KT" selected="">Kontraktor</option>
@@ -95,7 +88,6 @@
                                     <option value="KT">Kontraktor</option>
                                     @endif
                                  </select>
->>>>>>> c487134e3c7f9ad1be996d4b1295d3e0abd56f6d
                               </div>
                            </div>
 
@@ -116,7 +108,7 @@
                                  <input type="text" class="form-control form-control-sm text-right currency" name="c_pagu" value="{{ $customer->c_pagu }}">
                               </div>
                            </div>
-                           
+
                            <div class="col-md-3 col-sm-6 col-xs-12">
                               <label>Alamat</label>
                            </div>
@@ -150,7 +142,7 @@
                               </tbody>
                            </table>
                         </div>
-                        
+
                      </section>
                   </div>
                   <div class="card-footer text-right">

@@ -147,6 +147,13 @@
 
 @section('extra_script')
 <script type="text/javascript">
+  // jquery token
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
   $(document).ready(function(){
     $('#type_cus').on('change', function(){
       if($(this).val() === 'KONTRAK'){
@@ -210,41 +217,33 @@
     event.preventDefault();
     form_data = $('#myForm').serialize();
 
-
-   function simpan()
-   {
-      $.ajaxSetup({
-         headers: {
-             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-         }
-      });
-      $('.button-simpan').attr('disabled', 'disabled');
-      $.ajax({
-         url: baseUrl + "/master/datacustomer/save",
-         type: 'GET',
-         data: $('#formdata').serialize(),
-         success: function (response) {
-             if (response.status == 'sukses') {
-                 $.toast({
-                     heading: response.code,
-                     text: 'Berhasil di Simpan',
-                     bgColor: '#00b894',
-                     textColor: 'white',
-                     loaderBg: '#55efc4',
-                     icon: 'success'
-                  });
-                 window.location.href = baseUrl + "/master/datacustomer/index";
-             } else {
-                  $.toast({
-                      heading: 'Ada yang salah',
-                      text: 'Periksa data anda.',
-                      showHideTransition: 'plain',
-                      icon: 'warning'
-                  })
-                 $('.button-simpan').removeAttr('disabled', 'disabled');
-             }
-         }
-      })
+    $('.button-simpan').attr('disabled', 'disabled');
+    $.ajax({
+      url: baseUrl + "/master/datacustomer/save",
+      type: 'GET',
+      data: $('#formdata').serialize(),
+      success: function (response) {
+        if (response.status == 'sukses') {
+          $.toast({
+            heading: response.code,
+            text: 'Berhasil di Simpan',
+            bgColor: '#00b894',
+            textColor: 'white',
+            loaderBg: '#55efc4',
+            icon: 'success'
+          });
+          window.location.href = baseUrl + "/master/datacustomer/index";
+        } else {
+          $.toast({
+            heading: 'Ada yang salah',
+            text: 'Periksa data anda.',
+            showHideTransition: 'plain',
+            icon: 'warning'
+          })
+          $('.button-simpan').removeAttr('disabled', 'disabled');
+        }
+      }
+    });
    }
 
 </script>

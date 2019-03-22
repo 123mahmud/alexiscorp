@@ -155,25 +155,25 @@
                 				<div class="col-md-12">
                 					<label>Total Penjualan</label>
                 					<div class="form-group">
-                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalPenjualan" id="totalPenjualan">
+                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalPenjualan" id="totalPenjualan" value="0">
                 					</div>
                 				</div>
                 				<div class="col-md-12">
                 					<label>Total Diskon</label>
                 					<div class="form-group">
-                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="">
+                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalDisc" id="totalDisc" value="0">
                 					</div>
                 				</div>
                 				<div class="col-md-12">
                 					<label>PPn</label>
                 					<div class="form-group">
-                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="">
+                						<input type="number" class="form-control form-control-sm text-right" name="ppn" id="ppn" value="0">
                 					</div>
                 				</div>
                 				<div class="col-md-12">
                 					<label>Total Amount</label>
                 					<div class="form-group">
-                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="">
+                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalAmount" id="totalAmount">
                 					</div>
                 				</div>
                 			</div>
@@ -184,7 +184,7 @@
             </section>
         </div>
         <div class="card-footer text-right">
-    	<button class="btn btn-primary" data-toggle="modal" data-target="#proses" type="button">Proses</button>
+    	<button class="btn btn-primary" data-toggle="modal" data-target="#modal_bayar" type="button">Proses</button>
         </div>
     </div>
 </div>

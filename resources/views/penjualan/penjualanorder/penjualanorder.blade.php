@@ -114,6 +114,11 @@
 		$('.btn-tambah').on('click', function(){
 			table_tambah();
 		});
+
+		$('#ppn').on('change', function() {
+			totalAmount = sumTotalAmount();
+			$('#totalAmount').val(totalAmount);
+		})
 	});
 
 	function clearSelectItem()
@@ -153,6 +158,7 @@
 		return qty;
 	}
 
+	// check stock before adding item to dataTable
 	function isStockSufficient()
 	{
 		qty = getUnmaskQty();
@@ -176,6 +182,7 @@
 		return filteredData;
 	}
 
+	// check stock after item already inside dataTable
 	function checkStock(stock, price, rowId)
 	{
 		qty = tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val();
@@ -186,6 +193,7 @@
 		countDiscount(price, rowId);
 	}
 
+	// count discount each item inside dataTable
 	function countDiscount(price, rowId)
 	{
 		price = parseInt(price);
@@ -201,26 +209,51 @@
 
 		tb_penjualan.cell(rowId, 6).nodes().to$().find('input').val(finalPrice);
 		tb_penjualan.draw(false);
-		sum = sumTotalAfter();
-		$('#totalPenjualan').val(sum);
+		totalPenjualan = sumTotalBruto();
+		$('#totalPenjualan').val(totalPenjualan);
+		discountTotal = discTotal();
+		$('#totalDisc').val(discountTotal);
+		totalAmount = sumTotalAmount();
+		$('#totalAmount').val(totalAmount);
 	}
 
-	function sumTotalAfter()
+	// return total netto (total price after discount)
+	function sumTotalNetto()
 	{
-		let listTotalPerItems = [];
+		let listTotalPerItem = [];
 		for (let i = 0; i < tb_penjualan.rows()[0].length; i++) {
-			listTotalPerItems.push(parseInt(tb_penjualan.cell(i, 6).nodes().to$().find('input').val()));
+			listTotalPerItem.push(parseInt(tb_penjualan.cell(i, 6).nodes().to$().find('input').val()));
 		}
-		const sum = listTotalPerItems.reduce((partial_sum, a) => partial_sum + a);
-		return sum;
+		let totalNetto = listTotalPerItem.reduce((partial_sum, a) => partial_sum + a);
+		return totalNetto;
 	}
 
-	// function discTotal()
-	// {
-	// 	sum = sumTotalAfter();
-	//
-	// }
+	// return total bruto (total price before discount)
+	function sumTotalBruto()
+	{
+		let listBrutoPerItem = []
+		let price = 0;
+		let qty = 0;
+		for (let i = 0; i < tb_penjualan.rows()[0].length; i++) {
+			qty = parseInt(tb_penjualan.cell(i, 1).nodes().to$().find('input').val());
+			price = parseInt(tb_penjualan.cell(i, 3).nodes().to$().find('input').val());
+			Bruto = qty * price;
+			listBrutoPerItem.push(Bruto);
+		}
+		totalBruto = listBrutoPerItem.reduce((partial_sum, a) => partial_sum + a);
+		return totalBruto;
+	}
 
+	// return total discount used for all items
+	function discTotal()
+	{
+		totalBruto = sumTotalBruto();
+		totalNetto = sumTotalNetto();
+		let disc = totalBruto - totalNetto;
+		return disc;
+	}
+
+	// insert item to dataTable
 	function table_tambah()
 	{
 		if ( $('#qty').val() === '' || $('#barang').val() === '' || $('#qty').val().length === 0 || $('#barang').val().length === 0 ) {
@@ -261,7 +294,8 @@
 								'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm text-right" value="0">',
 								'<button class="btn btn-danger btn-hapus-kenangan" type="button" title="Delete"><i class="fa fa-trash-o"></i></button>'
 							]).node().id = rowId;
-							countDiscount(response.ip_price, rowId);
+							checkStock(parseInt($('#stock').val()), response.ip_price, rowId);
+							// countDiscount(response.ip_price, rowId);
 							counter++;
 							clearSelectItem();
 						} else {
@@ -278,6 +312,21 @@
 			// $('#barang').prop('selectedIndex', 0).trigger('change');
 			// $('#barang').select2('open');
 		}
+	}
+
+	// return total amount (final price that has to be pay)
+	function sumTotalAmount()
+	{
+		totalPenjualan = $('#totalPenjualan').val();
+		totalDisc = $('#totalDisc').val();
+		ppn = $('#ppn').val();
+
+		totalNetto = sumTotalNetto();
+		ppnVal = totalNetto * ppn / 100;
+		// console.log('netto: ' + totalNetto);
+		// console.log('ppn: ' + ppnVal);
+		totalAmount = totalNetto + ppnVal;
+		return totalAmount;
 	}
 
 </script>
