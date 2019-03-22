@@ -20,12 +20,12 @@
                     <div class="col-md-6 col-sm-12">
                       <div class="form-group">
                         <div class="input-group input-group-sm input-daterange">
-                          <input type="text" class="form-control" id="tgl_awal" name="">
+                          <input type="text" class="form-control datepicker2" id="tanggal1" name="tanggal1">
                           <span class="input-group-addon">-</span>
-                          <input type="text" id="tgl_akhir" class="form-control" name="">
+                          <input type="text" id="tanggal2" class="form-control datepicker2" name="tanggal2">
                           <div class="input-group-append">
-                          	<button class="btn btn-primary" type="button" onclick="search_purchase_plan()"><i class="fa fa-search"></i></button>
-                          	<button class="btn btn-secondary" type="button" onclick="refresh_purchase_plan()"><i class="fa fa-refresh"></i></button>
+                          	<button class="btn btn-primary" type="button" onclick="tablePlan()"><i class="fa fa-search"></i></button>
+                          	<button class="btn btn-secondary" type="button" onclick="tablePlan()"><i class="fa fa-refresh"></i></button>
                           </div>
                         </div>
                       </div>
@@ -47,7 +47,7 @@
             	
                 	<div class="table-responsive">
                 		
-                		<table class="table table-hover table-striped" cellspacing="0" id="tabel_purchase_plan">
+                		<table class="table table-hover table-striped" cellspacing="0" id="tablePlan">
                 			<thead class="bg-primary">
                 				<tr>
                 					<th>Tgl Dibuat</th>
@@ -56,7 +56,6 @@
                 					<th>Suplier</th>
                 					<th>Tgl Disetujui</th>
                                     <th>Status</th>
-                					<th>Approve</th>
                 					<th>Aksi</th>
                 				</tr>
                 			</thead>
