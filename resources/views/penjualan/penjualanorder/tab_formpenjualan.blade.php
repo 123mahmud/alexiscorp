@@ -15,76 +15,79 @@
 
             	</div>
 
-            	<fieldset class="mb-3">
-                	<div class="row">
-                		<div class="col-md-9 col-sm-12">
-                			<div class="row">
-                        		<div class="col-lg-12">
-                        			<label>Nama Customer</label>
-                        			<div class="form-group">
-                        				<div class="input-group">
-																	<input type="hidden" name="idCustomer" id="idCustomer">
-																	<input type="text" class="form-control form-control-sm" name="customer" id="customer">
-	                        				<div class="input-group-append">
-	                        					<button class="btn btn-primary btn-sm" id="btn-modal-customer"><i class="fa fa-plus-square"></i></button>
-	                        				</div>
-	                        			</div>
-                        			</div>
-                        		</div>
-
-                        		<div class="col-lg-12">
-                        			<label>Alamat</label>
-                        			<div class="form-group">
-                        				<input type="text" class="form-control form-control-sm" name="address" id="address" readonly="">
-                        			</div>
-                        		</div>
-
-                        		<div class="col-lg-12">
-                        			<label>Keterangan Project</label>
-                        			<div class="form-group">
-                        				<textarea class="form-control" name="keterangan" id="ket-project"></textarea>
-                        			</div>
-                        		</div>
-                        	</div>
-                    	</div>
-                    	<div class="col-md-3 col-sm-12">
-                    		<div class="row">
-                        		<div class="col-lg-12">
-                        			<label>Tanggal Order</label>
-                        			<div class="form-group">
-                        				<div class="input-group">
-	                        				<input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="">
-	                        				<div class="input-group-append">
-	                        					<button class="btn btn-primary btn-sm" type="button"><i class="fa fa-calendar"></i></button>
-	                        				</div>
-	                        			</div>
-                        			</div>
-                        		</div>
-
-                        		<div class="col-lg-12">
-                        			<label>Jatuh Tempo</label>
-                        			<div class="form-group">
-                        				<input type="text" class="form-control form-control-sm datepicker" name="">
-                        			</div>
-                        		</div>
-
-														<div class="col-lg-12">
-															<label>Group Harga</label>
-															<div class="form-group">
-																<select class="select2 form-control-sm form-control" id="group_price" name="group_price">
-				                					<option value="" disabled>- -Pilih- -</option>
-																	@foreach($data['group_harga'] as $group)
-																		<option value="{{ $group->pg_id }}">{{ $group->pg_name }}</option>
-																	@endforeach
-				                				</select>
+							<form id="customerForm">
+								<fieldset class="mb-3">
+									<div class="row">
+										<div class="col-md-9 col-sm-12">
+											<div class="row">
+												<div class="col-lg-12">
+													<label>Nama Customer</label>
+													<div class="form-group">
+														<div class="input-group">
+															<input type="hidden" name="idCustomer" id="idCustomer">
+															<input type="text" class="form-control form-control-sm" name="customer" id="customer">
+															<div class="input-group-append">
+																<button class="btn btn-primary btn-sm" id="btn-modal-customer"><i class="fa fa-plus-square"></i></button>
 															</div>
 														</div>
+													</div>
+												</div>
 
-                        	</div>
-                    	</div>
+												<div class="col-lg-12">
+													<label>Alamat</label>
+													<div class="form-group">
+														<input type="text" class="form-control form-control-sm" name="address" id="address" readonly="">
+													</div>
+												</div>
 
-                	</div>
-                </fieldset>
+												<div class="col-lg-12">
+													<label>Keterangan Project</label>
+													<div class="form-group">
+														<textarea class="form-control" name="keterangan" id="ket-project"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-3 col-sm-12">
+											<div class="row">
+												<div class="col-lg-12">
+													<label>Tanggal Order</label>
+													<div class="form-group">
+														<div class="input-group">
+															<input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="">
+															<div class="input-group-append">
+																<button class="btn btn-primary btn-sm" type="button"><i class="fa fa-calendar"></i></button>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div class="col-lg-12">
+													<label>Jatuh Tempo</label>
+													<div class="form-group">
+														<input type="text" class="form-control form-control-sm datepicker" name="">
+													</div>
+												</div>
+
+												<div class="col-lg-12">
+													<label>Group Harga</label>
+													<div class="form-group">
+														<select class="select2 form-control-sm form-control" id="group_price" name="group_price">
+															<option value="" disabled>- -Pilih- -</option>
+															@foreach($data['group_harga'] as $group)
+															<option value="{{ $group->pg_id }}">{{ $group->pg_name }}</option>
+															@endforeach
+														</select>
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+									</div>
+								</fieldset>
+							</form>
 
                 <fieldset class="mb-3" id="input-barang">
                 	<div class="row">
@@ -97,15 +100,6 @@
 												<input type="hidden" name="itemSatId" id="itemSatId">
 												<input type="hidden" name="itemSatName" id="itemSatName">
 												<input type="text" class="form-control form-control-sm" name="barang" id="barang">
-                				<!-- <select class="select2 form-control-sm form-control" id="barang">
-                					<option value="">- -Pilih- -</option>
-                					<optgroup label="Barang">
-                						<option value="1">Semen</option>
-                					</optgroup>
-                					<optgroup label="Jasa">
-                						<option value="2">Pasang</option>
-                					</optgroup>
-                				</select> -->
                 			</div>
                 		</div>
 
@@ -148,36 +142,39 @@
                 	</table>
                 </div>
 
+
             	<div class="row">
             		<div class="col-md-4 offset-md-8 col-sm-5 offset-sm-7 col-xs-12">
-                        <fieldset>
-                			<div class="row">
-                				<div class="col-md-12">
-                					<label>Total Penjualan</label>
-                					<div class="form-group">
-                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalPenjualan" id="totalPenjualan" value="0">
-                					</div>
-                				</div>
-                				<div class="col-md-12">
-                					<label>Total Diskon</label>
-                					<div class="form-group">
-                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalDisc" id="totalDisc" value="0">
-                					</div>
-                				</div>
-                				<div class="col-md-12">
-                					<label>PPn</label>
-                					<div class="form-group">
-                						<input type="number" class="form-control form-control-sm text-right" name="ppn" id="ppn" value="0">
-                					</div>
-                				</div>
-                				<div class="col-md-12">
-                					<label>Total Amount</label>
-                					<div class="form-group">
-                						<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalAmount" id="totalAmount">
-                					</div>
-                				</div>
-                			</div>
-                        </fieldset>
+									<fieldset>
+										<form id="salesForm">
+											<div class="row">
+												<div class="col-md-12">
+													<label>Total Penjualan</label>
+													<div class="form-group">
+														<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalPenjualan" id="totalPenjualan" value="0">
+													</div>
+												</div>
+												<div class="col-md-12">
+													<label>Total Diskon</label>
+													<div class="form-group">
+														<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalDisc" id="totalDisc" value="0">
+													</div>
+												</div>
+												<div class="col-md-12">
+													<label>PPn</label>
+													<div class="form-group">
+														<input type="number" class="form-control form-control-sm text-right" name="ppn" id="ppn" value="0">
+													</div>
+												</div>
+												<div class="col-md-12">
+													<label>Total Amount</label>
+													<div class="form-group">
+														<input type="text" class="form-control form-control-sm text-right totalAmount" readonly="" name="totalAmount" value="0">
+													</div>
+												</div>
+											</div>
+										</form>
+									</fieldset>
             		</div>
             	</div>
 

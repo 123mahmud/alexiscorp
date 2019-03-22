@@ -105,7 +105,6 @@
 			$(this).val('');
 		})
 
-		// maybe it should switch .on with .one to prevent duplicate entry
 		$('#qty').on('keypress', function(e){
 			if(e.keypress === 13 || e.keyCode === 13){
 				table_tambah();
@@ -115,9 +114,18 @@
 			table_tambah();
 		});
 
-		$('#ppn').on('change', function() {
+		$('#ppn').on('keyup', function() {
 			totalAmount = sumTotalAmount();
-			$('#totalAmount').val(totalAmount);
+			$('.totalAmount').val(totalAmount);
+		})
+
+		$('#totalBayar').on('keyup', function() {
+			kembalian = sumTotalKembalian();
+			$('#kembalian').val(kembalian);
+		})
+
+		$('#btn_simpan').on('click', function() {
+			SubmitForm(event);
 		})
 	});
 
@@ -214,7 +222,7 @@
 		discountTotal = discTotal();
 		$('#totalDisc').val(discountTotal);
 		totalAmount = sumTotalAmount();
-		$('#totalAmount').val(totalAmount);
+		$('.totalAmount').val(totalAmount);
 	}
 
 	// return total netto (total price after discount)
@@ -328,6 +336,58 @@
 		totalAmount = totalNetto + ppnVal;
 		return totalAmount;
 	}
+
+	// return total kembalian (change for customer)
+	function sumTotalKembalian()
+	{
+		totalAmount = $('#totalAmountM').val();
+		totalBayar = $('#totalBayar').val();
+		totalBayar = totalBayar.replace(/,/g, '');
+
+		console.log(totalAmount, totalBayar);
+		kembalian = totalBayar - totalAmount;
+		return kembalian;
+	}
+
+	// store-data -> submit form to store data in db
+	function SubmitForm(event)
+	{
+		event.preventDefault();
+		customer = $('#customerForm').serialize();
+		sales = $('#salesForm').serialize();
+		payment = $('#paymentForm').serialize();
+
+		let listItems = $();
+		for (let i = 0; i < tb_penjualan.rows()[0].length; i++) {
+			listItems = listItems.add(tb_penjualan.row(i).node());
+		}
+		let dataListItems = listItems.find('input').serialize();
+
+		data_final = customer +'&'+ sales +'&'+ payment +'&'+ dataListItems;
+		console.log(data_final);
+
+		$.ajax({
+			data : data_final,
+			type : "post",
+			url : baseUrl + '/penjualan/penjualanorder/store',
+			dataType : 'json',
+			success : function (response){
+				if(response.status == 'berhasil'){
+					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
+					// location.reload();
+				} else if (response.status == 'invalid') {
+					messageFailed('Perhatian', response.message);
+				} else if (response.status == 'gagal') {
+					messageWarning('Error', response.message);
+				}
+			},
+			error : function(e){
+				messageWarning('Gagal', 'Data gagal ditambahkan, hubungi pengembang !');
+			}
+		})
+	}
+
+
 
 </script>
 

@@ -10,6 +10,7 @@ use App\m_item;
 use App\d_stock;
 use App\m_customer;
 use App\m_item_price;
+use carbon\Carbon;
 
 class PenjualanOrderController extends Controller
 {
@@ -87,7 +88,14 @@ class PenjualanOrderController extends Controller
     {
       $price = m_item_price::where('ip_group', $request->priceGroup)
         ->where('ip_item',  $request->itemId)
-        ->firstOrFail();
+        ->first();
+      if ($price == null) {
+        return response()->json([
+          'ip_group' => (int)$request->priceGroup,
+          'ip_item' => (int)$request->itemId,
+          'ip_price' => 0
+        ]);
+      }
       return $price;
     }
 
@@ -99,6 +107,8 @@ class PenjualanOrderController extends Controller
     public function index()
     {
       $data['group_harga'] = DB::table('m_price_group')
+        ->get();
+      $data['tipe_pembayaran'] = DB::table('m_paymentmethod')
         ->get();
     	return view('penjualan/penjualanorder/penjualanorder', compact('data'));
     }
@@ -121,7 +131,31 @@ class PenjualanOrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      dd($request->all());
+
+      $salesId = d_sales::max('s_id') + 1;
+
+      $sales = new d_sales();
+      $sales->s_id = $salesId;
+      $sales->s_channel = 'OD';
+      // $sales->s_date = Carbon::now();
+      // $sales->s_note
+      $sales->s_staff = Auth::user()->m_id;
+      $sales->s_customer = $request->idCustomer;
+      $sales->s_gross = $request->totalPenjualan;
+      // $sales->s_disc_percent
+      $sales->s_disc_value = $request->totalDisc;
+      $sales->s_tax = $request->ppn;
+      $sales->s_jatuh_tempo
+      $sales->s_ongkir
+      $sales->s_net
+      $sales->s_sisa
+      $sales->s_status
+      $sales->s_resi
+      $sales->s_info
+      $sales->s_insert = Carbon::now();
+      $sales->s_update = Carbon::now();
+
     }
 
     /**

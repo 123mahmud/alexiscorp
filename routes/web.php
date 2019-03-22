@@ -120,7 +120,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
     Route::get('/master/grouphargakhusus/tambahItemHarga', 'Master\DataHargaController@saveHargaItem');
     Route::get('/master/grouphargakhusus/itemharga/hapus/{id}', 'Master\DataHargaController@deleteItemHarga');
     Route::get('/master/dataharga/edit', 'Master\DataHargaController@editGroup');
-    
+
 //mahmud jabatan
 	Route::get('/master/datajabatan/index', 'Master\JabatanController@index')->name('datajabatan');
 	Route::get('/master/datajabatan/create', 'Master\JabatanController@tambahJabatan')->name('tambah_datajabatan');
@@ -231,6 +231,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
   Route::get('/penjualan/penjualanorder/getItems', 'Penjualan\PenjualanOrderController@getItems')->name('penjualanorder.getitems');
   Route::get('/penjualan/penjualanorder/getStock', 'Penjualan\PenjualanOrderController@getStock')->name('penjualanorder.getstock');
   Route::get('/penjualan/penjualanorder/getPrice', 'Penjualan\PenjualanOrderController@getPrice')->name('penjualanorder.getprice');
+	Route::post('/penjualan/penjualanorder/store', 'Penjualan\PenjualanOrderController@store')->name('penjualanorder.store');
 
 	Route::get('/penjualan/diskonpenjualan/index', 'PenjualanController@diskonpenjualan')->name('diskonpenjualan');
 	Route::get('/penjualan/diskonpenjualan/create', 'PenjualanController@tambah_diskonpenjualan')->name('tambah_diskonpenjualan');
