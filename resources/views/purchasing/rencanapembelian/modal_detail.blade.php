@@ -1,5 +1,5 @@
 <div class="modal fade" id="modal-detail" role="dialog">
-    <div class="modal-dialog" style="width: 90%;margin: auto;">
+    <div class="modal-dialog modal-lg" style="width: 90%;margin: auto;">
         
         <form method="get" action="#">
             <!-- Modal content-->
