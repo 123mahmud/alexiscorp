@@ -1,76 +1,76 @@
-<!-- Modal -->
-<div id="detail_rencana" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header bg-gradient-info">
-        <h4 class="modal-title">Detail Rencana Pembelian</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
+<div class="modal fade" id="modal-detail" role="dialog">
+    <div class="modal-dialog" style="width: 90%;margin: auto;">
         
-        <label>Status : </label> <span class="badge badge-pill badge-success">Disetujui</span>
-        
-        <fieldset>
-          <div class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold">Kode Rencana</label>
+        <form method="get" action="#">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #e77c38;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" style="color: white;">Detail Rencana Pembelian</h4>
+                </div>
+           {{--      <div class="modal-body">
+                    <label class="tebal">Status : </label>&nbsp;&nbsp;
+                    <span class="" id="txt_span_status"></span>
+                    <div class="col-md-12 col-sm-12 col-xs-12 tamma-bg" style="margin-top:10px;padding-bottom: 10px;padding-top: 20px;margin-bottom: 15px;">
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <label class="tebal">Kode Rencana Pembelian</label>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label id="lblCodePlan"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <label class="tebal">Tanggal Rencana Pembelian</label>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label id="lblTglPlan"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <label class="tebal">Staff</label>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label id="lblStaff"></label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <label class="tebal">Suplier</label>
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label id="lblSupplier"></label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table id="tabel-detail" class="table tabelan table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;" width="5%;">No</th>
+                                    <th width="35%;">Kode | Barang</th>
+                                    <th width="15%;">Satuan</th>
+                                    <th width="15%;">Qty</th>
+                                    <th width="15%;">Qty Confirm</th>
+                                    <th width="15%;">Stok Gudang</th>
+                                </tr>
+                            </thead>
+                            <tbody id="div_item">
+                            </tbody>
+                        </table>
+                    </div>
+                </div> --}}
+                
+                <div class="modal-footer" style="border-top: none;">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                </div>
             </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="pp_code">ReP/201812/1</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold" >Tanggal Rencana</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="pp_tanggal_label">29 Des 2018</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold">Staff</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="name">Administrator</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold" class="s_name">Suplier</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="s_name">Alpha</label>
-            </div>
-          </div>
-        </fieldset>
-        <hr>
-
-        <div class="table-responsive">
-          <table class="table table-striped table-hover" cellspacing="0" id="tabel_detail">
-            <thead class="bg-primary">
-              <tr>
-                <th>Kode Barang</th>
-                <th>Nama Barang</th>
-                <th width="35%">Qty</th>
-                <th>Satuan</th>
-                <th width="10%">Stock Gudang</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-               
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+            <!-- /Modal content-->
+        </form>
+        <!-- /Form-->
     </div>
-
-  </div>
 </div>
