@@ -80,7 +80,6 @@
 			</div>
 
 		</div>
-		@include('purchasing.rencanapembelian.modal-detail')
 	</section>
 
 </article>
