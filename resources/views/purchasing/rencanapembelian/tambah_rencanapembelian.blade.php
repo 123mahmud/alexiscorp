@@ -58,56 +58,91 @@
                                 </div>
 
                                 <div class="col-md-3 col-sm-6 col-xs-12">
-                                  <label>Staff</label>
-                                </div>
-
-                                <div class="col-md-3 col-sm-6 col-xs-12">
-                                  <div class="form-group">
-                                    <input type="hidden" name="pp_officer" value="{{ Auth::user()->id }}">
-                                    <input type="text" class="form-control form-control-sm" readonly="" name="" value="{{ Auth::user()->name }}">
-                                  </div>
-                                </div>
-
-                                <div class="col-md-3 col-sm-6 col-xs-12">
-                                  <label>Suplier</label>
+                                  <label>Suplier <span class="text-danger">*</span></label>
                                 </div>
 
                                 <div class="col-md-3 col-sm-6 col-xs-12">
                                     <select class="form-control form-control-sm " name="pp_supplier" id="pp_supplier">
                                     </select>
                                 </div>
+
                               </div>
+                            </fieldset>
+                            <fieldset class="mt-2">
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-12">
+                                       <div class="col-12">
+                                          <label>Masukan Kode / Nama</label>
+                                       </div>
+                                       <div class="col-12">
+                                          <input type="text" class="form-control form-control-sm"/> 
+                                       </div>
+                                    </div>
+                                    <div class="col-md-2 col-sm-12">
+                                       <div class="col-12">
+                                          <label>Stok</label>
+                                       </div>
+                                       <div class="col-12">
+                                          <input type="text" class="form-control form-control-sm" readonly=""/> 
+                                       </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-12">
+                                       <div class="col-12">
+                                          <label>Harga / Satuan Utama</label>
+                                       </div>
+                                       <div class="col-12">
+                                          <input type="text" class="form-control form-control-sm" readonly=""/> 
+                                       </div>
+                                    </div>
+                                    <div class="col-md-2 col-sm-12">
+                                       <div class="col-12">
+                                          <label>Jumlah</label>
+                                       </div>
+                                       <div class="col-12">
+                                          <input type="text" class="form-control form-control-sm"/> 
+                                       </div>
+                                    </div>
+                                    <div class="col-md-2 col-sm-12">
+                                       <div class="col-12">
+                                          <label>Satuan</label>
+                                       </div>
+                                       <div class="col-12">
+                                           <select class="form-control form-control-sm"></select>
+                                       </div>
+                                    </div>
+                                </div>
                             </fieldset>
 
                             <div class="table-responsive mt-3">
-                              <table class="table table-hover table-striped table-bordered" id="table_purchase_plan_dt">
+                              <table class="table table-hover table-striped table-bordered display nowrap" id="table_purchase_plan_dtt">
                                 <thead class="bg-primary">
                                   <tr>
-                                    <th width="35%">Kode | Barang</th>
+                                    <th width="35%">Kode - Barang</th>
+                                    <th width="20%">Stok Gudang</th>
+                                    <th width="20%">Harga / Satuan Utama</th>
                                     <th width="10%">Qty</th>
                                     <th width="10%">Satuan</th>
-                                    <th>Harga Prev / Satuan Utama</th>
-                                    <th width="10%">Stok Gudang</th>
                                     <th width="10%">Aksi</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <td><select class="form-control form-control-sm" name="ppdt_item[]"></select></td>
-                                    <td><input type="number" min="1" class="form-control form-control-sm text-right" name="ppdt_qty[]"></td>
+                                    <td>KUY001 - SEMEN</td>
                                     <td>
-                                      <select class="form-control-sm form-control" name="ppdt_satuan[]">
-                                      </select>
+                                        <input type="text" class="form-control form-control-sm" readonly=""/>
                                     </td>
                                     <td>
-                                      <input type="text" class="text-right form-control form-control-sm" readonly="" name="ppdt_prev_price[]">
+                                        <input type="text" class="form-control form-control-sm" readonly=""/>
                                     </td>
                                     <td>
-                                      <input type="text" class="text-right form-control form-control-sm" readonly="" name="stock[]">
+                                        <input type="text" class="form-control form-control-sm"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" readonly=""/>
                                     </td>
                                     <td align="center">
-                                      <div class="btn-group">
-                                          <button title="Tambah Item" class="btn btn-primary btn-tambah" type="button" onclick="append_purchase_plan_dt()"><i class="fa fa-plus"></i></button>
+                                      <div class="btn btn-group btn-sm">
+                                          <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                       </div>
                                     </td>
                                   </tr>
