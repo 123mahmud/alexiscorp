@@ -1,21 +1,20 @@
 <div class="modal fade" id="modal-detail" role="dialog">
-<<<<<<< HEAD
-    <div class="modal-dialog modal-lg" style="width: 90%;margin: auto;">
-=======
-    <div class="modal-dialog modal-full" style="width: 90%;margin: auto;">
->>>>>>> 873de60044859dd32636a753ac000659ef59f3e8
+
+    <div class="modal-dialog modal-full" style="width: 90%;margin: auto; font-size:10pt;">
+
         
         <form method="get" action="#">
             <!-- Modal content-->
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #e77c38;">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="modal-header">
                     <h4 class="modal-title" style="color: white;">Detail Rencana Pembelian</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    
                 </div>
-           {{--      <div class="modal-body">
+                <div class="modal-body">
                     <label class="tebal">Status : </label>&nbsp;&nbsp;
                     <span class="" id="txt_span_status"></span>
-                    <div class="col-md-12 col-sm-12 col-xs-12 tamma-bg" style="margin-top:10px;padding-bottom: 10px;padding-top: 20px;margin-bottom: 15px;">
+                    <div class="col-md-12 col-sm-12 col-xs-12 row" style="margin-top:10px;padding-bottom: 10px;padding-top: 20px;margin-bottom: 15px;">
                         <div class="col-md-3 col-sm-12 col-xs-12">
                             <label class="tebal">Kode Rencana Pembelian</label>
                         </div>
@@ -53,7 +52,7 @@
                     
                     <div class="table-responsive">
                         <table id="tabel-detail" class="table tabelan table-bordered table-striped">
-                            <thead>
+                            <thead class="bg-primary">
                                 <tr>
                                     <th style="text-align: center;" width="5%;">No</th>
                                     <th width="35%;">Kode | Barang</th>
@@ -67,7 +66,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div> --}}
+                </div>
                 
                 <div class="modal-footer" style="border-top: none;">
                     <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
