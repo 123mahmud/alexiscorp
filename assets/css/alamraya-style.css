@@ -577,7 +577,7 @@ a.text-dark:hover,a.text-dark:focus{
 }
 @media (min-width: 992px) {
   .modal-full {
-    max-width: 90%;
+    max-width: 100%;
   }
 }
 .background-loading{
