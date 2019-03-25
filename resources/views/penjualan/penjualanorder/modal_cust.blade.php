@@ -49,12 +49,12 @@
             <div class="form-group">
               <input type="text" class="form-control form-control-sm" name="">
             </div>
-          </div>                    
+          </div>
         </div>
 
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" id="btn-simpan-kenanganterindah" type="button">Simpan</button>
+        <button type="button" class="btn btn-primary" id="btn-simpan-kenanganterindah">Simpan</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>

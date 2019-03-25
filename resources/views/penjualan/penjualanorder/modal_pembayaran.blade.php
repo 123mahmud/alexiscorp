@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
-                <input type="text" readonly="" class="form-control form-control-sm text-right totalAmount" value="0" name="totalAmountM" id="totalAmountM">
+                <input type="text" readonly="" class="form-control form-control-sm text-right currency text-right totalAmount" id="totalAmountM" value="0">
               </div>
             </div>
 
@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
-                <input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="">
+                <input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="paymentDate">
               </div>
             </div>
 
@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
-                <select class="form-control form-control-sm">
+                <select class="form-control form-control-sm" name="paymentMethod">
                   <option value="" selected="" disabled="">--Pilih--</option>
                   @foreach($data['tipe_pembayaran'] as $method)
                   <option value="{{ $method->pm_id }}">{{ $method->pm_name }}</option>
@@ -49,7 +49,8 @@
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
-                <input type="text" class="form-control form-control-sm currency text-right" name="totalBayar" id="totalBayar">
+                <input type="hidden" name="totalBayar" id="totalBayarHidden">
+                <input type="text" class="form-control form-control-sm currency text-right" id="totalBayar">
               </div>
             </div>
 
@@ -58,7 +59,7 @@
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
-                <input type="text" readonly="" class="form-control form-control-sm text-right" name="kembalian" id="kembalian">
+                <input type="text" readonly="" class="form-control form-control-sm currency text-right" name="kembalian" id="kembalian">
               </div>
             </div>
 
@@ -68,7 +69,7 @@
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
-                <textarea class="form-control" name=""></textarea>
+                <textarea class="form-control" name="info"></textarea>
               </div>
             </div>
 

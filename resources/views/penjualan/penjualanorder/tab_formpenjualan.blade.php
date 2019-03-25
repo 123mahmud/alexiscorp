@@ -9,7 +9,7 @@
             		<div class="offset-lg-5 col-lg-7 offset-md-4 col-md-8 offset-sm-3 col-sm-9 col-12">
             			<div class="form-group top-totalprice">
 	            			<label>Total Amount</label>
-            				<input type="text" class="form-control form-control-lg text-right" value="0,00" readonly="" name="">
+            				<input type="text" class="form-control form-control-lg text-right currency text-right totalAmount" value="0,00" readonly="">
             			</div>
             		</div>
 
@@ -27,7 +27,7 @@
 															<input type="hidden" name="idCustomer" id="idCustomer">
 															<input type="text" class="form-control form-control-sm" name="customer" id="customer">
 															<div class="input-group-append">
-																<button class="btn btn-primary btn-sm" id="btn-modal-customer"><i class="fa fa-plus-square"></i></button>
+																<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tambah_cust"><i class="fa fa-plus-square"></i></button>
 															</div>
 														</div>
 													</div>
@@ -55,7 +55,7 @@
 													<label>Tanggal Order</label>
 													<div class="form-group">
 														<div class="input-group">
-															<input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="">
+															<input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="orderDate">
 															<div class="input-group-append">
 																<button class="btn btn-primary btn-sm" type="button"><i class="fa fa-calendar"></i></button>
 															</div>
@@ -66,7 +66,7 @@
 												<div class="col-lg-12">
 													<label>Jatuh Tempo</label>
 													<div class="form-group">
-														<input type="text" class="form-control form-control-sm datepicker" name="">
+														<input type="text" class="form-control form-control-sm datepicker" name="dueDate">
 													</div>
 												</div>
 
@@ -151,7 +151,8 @@
 												<div class="col-md-12">
 													<label>Total Penjualan</label>
 													<div class="form-group">
-														<input type="text" class="form-control form-control-sm text-right" readonly="" name="totalPenjualan" id="totalPenjualan" value="0">
+														<input type="hidden" id="totalPenjualanHidden" name="totalPenjualan">
+														<input type="text" class="form-control form-control-sm currency text-right" readonly="" id="totalPenjualan" value="0">
 													</div>
 												</div>
 												<div class="col-md-12">
@@ -169,7 +170,8 @@
 												<div class="col-md-12">
 													<label>Total Amount</label>
 													<div class="form-group">
-														<input type="text" class="form-control form-control-sm text-right totalAmount" readonly="" name="totalAmount" value="0">
+														<input type="hidden" id="totalAmountHidden" name="totalAmount">
+														<input type="text" class="form-control form-control-sm text-right currency text-right totalAmount" readonly="" value="0">
 													</div>
 												</div>
 											</div>

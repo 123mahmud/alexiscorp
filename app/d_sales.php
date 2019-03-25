@@ -11,4 +11,16 @@ class d_sales extends Model
     const CREATED_AT = 's_insert';
     const UPDATED_AT = 's_update';
 
+    public function getCustomer()
+    {
+      return $this->belongsTo('App\m_customer', 's_customer', 'c_id');
+    }
+    public function getStaff()
+    {
+      return $this->belongsTo('App\mMember', 's_staff', 'm_id');
+    }
+    public function getSalesPayment()
+    {
+      return $this->hasOne('App\d_sales_payment', 'sp_sales', 's_id');
+    }
 }
