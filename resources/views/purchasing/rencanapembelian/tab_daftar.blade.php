@@ -33,8 +33,8 @@
 
                     <div class="col-md-3 col-sm-12">
                         <div class="form-group">
-                            <select name="pp_status" id="tampil_data" class="form-control form-control-sm">
-                                <option value="">Tampilkan Data : Semua</option>
+                            <select name="pp_status" id="tampil_data" class="form-control form-control-sm" onchange="tablePlan()">
+                                <option value="ALL">Tampilkan Data : Semua</option>
                                 <option value="WT">Tampilkan Data : Waiting</option>
                                 <option value="AP">Tampilkan Data : Disetujui</option>
                             </select>
