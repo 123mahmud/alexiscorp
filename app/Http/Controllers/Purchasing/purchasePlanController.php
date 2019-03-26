@@ -180,7 +180,10 @@ class purchasePlanController extends Controller
    {
       $tanggal1 = date('Y-m-d',strtotime($request->tanggal1))." 00:00:00";
       $tanggal2 = date('Y-m-d',strtotime($request->tanggal2))." 23:59:59";
-      $data = d_purchase_plan::select('p_created',
+
+      if ($request->status == 'ALL') 
+      {
+         $data = d_purchase_plan::select('p_created',
                                        'p_code',
                                        'm_name',
                                        's_company',
@@ -194,6 +197,44 @@ class purchasePlanController extends Controller
                ->where('p_comp','=',Session::get('user_comp'))
                ->orderBy('p_created', 'DESC')
                ->get();
+      }
+      else if ($request->status == 'WT') 
+      {
+         $data = d_purchase_plan::select('p_created',
+                                       'p_code',
+                                       'm_name',
+                                       's_company',
+                                       'p_status',
+                                       'p_status_date',
+                                       'p_id'
+                                    )
+               ->join('m_supplier','d_purchase_plan.p_supplier','=','m_supplier.s_id')
+               ->join('d_mem','d_purchase_plan.p_mem','=','d_mem.m_id')
+               ->whereBetween('p_created', [$tanggal1, $tanggal2])
+               ->where('p_comp','=',Session::get('user_comp'))
+               ->where('p_status','WT')
+               ->orderBy('p_created', 'DESC')
+               ->get();
+      }
+      else
+      {
+         $data = d_purchase_plan::select('p_created',
+                                       'p_code',
+                                       'm_name',
+                                       's_company',
+                                       'p_status',
+                                       'p_status_date',
+                                       'p_id'
+                                    )
+               ->join('m_supplier','d_purchase_plan.p_supplier','=','m_supplier.s_id')
+               ->join('d_mem','d_purchase_plan.p_mem','=','d_mem.m_id')
+               ->whereBetween('p_created', [$tanggal1, $tanggal2])
+               ->where('p_comp','=',Session::get('user_comp'))
+               ->where('p_status','AP')
+               ->orderBy('p_created', 'DESC')
+               ->get();
+      }
+      
               // dd($data);
       // return $data;
       return DataTables::of($data)
@@ -529,45 +570,58 @@ class purchasePlanController extends Controller
 
    public function getDataTabelHistory($tgl1, $tgl2, $tampil)
     {
-        $y = substr($tgl1, -4);
-        $m = substr($tgl1, -7,-5);
-        $d = substr($tgl1,0,2);
-         $tanggal1 = $y.'-'.$m.'-'.$d;
+         $tanggal1 = date('Y-m-d',strtotime($tgl1))." 00:00:00";
+         $tanggal2 = date('Y-m-d',strtotime($tgl2))." 23:59:59";
 
-        $y2 = substr($tgl2, -4);
-        $m2 = substr($tgl2, -7,-5);
-        $d2 = substr($tgl2,0,2);
-        $tanggal2 = $y2.'-'.$m2.'-'.$d2;
-
-        if ($tampil == 'WT') 
+        if ($tampil == 'ALL') 
         { 
-          $is_confirm = "FALSE";
-          $status = "WT";
+            $data = DB::table('d_purchaseplan_dt')
+               ->select('d_purchaseplan_dt.*', 
+                        'd_purchase_plan.*', 
+                        'm_item.i_name', 
+                        'm_supplier.s_company', 
+                        'm_satuan.s_name')
+               ->leftJoin('d_purchase_plan','d_purchaseplan_dt.ppdt_pruchaseplan','=','d_purchase_plan.p_id')
+               ->leftJoin('m_supplier','d_purchase_plan.p_supplier','=','m_supplier.s_id')
+               ->leftJoin('m_item','d_purchaseplan_dt.ppdt_item','=','m_item.i_id')
+               ->leftJoin('m_satuan','d_purchaseplan_dt.ppdt_satuan','=','m_satuan.s_id')
+               ->whereBetween('d_purchase_plan.p_created', [$tanggal1, $tanggal2])
+               ->get();
         }
-        elseif ($tampil == 'edit') 
+        elseif ($tampil == 'WT') 
         {
-          $is_confirm = "TRUE";
-          $status = "DE";
-        }else
+            $data = DB::table('d_purchaseplan_dt')
+               ->select('d_purchaseplan_dt.*', 
+                        'd_purchase_plan.*', 
+                        'm_item.i_name', 
+                        'm_supplier.s_company', 
+                        'm_satuan.s_name')
+               ->leftJoin('d_purchase_plan','d_purchaseplan_dt.ppdt_pruchaseplan','=','d_purchase_plan.p_id')
+               ->leftJoin('m_supplier','d_purchase_plan.p_supplier','=','m_supplier.s_id')
+               ->leftJoin('m_item','d_purchaseplan_dt.ppdt_item','=','m_item.i_id')
+               ->leftJoin('m_satuan','d_purchaseplan_dt.ppdt_satuan','=','m_satuan.s_id')
+               ->where('d_purchase_plan.p_status','=',$tampil)
+               ->whereBetween('d_purchase_plan.p_created', [$tanggal1, $tanggal2])
+               ->get();
+        }
+        else
         {
-          $is_confirm = "TRUE";
-          $status = "FN";
+            $data = DB::table('d_purchaseplan_dt')
+               ->select('d_purchaseplan_dt.*', 
+                        'd_purchase_plan.*', 
+                        'm_item.i_name', 
+                        'm_supplier.s_company', 
+                        'm_satuan.s_name')
+               ->leftJoin('d_purchase_plan','d_purchaseplan_dt.ppdt_pruchaseplan','=','d_purchase_plan.p_id')
+               ->leftJoin('m_supplier','d_purchase_plan.p_supplier','=','m_supplier.s_id')
+               ->leftJoin('m_item','d_purchaseplan_dt.ppdt_item','=','m_item.i_id')
+               ->leftJoin('m_satuan','d_purchaseplan_dt.ppdt_satuan','=','m_satuan.s_id')
+               ->where('d_purchase_plan.p_status','=',$tampil)
+               ->whereBetween('d_purchase_plan.p_created', [$tanggal1, $tanggal2])
+               ->get();
         }
 
-        $data = DB::table('d_purchaseplan_dt')
-            ->select('d_purchaseplan_dt.*', 
-                     'd_purchase_plan.*', 
-                     'm_item.i_name', 
-                     'm_supplier.s_company', 
-                     'm_satuan.s_name')
-            ->leftJoin('d_purchase_plan','d_purchaseplan_dt.ppdt_pruchaseplan','=','d_purchase_plan.p_id')
-            ->leftJoin('m_supplier','d_purchase_plan.p_supplier','=','m_supplier.s_id')
-            ->leftJoin('m_item','d_purchaseplan_dt.ppdt_item','=','m_item.i_id')
-            ->leftJoin('m_satuan','d_purchaseplan_dt.ppdt_satuan','=','m_satuan.s_id')
-            ->where('d_purchaseplan_dt.ppdt_isconfirm','=',$is_confirm)
-            ->where('d_purchase_plan.p_status','=',$status)
-            ->whereBetween('d_purchase_plan.p_created', [$tanggal1, $tanggal2])
-            ->get();
+        
 
         return DataTables::of($data)
         ->addIndexColumn()

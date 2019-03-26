@@ -59,7 +59,7 @@
                 <a href="" class="nav-link active" data-target="#daftar_rencana" aria-controls="daftar_rencana" data-toggle="tab" role="tab">Daftar Rencana Pembelian</a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link" data-target="#history_rencana" aria-controls="history_rencana" data-toggle="tab" role="tab">History Rencana Pembelian</a>
+                <a href="" class="nav-link" data-target="#history_rencana" aria-controls="history_rencana" data-toggle="tab" role="tab" onclick="lihatHistorybyTgl()">History Rencana Pembelian</a>
             </li>
         </ul>
 
@@ -317,7 +317,6 @@
 		var tgl1 = $('#tanggal3').val();
 		var tgl2 = $('#tanggal4').val();
 		var tampil = $('#tampil_data1').val();
-		alert(tampil);
 		$('#tbl-history').dataTable({
 			"destroy": true,
 			"processing" : true,
