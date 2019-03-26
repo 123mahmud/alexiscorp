@@ -32,13 +32,15 @@ class PenjualanOrderController extends Controller
       // start: validate data before execute
       $validator = Validator::make($request->all(), [
         'idCustomer' => 'required',
-        'ppn' => 'required',
-        'dueDate' => 'required'
+        'orderDate' => 'required',
+        'dueDate' => 'required',
+        'ppn' => 'required'
       ],
       [
         'idCustomer.required' => 'Silahkan pilih customer terlebih dahulu !',
+        'orderDate.required' => 'Silahkan isi tanggal order terlebih dahulu !',
+        'dueDate.required' => 'Silahkan isi tanggal jatuh tempo terlebih dahulu !',
         'ppn.required' => 'ppn masih kosong !',
-        'dueDate' => 'Tanggal jatuh tempo masih kosong !'
       ]);
       if($validator->fails())
       {
@@ -251,6 +253,7 @@ class PenjualanOrderController extends Controller
       try {
         // insert sales
         $salesId = d_sales::max('s_id') + 1;
+        $discPercent = ($request->totalDisc * 100) / $request->totalPenjualan;
         $salesNota = CodeGenerator::code('d_sales', 's_note', 5, 'SLS');
         $sales = new d_sales();
         $sales->s_id = $salesId;
@@ -260,7 +263,7 @@ class PenjualanOrderController extends Controller
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_customer = $request->idCustomer;
         $sales->s_gross = $request->totalPenjualan;
-        // $sales->s_disc_percent
+        $sales->s_disc_percent = $discPercent;
         $sales->s_disc_value = $request->totalDisc;
         $sales->s_tax = $request->ppn;
         $sales->s_jatuh_tempo = Carbon::parse($request->dueDate)->format('Y-m-d');
@@ -269,7 +272,7 @@ class PenjualanOrderController extends Controller
         // $sales->s_sisa
         $sales->s_status = 'PR'; // PR: Progress || FN: Final
         // $sales->s_resi
-        $sales->s_info = $request->info;
+        $sales->s_info = $request->keterangan;
         $sales->save();
 
         // insert sales-detail
@@ -277,6 +280,8 @@ class PenjualanOrderController extends Controller
         $loopCount = 0;
         foreach ($listItems as $item) {
           if ($item != null) {
+            $valDiscP = ($request->listQty[$loopCount] * $request->listPrice[$loopCount]) * $request->listDiscP[$loopCount] / 100;
+            $valDiscH = $request->listQty[$loopCount] * $request->listDiscH[$loopCount];
             $salesDtId = d_sales_dt::where('sd_sales', $salesId)
               ->max('sd_detailid') + 1;
             $salesDt = new d_sales_dt;
@@ -286,13 +291,22 @@ class PenjualanOrderController extends Controller
             $salesDt->sd_qty = $request->listQty[$loopCount];
             $salesDt->sd_price = $request->listPrice[$loopCount];
             $salesDt->sd_disc_percent = $request->listDiscP[$loopCount];
-            // $salesDt->sd_disc_vpercent = $listPrice[$loopCount];
-            // $salesDt->sd_disc_value = $listPrice[$loopCount];
+            $salesDt->sd_disc_vpercent = $valDiscP;
+            $salesDt->sd_disc_value = $valDiscH;
             $salesDt->sd_total = $request->listSubTotal[$loopCount];
             $salesDt->save();
           }
           $loopCount++;
         }
+
+        // insert sales-payment
+        $salesPay = new d_sales_payment;
+        $salesPay->sp_sales = $salesId;
+        $salesPay->sp_paymentid = 1;
+        $salesPay->sp_method = $request->paymentMethod;
+        $salesPay->sp_nominal = $request->totalBayar;
+        // $salesPay->sp_ref =
+        $salesPay->save();
 
         DB::commit();
         return response()->json([

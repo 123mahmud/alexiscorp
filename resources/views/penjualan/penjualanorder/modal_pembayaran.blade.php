@@ -21,14 +21,14 @@
               </div>
             </div>
 
-            <div class="col-md-3 col-sm-4 col-12">
+            <!-- <div class="col-md-3 col-sm-4 col-12">
               <label>Tanggal Bayar</label>
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
                 <input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="paymentDate">
               </div>
-            </div>
+            </div> -->
 
             <div class="col-md-3 col-sm-4 col-12">
               <label>Tipe Pembayaran</label>
@@ -36,7 +36,7 @@
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
                 <select class="form-control form-control-sm" name="paymentMethod">
-                  <option value="" selected="" disabled="">--Pilih--</option>
+                  <option value="" disabled="">--Pilih--</option>
                   @foreach($data['tipe_pembayaran'] as $method)
                   <option value="{{ $method->pm_id }}">{{ $method->pm_name }}</option>
                   @endforeach
@@ -62,7 +62,7 @@
                 <input type="text" readonly="" class="form-control form-control-sm currency text-right" name="kembalian" id="kembalian">
               </div>
             </div>
-
+<!--
 
             <div class="col-md-3 col-sm-4 col-12">
               <label>Keterangan</label>
@@ -71,7 +71,7 @@
               <div class="form-group">
                 <textarea class="form-control" name="info"></textarea>
               </div>
-            </div>
+            </div> -->
 
           </div>
         </form>
