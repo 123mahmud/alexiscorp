@@ -126,11 +126,10 @@
                 				<input type="text" readonly="" class="form-control form-control-sm" name="stock" id="stock">
                 			</div>
                 		</div>
-
                 	</div>
                 </fieldset>
 
-                <div class="table-responsive mb-3">
+                <div class="table-responsive" style="overflow-y : auto;height : 350px; border: solid 1.5px #bb936a; margin-top: 0px !important">
                 	<table class="table table-hover table-striped table-bordered" id="table_penjualan" cellspacing="0">
                 		<thead class="bg-primary">
                 			<tr>
@@ -141,7 +140,7 @@
                 				<th width="5%">Disc Persen</th>
                 				<th>Disc Harga</th>
                 				<th>Total</th>
-                				<th width="1%"></th>
+                				<th width="1%">Aksi</th>
                 			</tr>
                 		</thead>
                 	</table>

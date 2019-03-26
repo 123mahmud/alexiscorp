@@ -74,7 +74,11 @@
 
 	$(document).ready(function() {
 		tb_penjualan = $('#table_penjualan').DataTable({
-			"order": []
+			"order": [],
+			"searching": false,
+			"lengthChange": false,
+			"paging": false,
+			"info": false,
 		});
 
 		$('#customer').on('click', function() {
@@ -197,6 +201,7 @@
 	}
 
 	// check stock before adding item to dataTable
+	// because it is Order, it always return 'Y'
 	function isStockSufficient()
 	{
 		qty = getUnmaskQty();
@@ -204,7 +209,7 @@
 		if (stock >= qty) {
 			return 'Y';
 		} else {
-			return 'N';
+			return 'Y';
 		}
 	}
 
@@ -223,11 +228,11 @@
 	// check stock after item already inside dataTable
 	function checkStock(stock, price, rowId)
 	{
-		qty = tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val();
-		if (qty > stock) {
-			messageWarning('Perhatian', 'Stock tidak mencukupi, permintaan disesuaikan dengan stock !');
-			tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val(stock);
-		}
+		// qty = tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val();
+		// if (qty > stock) {
+		// 	messageWarning('Perhatian', 'Stock tidak mencukupi, permintaan disesuaikan dengan stock !');
+		// 	tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val(stock);
+		// }
 		countDiscount(price, rowId);
 	}
 
@@ -395,7 +400,22 @@
 
 		console.log(totalAmount, totalBayar);
 		kembalian = totalBayar - totalAmount;
+		if (kembalian >= 0) {
+			$('#btn_simpan').attr('disabled', false);
+		} else {
+			$('#btn_simpan').attr('disabled', true);
+		}
 		return kembalian;
+	}
+
+	// reset all input-field
+	function resetAllInput()
+	{
+		$('.totalAmount').val('0,00');
+		$('#customerForm')[0].reset();
+		$('#salesForm')[0].reset();
+		$('#paymentForm')[0].reset();
+		tb_penjualan.clear().draw();
 	}
 
 	// store-data -> submit form to store data in db
@@ -428,7 +448,8 @@
 			success : function (response){
 				if(response.status == 'berhasil'){
 					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
-					location.reload();
+					resetAllInput();
+					// location.reload();
 				} else if (response.status == 'invalid') {
 					messageFailed('Perhatian', response.message);
 				} else if (response.status == 'gagal') {
