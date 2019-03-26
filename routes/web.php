@@ -120,7 +120,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
     Route::get('/master/grouphargakhusus/tambahItemHarga', 'Master\DataHargaController@saveHargaItem');
     Route::get('/master/grouphargakhusus/itemharga/hapus/{id}', 'Master\DataHargaController@deleteItemHarga');
     Route::get('/master/dataharga/edit', 'Master\DataHargaController@editGroup');
-    
+
 //mahmud jabatan
 	Route::get('/master/datajabatan/index', 'Master\JabatanController@index')->name('datajabatan');
 	Route::get('/master/datajabatan/create', 'Master\JabatanController@tambahJabatan')->name('tambah_datajabatan');
@@ -148,7 +148,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/purchasing/rencanapembelian/get-detail-plan/{id}/{type}', 'Purchasing\purchasePlanController@getDetailPlan');
 	Route::get('/purchasing/rencanapembelian/tambah_rencanapembelian', 'Purchasing\purchasePlanController@tambah_rencanapembelian')->name('tambah_rencanapembelian');
 	//end
-	
+
 	// Route::get('/purchasing/rencanapembelian/preview_rencanapembelian/{id}', 'Purchasing\RencanaPembelianController@preview_rencanapembelian')->name('preview_rencanapembelian');
 	// Route::get('/purchasing/rencanapembelian/edit_rencanapembelian/{id}', 'Purchasing\RencanaPembelianController@edit_rencanapembelian')->name('edit_rencanapembelian');
 	// Route::get('/purchasing/rencanapembelian/find_d_purchase_plan', 'Purchasing\RencanaPembelianController@find_d_purchase_plan')->middleware('auth');
@@ -231,16 +231,21 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 
 	// Penjualan
   Route::get('/penjualan/penjualanorder/index', 'Penjualan\PenjualanOrderController@index')->name('penjualanorder');
+  Route::get('/penjualan/penjualanorder/getListPenjualan', 'Penjualan\PenjualanOrderController@getListPenjualan')->name('penjualanorder.getlistpenjualan');
+  Route::get('/penjualan/penjualanorder/getListPembayaran', 'Penjualan\PenjualanOrderController@getListPembayaran')->name('penjualanorder.getlistpembayaran');
   Route::get('/penjualan/penjualanorder/getCustomers', 'Penjualan\PenjualanOrderController@getCustomers')->name('penjualanorder.getcustomers');
   Route::get('/penjualan/penjualanorder/getItems', 'Penjualan\PenjualanOrderController@getItems')->name('penjualanorder.getitems');
   Route::get('/penjualan/penjualanorder/getStock', 'Penjualan\PenjualanOrderController@getStock')->name('penjualanorder.getstock');
   Route::get('/penjualan/penjualanorder/getPrice', 'Penjualan\PenjualanOrderController@getPrice')->name('penjualanorder.getprice');
+	Route::post('/penjualan/penjualanorder/store', 'Penjualan\PenjualanOrderController@store')->name('penjualanorder.store');
+
+	Route::get('/penjualan/penjualantanpaorder/index', 'Penjualan\PenjualanTOController@index')->name('penjualantanpaorder');
+	Route::get('/penjualan/penjualantanpaorder/getListPenjualan', 'Penjualan\PenjualanTOController@getListPenjualan')->name('penjualantanpaorder.getlistpenjualan');
+	Route::get('/penjualan/penjualantanpaorder/create', 'Penjualan\PenjualanTOController@create')->name('tambah_penjualantanpaorder');
 
 	Route::get('/penjualan/diskonpenjualan/index', 'PenjualanController@diskonpenjualan')->name('diskonpenjualan');
 	Route::get('/penjualan/diskonpenjualan/create', 'PenjualanController@tambah_diskonpenjualan')->name('tambah_diskonpenjualan');
 	Route::get('/penjualan/penjualanproject/index', 'PenjualanController@penjualanproject')->name('penjualanproject');
-	Route::get('/penjualan/penjualantanpaorder/index', 'PenjualanController@penjualantanpaorder')->name('penjualantanpaorder');
-	Route::get('/penjualan/penjualantanpaorder/create', 'PenjualanController@tambah_penjualantanpaorder')->name('tambah_penjualantanpaorder');
 	Route::get('/penjualan/returnpenjualan/index', 'PenjualanController@returnpenjualan')->name('returnpenjualan');
 	Route::get('/penjualan/returnpenjualan/create', 'PenjualanController@tambah_returnpenjualan')->name('tambah_returnpenjualan');
 

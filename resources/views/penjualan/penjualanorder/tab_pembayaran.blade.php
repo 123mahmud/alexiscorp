@@ -12,23 +12,22 @@
                     <div class="col-md-6 col-sm-12">
                       <div class="form-group">
                         <div class="input-group input-group-sm input-daterange">
-                          <input type="text" class="form-control" name="">
+                          <input type="text" class="form-control" id="date_from_pb">
                           <span class="input-group-addon">-</span>
-                          <input type="text" class="form-control" name="">
+                          <input type="text" class="form-control" id="date_to_pb">
                           <div class="input-group-append">
-                          	<button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-                          	<button class="btn btn-secondary" type="button"><i class="fa fa-refresh"></i></button>
+                          	<button class="btn btn-primary" type="button" id="btn_search_date_pb"><i class="fa fa-search"></i></button>
+                          	<button class="btn btn-secondary" type="button" id="btn_refresh_date_pb"><i class="fa fa-refresh"></i></button>
                           </div>
-
                         </div>
                       </div>
                     </div>
-                	
+
 
             	</div>
 
     			<div class="table-responsive">
-    				<table class="table table-bordered  table-hover table-striped" id="table_pembayaran" cellspacing="0">
+    				<table class="table table-bordered  table-hover table-striped" id="table_listpembayaran" cellspacing="0">
     					<thead class="bg-primary">
     						<tr>
     							<th width="1%">No</th>
@@ -40,9 +39,9 @@
     						</tr>
     					</thead>
     					<tbody>
-    						<tr>
+    						<!-- <tr>
                   <td>1</td>
-                  <td>POSTO/20190207/1</td>      
+                  <td>POSTO/20190207/1</td>
                   <td>Charlie</td>
                   <td>
                     <div class="row">
@@ -56,7 +55,7 @@
                 </tr>
                 <tr>
                   <td>2</td>
-                  <td>POSTO/20181207/1</td>      
+                  <td>POSTO/20181207/1</td>
                   <td>Delta</td>
                   <td>
                     <div class="row">
@@ -67,7 +66,7 @@
                   <td align="center">
                     <button class="btn btn-primary btn-sm" type="button" title="Bayar" data-toggle="modal" data-target="#modal_bayar"><i class="fa fa-money"></i></button>
                   </td>
-                </tr>
+                </tr> -->
     					</tbody>
     				</table>
     			</div>
@@ -75,6 +74,6 @@
 
 		</div>
 
-		
+
 	</div>
 </div>

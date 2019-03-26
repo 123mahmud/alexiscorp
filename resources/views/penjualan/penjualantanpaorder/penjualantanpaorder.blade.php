@@ -8,8 +8,8 @@
 	<div class="title-block text-primary">
 	    <h1 class="title"> Pencatatan Penjualan Tanpa Order </h1>
 	    <p class="title-description">
-	    	<i class="fa fa-home"></i>&nbsp;<a href="{{url('/home')}}">Home</a> 
-	    	/ <span>Penjualan</span> 
+	    	<i class="fa fa-home"></i>&nbsp;<a href="{{url('/home')}}">Home</a>
+	    	/ <span>Penjualan</span>
 	    	/ <span class="text-primary font-weight-bold">Pencatatan Penjualan Tanpa Order</span>
 	     </p>
 	</div>
@@ -19,7 +19,7 @@
 		<div class="row">
 
 			<div class="col-12">
-				
+
 				<div class="card">
                     <div class="card-header bordered p-2">
                     	<div class="header-block">
@@ -27,38 +27,27 @@
 	                    </div>
 	                    <div class="header-block pull-right">
                 			<button class="btn btn-primary" id="btn-tambah-mantan"><i class="fa fa-plus"></i>&nbsp;Tambah Data</button>
-	                    	
+
 	                    </div>
                     </div>
                     <div class="card-block">
                         <section>
-                        	
-                    		
+
+
                         	<div class="table-responsive">
-	                            <table class="table data-table table-hover" cellspacing="0">
+	                            <table class="table data-table table-hover" cellspacing="0" id="table_listpenjualan">
 	                                <thead class="bg-primary">
 	                                    <tr>
-	                                    	<th width="1%">No</th>
-							                <th>Nota</th>
-							                <th>Customer</th>
-							                <th>Staff</th>
-							                <th>Aksi</th>
-							            </tr>
+		                                    	<th width="1%">No</th>
+													                <th>Nota</th>
+													                <th>Customer</th>
+													                <th>Staff</th>
+													                <th>Aksi</th>
+													            </tr>
 	                                </thead>
 	                                <tbody>
-	                                	<tr>
-	                                		<td>1</td>
-	                                		<td>POS-TO/20190130/1</td>
-	                                		<td>Alpha</td>
-	                                		<td>Administrator</td>	
-	                                		<td align="center" width="15%">
-	                                			<div class="btn btn-group">
-	                                				<button class="btn btn-warning btn-sm" type="button" title="Edit"><i class="fa fa-pencil"></i></button>
-	                                				<button class="btn btn-danger btn-sm" type="button" title="Hapus"><i class="fa fa-trash-o"></i></button>
-	                                			</div>
-	                                		</td>
-	                                	</tr>
-							        </tbody>
+
+							        						</tbody>
 	                            </table>
 	                        </div>
                         </section>
@@ -77,16 +66,47 @@
 @section('extra_script')
 
 <script type="text/javascript">
-	
-	$(document).ready(function(){
-
-		$('#btn-tambah-mantan').click(function(){
-
-			window.location.href = '{{route('tambah_penjualantanpaorder')}}';
-
-		})
-
+	// jquery token
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
 	});
+
+	$(document).ready(function(){
+		TableListPenjualan();
+		$('#btn-tambah-mantan').click(function(){
+			window.location.href = '{{route('tambah_penjualantanpaorder')}}';
+		})
+	});
+
+	// data-table -> function to retrieve DataTable server side
+	var tb_listpenjualan;
+	function TableListPenjualan()
+	{
+		$('#table_listpenjualan').dataTable().fnDestroy();
+		tb_listpenjualan = $('#table_listpenjualan').DataTable({
+			responsive: true,
+			serverSide: true,
+			ajax: {
+				url: "{{ route('penjualantanpaorder.getlistpenjualan') }}",
+				type: "get",
+				data: {
+					"_token": "{{ csrf_token() }}",
+				}
+			},
+			columns: [
+				{data: 'DT_RowIndex'},
+				{data: 's_note'},
+				{data: 'customer', width: "30%"},
+				{data: 'staff', width: "30%"},
+				{data: 'action'}
+			],
+			pageLength: 10,
+			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
+		});
+	}
+
 
 </script>
 

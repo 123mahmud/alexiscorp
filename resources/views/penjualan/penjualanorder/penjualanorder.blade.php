@@ -52,7 +52,18 @@
 
 @endsection
 @section('extra_script')
-<!-- script for penjualan-order -->
+
+<!-- script for general -->
+<script type="text/javascript">
+	$(document).ready(function() {
+		// datepicker -> set starting date_to
+		cur_date = new Date();
+		first_day = new Date(cur_date.getFullYear(), cur_date.getMonth(), 1);
+		last_day =   new Date(cur_date.getFullYear(), cur_date.getMonth() + 1, 0);
+	});
+</script>
+
+<!-- script for tab-penjualan-order -->
 <script type="text/javascript">
   // jquery token
   $.ajaxSetup({
@@ -87,7 +98,7 @@
 
 		$('#barang').on('click', function() {
 			clearSelectItem();
-		})
+		});
 		$('#barang').autocomplete({
 			source: baseUrl + '/penjualan/penjualanorder/getItems',
 			minLength: 2,
@@ -103,9 +114,7 @@
 		$('#qty').inputmask('999.999.999.999', {placeholder: " "});
 		$('#qty').on('click', function() {
 			$(this).val('');
-		})
-
-		// maybe it should switch .on with .one to prevent duplicate entry
+		});
 		$('#qty').on('keypress', function(e){
 			if(e.keypress === 13 || e.keyCode === 13){
 				table_tambah();
@@ -114,6 +123,32 @@
 		$('.btn-tambah').on('click', function(){
 			table_tambah();
 		});
+
+		$('#ppn').on({
+			keyup: function() {
+				totalAmount = sumTotalAmount();
+				$('.totalAmount').val(totalAmount);
+			},
+			change: function() {
+				totalAmount = sumTotalAmount();
+				$('.totalAmount').val(totalAmount);
+			}
+		});
+
+		$('#totalBayar').on({
+			keyup: function() {
+				kembalian = sumTotalKembalian();
+				$('#kembalian').val(kembalian);
+			},
+			change: function() {
+				kembalian = sumTotalKembalian();
+				$('#kembalian').val(kembalian);
+			}
+		})
+
+		$('#btn_simpan').on('click', function() {
+			SubmitForm(event);
+		})
 	});
 
 	function clearSelectItem()
@@ -153,6 +188,7 @@
 		return qty;
 	}
 
+	// check stock before adding item to dataTable
 	function isStockSufficient()
 	{
 		qty = getUnmaskQty();
@@ -176,6 +212,7 @@
 		return filteredData;
 	}
 
+	// check stock after item already inside dataTable
 	function checkStock(stock, price, rowId)
 	{
 		qty = tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val();
@@ -186,6 +223,7 @@
 		countDiscount(price, rowId);
 	}
 
+	// count discount each item inside dataTable
 	function countDiscount(price, rowId)
 	{
 		price = parseInt(price);
@@ -201,26 +239,51 @@
 
 		tb_penjualan.cell(rowId, 6).nodes().to$().find('input').val(finalPrice);
 		tb_penjualan.draw(false);
-		sum = sumTotalAfter();
-		$('#totalPenjualan').val(sum);
+		totalPenjualan = sumTotalBruto();
+		$('#totalPenjualan').val(totalPenjualan);
+		discountTotal = discTotal();
+		$('#totalDisc').val(discountTotal);
+		totalAmount = sumTotalAmount();
+		$('.totalAmount').val(totalAmount);
 	}
 
-	function sumTotalAfter()
+	// return total netto (total price after discount)
+	function sumTotalNetto()
 	{
-		let listTotalPerItems = [];
+		let listTotalPerItem = [];
 		for (let i = 0; i < tb_penjualan.rows()[0].length; i++) {
-			listTotalPerItems.push(parseInt(tb_penjualan.cell(i, 6).nodes().to$().find('input').val()));
+			listTotalPerItem.push(parseInt(tb_penjualan.cell(i, 6).nodes().to$().find('input').val()));
 		}
-		const sum = listTotalPerItems.reduce((partial_sum, a) => partial_sum + a);
-		return sum;
+		let totalNetto = listTotalPerItem.reduce((partial_sum, a) => partial_sum + a);
+		return totalNetto;
 	}
 
-	// function discTotal()
-	// {
-	// 	sum = sumTotalAfter();
-	//
-	// }
+	// return total bruto (total price before discount)
+	function sumTotalBruto()
+	{
+		let listBrutoPerItem = []
+		let price = 0;
+		let qty = 0;
+		for (let i = 0; i < tb_penjualan.rows()[0].length; i++) {
+			qty = parseInt(tb_penjualan.cell(i, 1).nodes().to$().find('input').val());
+			price = parseInt(tb_penjualan.cell(i, 3).nodes().to$().find('input').val());
+			Bruto = qty * price;
+			listBrutoPerItem.push(Bruto);
+		}
+		totalBruto = listBrutoPerItem.reduce((partial_sum, a) => partial_sum + a);
+		return totalBruto;
+	}
 
+	// return total discount used for all items
+	function discTotal()
+	{
+		totalBruto = sumTotalBruto();
+		totalNetto = sumTotalNetto();
+		let disc = totalBruto - totalNetto;
+		return disc;
+	}
+
+	// insert item to dataTable
 	function table_tambah()
 	{
 		if ( $('#qty').val() === '' || $('#barang').val() === '' || $('#qty').val().length === 0 || $('#barang').val().length === 0 ) {
@@ -255,13 +318,13 @@
 								'<input type="text" min="0" class="form-control form-control-sm" name="listQty[]" value="'+ qty +'" onchange="checkStock('+ parseInt($('#stock').val()) +','+ response.ip_price +','+ rowId +')">',
 								'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ $('#itemSatName').val() +'" readonly>' +
 									'<input type="hidden" value="'+$('#itemSatId').val()+'" name="listSatId[]">',
-								'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ response.ip_price +'" readonly>',
+								'<input type="text" class="form-control form-control-plaintext form-control-sm" name="listPrice[]" value="'+ response.ip_price +'" readonly>',
 								'<input type="number" class="form-control form-control-sm" name="listDiscP[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
 								'<input type="number" class="form-control form-control-sm" name="listDiscH[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
-								'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm text-right" value="0">',
+								'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm text-right" name="listSubTotal[]" value="0">',
 								'<button class="btn btn-danger btn-hapus-kenangan" type="button" title="Delete"><i class="fa fa-trash-o"></i></button>'
 							]).node().id = rowId;
-							countDiscount(response.ip_price, rowId);
+							checkStock(parseInt($('#stock').val()), response.ip_price, rowId);
 							counter++;
 							clearSelectItem();
 						} else {
@@ -275,21 +338,206 @@
 			} else {
 				messageWarning('Perhatian', 'Stock tidak mencukupi !');
 			}
-			// $('#barang').prop('selectedIndex', 0).trigger('change');
-			// $('#barang').select2('open');
 		}
+	}
+
+	// return total amount (final price that has to be pay)
+	function sumTotalAmount()
+	{
+		totalPenjualan = $('#totalPenjualan').val();
+		totalDisc = $('#totalDisc').val();
+		ppn = $('#ppn').val();
+
+		totalNetto = sumTotalNetto();
+		ppnVal = totalNetto * ppn / 100;
+		// console.log('netto: ' + totalNetto);
+		// console.log('ppn: ' + ppnVal);
+		totalAmount = totalNetto + ppnVal;
+		return totalAmount;
+	}
+
+	// duplicate value of totalAmountM and normalize it, then store it to totalAmountHidden
+	function normalizingTotalPenjualan()
+	{
+		totalPenjualan = $('#totalPenjualan').val();
+		totalPenjualan = totalPenjualan.replace(/,/g, '');
+		totalPenjualan = totalPenjualan.replace('.00', '');
+		$('#totalPenjualanHidden').val(totalPenjualan);
+	}
+
+	// duplicate value of totalAmountM and normalize it, then store it to totalAmountHidden
+	function normalizingTotalAmount()
+	{
+		totalAmount = $('#totalAmountM').val();
+		totalAmount = totalAmount.replace(/,/g, '');
+		totalAmount = totalAmount.replace('.00', '');
+		$('#totalAmountHidden').val(totalAmount);
+	}
+
+	// return total kembalian (change for customer)
+	function sumTotalKembalian()
+	{
+		normalizingTotalAmount();
+		totalAmount = $('#totalAmountHidden').val();
+		totalBayar = $('#totalBayar').val();
+		totalBayar = totalBayar.replace(/,/g, '');
+		totalBayar = totalBayar.replace('.00', '');
+		$('#totalBayarHidden').val(totalBayar);
+
+		console.log(totalAmount, totalBayar);
+		kembalian = totalBayar - totalAmount;
+		return kembalian;
+	}
+
+	// store-data -> submit form to store data in db
+	function SubmitForm(event)
+	{
+		event.preventDefault();
+		// normalize totalAmount (discard comma, extra-00, etc)
+		normalizingTotalAmount();
+		// normalize totalPenjualan (discard comma, extra-00, etc)
+		normalizingTotalPenjualan();
+
+		customer = $('#customerForm').serialize();
+		sales = $('#salesForm').serialize();
+		payment = $('#paymentForm').serialize();
+
+		let listItems = $();
+		for (let i = 0; i < tb_penjualan.rows()[0].length; i++) {
+			listItems = listItems.add(tb_penjualan.row(i).node());
+		}
+		let dataListItems = listItems.find('input').serialize();
+
+		data_final = customer +'&'+ sales +'&'+ payment +'&'+ dataListItems;
+		console.log(data_final);
+
+		$.ajax({
+			data : data_final,
+			type : "post",
+			url : baseUrl + '/penjualan/penjualanorder/store',
+			dataType : 'json',
+			success : function (response){
+				if(response.status == 'berhasil'){
+					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
+					// location.reload();
+				} else if (response.status == 'invalid') {
+					messageFailed('Perhatian', response.message);
+				} else if (response.status == 'gagal') {
+					messageWarning('Error', response.message);
+				}
+			},
+			error : function(e){
+				messageWarning('Gagal', 'Data gagal ditambahkan, hubungi pengembang !');
+			}
+		})
 	}
 
 </script>
 
+<!-- script for tab-list-penjualan -->
 <script type="text/javascript">
-	var table2 	= $('#table_pembayaran').DataTable();
+	$(document).ready(function() {
+		$('#date_from_pj').datepicker('setDate', first_day);
+		$('#date_to_pj').datepicker('setDate', last_day);
+
+		TableListPenjualan();
+		$('#date_from_pj').on('change', function() {
+			TableListPenjualan();
+		});
+		$('#date_to_pj').on('change', function() {
+			TableListPenjualan();
+		});
+		$('#btn_search_date_pj').on('click', function() {
+			TableListPenjualan();
+		});
+		$('#btn_refresh_date_pj').on('click', function() {
+			TableListPenjualan();
+		});
+	});
+
+	// data-table -> function to retrieve DataTable server side
+	var tb_listpenjualan;
+	function TableListPenjualan()
+	{
+		$('#table_listpenjualan').dataTable().fnDestroy();
+		tb_listpenjualan = $('#table_listpenjualan').DataTable({
+			responsive: true,
+			serverSide: true,
+			ajax: {
+				url: "{{ route('penjualanorder.getlistpenjualan') }}",
+				type: "get",
+				data: {
+					"_token": "{{ csrf_token() }}",
+					"date_from" : $('#date_from_pj').val(),
+					"date_to" : $('#date_to_pj').val()
+				}
+			},
+			columns: [
+				{data: 'DT_RowIndex'},
+				{data: 's_note'},
+				{data: 'customer', width: "70%"},
+				{data: 'action'}
+			],
+			pageLength: 10,
+			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
+		});
+	}
+</script>
+
+<!-- script for tab-pembayaran -->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#date_from_pb').datepicker('setDate', first_day);
+		$('#date_to_pb').datepicker('setDate', last_day);
+
+		TableListPembayaran();
+		$('#date_from_pb').on('change', function() {
+			TableListPembayaran();
+		});
+		$('#date_to_pb').on('change', function() {
+			TableListPembayaran();
+		});
+		$('#btn_search_date_pb').on('click', function() {
+			TableListPembayaran();
+		});
+		$('#btn_refresh_date_pb').on('click', function() {
+			TableListPembayaran();
+		});
+	});
+
+	// data-table -> function to retrieve DataTable server side
+	var tb_listpembayaran;
+	function TableListPembayaran()
+	{
+		$('#table_listpembayaran').dataTable().fnDestroy();
+		tb_listpembayaran = $('#table_listpembayaran').DataTable({
+			responsive: true,
+			serverSide: true,
+			ajax: {
+				url: "{{ route('penjualanorder.getlistpembayaran') }}",
+				type: "get",
+				data: {
+					"_token": "{{ csrf_token() }}",
+					"date_from" : $('#date_from_pb').val(),
+					"date_to" : $('#date_to_pb').val()
+				}
+			},
+			columns: [
+				{data: 'DT_RowIndex'},
+				{data: 's_note'},
+				{data: 'customer'},
+				{data: 'amount'},
+				{data: 'status'},
+				{data: 'action'}
+			],
+			pageLength: 10,
+			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
+		});
+	}
+</script>
+
+<script type="text/javascript">
 	var counter = 0;
-
-
-	// $('#barang').on('select2:select', function(){
-	// 	$('#qty').focus();
-	// })
 
 	$('#input-barang input, #input-barang select').on('change focus blur keyup', function(){
 		if($(this).val() !== '' || $(this).val().length !== 0){
@@ -302,16 +550,13 @@
 	}
 
 	$(document).ready(function(){
-
 		$('#table_penjualan tbody').on('click', '.btn-hapus-kenangan', function(){
 			hapus_row($(this));
 		});
+		// $('#btn-modal-customer').on('click', function() {
+		// 	$('#tambah_cust').modal('show');
+		// });
 	});
 
-	$('#btn-modal-customer').click(function(){
-
-		$('#tambah_cust').modal('show');
-
-	});
 </script>
 @endsection
