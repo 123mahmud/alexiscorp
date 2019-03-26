@@ -242,7 +242,12 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 
 	Route::get('/penjualan/penjualantanpaorder/index', 'Penjualan\PenjualanTOController@index')->name('penjualantanpaorder');
 	Route::get('/penjualan/penjualantanpaorder/getListPenjualan', 'Penjualan\PenjualanTOController@getListPenjualan')->name('penjualantanpaorder.getlistpenjualan');
-	Route::get('/penjualan/penjualantanpaorder/create', 'Penjualan\PenjualanTOController@create')->name('tambah_penjualantanpaorder');
+  Route::get('/penjualan/penjualantanpaorder/getCustomers', 'Penjualan\PenjualanTOController@getCustomers')->name('penjualantanpaorder.getcustomers');
+  Route::get('/penjualan/penjualantanpaorder/getItems', 'Penjualan\PenjualanTOController@getItems')->name('penjualantanpaorder.getitems');
+  Route::get('/penjualan/penjualantanpaorder/getStock', 'Penjualan\PenjualanTOController@getStock')->name('penjualantanpaorder.getstock');
+  Route::get('/penjualan/penjualantanpaorder/getPrice', 'Penjualan\PenjualanTOController@getPrice')->name('penjualantanpaorder.getprice');
+	Route::get('/penjualan/penjualantanpaorder/create', 'Penjualan\PenjualanTOController@create')->name('penjualantanpaorder.create');
+	Route::post('/penjualan/penjualantanpaorder/store', 'Penjualan\PenjualanTOController@store')->name('penjualantanpaorder.store');
 
 	Route::get('/penjualan/diskonpenjualan/index', 'PenjualanController@diskonpenjualan')->name('diskonpenjualan');
 	Route::get('/penjualan/diskonpenjualan/create', 'PenjualanController@tambah_diskonpenjualan')->name('tambah_diskonpenjualan');

@@ -79,7 +79,7 @@
       </div>
       <div class="modal-footer">
         {{-- <button class="btn btn-secondary d-none" id="btn-rencanabahanbaku">Buat Rencana Bahan Baku</button> --}}
-        <button class="btn btn-primary" id="btn_simpan" type="button">Simpan Pembayaran</button>
+        <button class="btn btn-primary" id="btn_simpan" type="button" disabled>Simpan Pembayaran</button>
         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
       </div>
     </div>
