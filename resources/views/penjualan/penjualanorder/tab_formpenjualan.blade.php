@@ -15,7 +15,7 @@
 
             	</div>
 
-							<form id="customerForm">
+							<form id="customerForm" action="#">
 								<fieldset class="mb-3">
 									<div class="row">
 										<div class="col-md-9 col-sm-12">
@@ -27,7 +27,7 @@
 															<input type="hidden" name="idCustomer" id="idCustomer">
 															<input type="text" class="form-control form-control-sm" name="customer" id="customer">
 															<div class="input-group-append">
-																<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tambah_cust"><i class="fa fa-plus-square"></i></button>
+																<button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#tambah_cust"><i class="fa fa-plus-square"></i></button>
 															</div>
 														</div>
 													</div>
@@ -43,7 +43,7 @@
 												<div class="col-lg-12">
 													<label>Keterangan Project</label>
 													<div class="form-group">
-														<textarea class="form-control" name="keterangan" id="ket-project"></textarea>
+														<textarea class="form-control" name="keterangan" id="ket_project"></textarea>
 													</div>
 												</div>
 											</div>
@@ -55,9 +55,9 @@
 													<label>Tanggal Order</label>
 													<div class="form-group">
 														<div class="input-group">
-															<input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="orderDate">
+															<input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="orderDate" id="orderDate">
 															<div class="input-group-append">
-																<button class="btn btn-primary btn-sm" type="button"><i class="fa fa-calendar"></i></button>
+																<button class="btn btn-primary btn-sm" type="button" id="cal-orderDate"><i class="fa fa-calendar"></i></button>
 															</div>
 														</div>
 													</div>
@@ -66,7 +66,12 @@
 												<div class="col-lg-12">
 													<label>Jatuh Tempo</label>
 													<div class="form-group">
-														<input type="text" class="form-control form-control-sm datepicker" name="dueDate">
+														<div class="input-group">
+															<input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="dueDate" id="dueDate">
+															<div class="input-group-append">
+																<button class="btn btn-primary btn-sm" type="button" id="cal-dueDate"><i class="fa fa-calendar"></i></button>
+															</div>
+														</div>
 													</div>
 												</div>
 
@@ -107,7 +112,7 @@
                 			<label>Qty</label>
                 			<div class="form-group">
                 				<div class="input-group">
-                    				<input type="text" min="0" id="qty" class="form-control form-control-sm" name="">
+                    				<input type="number" min="0" id="qty" class="form-control form-control-sm text-right">
                     				<div class="input-group-append">
                     					<button class="btn btn-primary btn-sm btn-tambah" type="button" title="Tambah"><i class="fa fa-plus"></i></button>
                     				</div>
@@ -164,7 +169,12 @@
 												<div class="col-md-12">
 													<label>PPn</label>
 													<div class="form-group">
-														<input type="number" class="form-control form-control-sm text-right" name="ppn" id="ppn" value="0">
+														<div class="input-group">
+															<input type="number" min="0" class="form-control form-control-sm text-right" name="ppn" id="ppn" value="0">
+															<div class="input-group-append">
+																<span class="input-group-text">%</span>
+															</div>
+														</div>
 													</div>
 												</div>
 												<div class="col-md-12">

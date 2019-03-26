@@ -86,7 +86,7 @@
 			select: function(event, data){
 				$('#address').val(data.item.address);
 				$('#idCustomer').val(data.item.id);
-				$('#ket-project').focus();
+				$('#ket_project').focus();
 			}
 		});
 		function clearCustomer()
@@ -95,6 +95,13 @@
 			$('#address').val('');
 			$('#idCustomer').val('');
 		}
+
+		$('#cal-orderDate').on('click', function() {
+			$('#orderDate').trigger('focus');
+		});
+		$('#cal-dueDate').on('click', function() {
+			$('#dueDate').trigger('focus');
+		});
 
 		$('#barang').on('click', function() {
 			clearSelectItem();
@@ -108,10 +115,11 @@
 				$('#itemSatId').val(data.item.sat1_id);
 				$('#itemSatName').val(data.item.sat1_name);
 				getItemStock();
+				$('#qty').focus();
 			}
 		});
 
-		$('#qty').inputmask('999.999.999.999', {placeholder: " "});
+		// $('#qty').inputmask('999.999.999.999', {placeholder: " "});
 		$('#qty').on('click', function() {
 			$(this).val('');
 		});
@@ -144,11 +152,11 @@
 				kembalian = sumTotalKembalian();
 				$('#kembalian').val(kembalian);
 			}
-		})
+		});
 
 		$('#btn_simpan').on('click', function() {
 			SubmitForm(event);
-		})
+		});
 	});
 
 	function clearSelectItem()
@@ -177,7 +185,7 @@
 				$('#stock').val(response.s_qty);
 			},
 			error : function(e){
-				$('#stock').val('Error, check response !');
+				$('#stock').val(0);
 			}
 		});
 	}
@@ -315,12 +323,12 @@
 							tb_penjualan.row.add([
 								$('#itemName').val() +
 									'<input type="hidden" value="'+$('#itemId').val()+'" class="barang" name="listItemId[]">',
-								'<input type="text" min="0" class="form-control form-control-sm" name="listQty[]" value="'+ qty +'" onchange="checkStock('+ parseInt($('#stock').val()) +','+ response.ip_price +','+ rowId +')">',
+								'<input type="number" min="0" class="form-control form-control-sm" name="listQty[]" value="'+ qty +'" onchange="checkStock('+ parseInt($('#stock').val()) +','+ response.ip_price +','+ rowId +')">',
 								'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ $('#itemSatName').val() +'" readonly>' +
 									'<input type="hidden" value="'+$('#itemSatId').val()+'" name="listSatId[]">',
 								'<input type="text" class="form-control form-control-plaintext form-control-sm" name="listPrice[]" value="'+ response.ip_price +'" readonly>',
-								'<input type="number" class="form-control form-control-sm" name="listDiscP[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
-								'<input type="number" class="form-control form-control-sm" name="listDiscH[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
+								'<input type="number" min="0" class="form-control form-control-sm" name="listDiscP[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
+								'<input type="number" min="0" class="form-control form-control-sm" name="listDiscH[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
 								'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm text-right" name="listSubTotal[]" value="0">',
 								'<button class="btn btn-danger btn-hapus-kenangan" type="button" title="Delete"><i class="fa fa-trash-o"></i></button>'
 							]).node().id = rowId;
@@ -335,6 +343,7 @@
 						messageWarning('Perhatian', 'Harga barang tidak ditemukan !');
 					}
 				})
+				$('#barang').focus();
 			} else {
 				messageWarning('Perhatian', 'Stock tidak mencukupi !');
 			}
@@ -419,7 +428,7 @@
 			success : function (response){
 				if(response.status == 'berhasil'){
 					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
-					// location.reload();
+					location.reload();
 				} else if (response.status == 'invalid') {
 					messageFailed('Perhatian', response.message);
 				} else if (response.status == 'gagal') {
