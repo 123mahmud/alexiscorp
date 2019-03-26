@@ -106,6 +106,15 @@
 		  	format:"dd-mm-yyyy",        
 		  	autoclose: true,
 		}).datepicker( "setDate", new Date());
+		$('.datepicker3').datepicker({
+			autoclose: true,
+			format:"dd-mm-yyyy",
+			endDate: 'today'
+		}).datepicker("setDate", d);
+		$('#tanggal4').datepicker({
+		  	format:"dd-mm-yyyy",        
+		  	autoclose: true,
+		}).datepicker( "setDate", new Date());
 
 		tablePlan();
 
@@ -125,16 +134,17 @@
 				data: {
 			       	"_token": "{{ csrf_token() }}",                    
 				    "tanggal1" :$('#tanggal1').val(),
-           	        "tanggal2" :$('#tanggal2').val()
+           	        "tanggal2" :$('#tanggal2').val(),
+           	        "status" :$('#tampil_data').val()
 				},
 			},
 			columns: [
 				{data: 'tglBuat', name: 'tglBuat', "width": "15%"},
 				{data: 'p_code', name: 'p_code', "width": "15%"},            
 				{data: 'm_name', name: 'm_name', "width": "15%"},
-				{data: 's_company', name: 's_company', "width": "15%"},                        
+				{data: 's_company', name: 's_company', "width": "15%"},  
+				{data: 'tglConfirm', name: 'tglConfirm', "width": "15%"},                      
 				{data: 'status', name: 'status', "width": "10%"}, 
-				{data: 'tglConfirm', name: 'tglConfirm', "width": "15%"},                         
 				{data: 'aksi', name: 'aksi', "width": "15%"},
 			],
 			//responsive: true,
@@ -186,6 +196,165 @@
 			}
 		});
 	}
+
+    function editPlanAll(id)
+  	{
+    	$.ajax({
+         type: "GET",
+         url: baseUrl + '/purcahse-plan/get-edit-plan',
+         data: {id:id},
+         success: function(response){
+
+         },
+         complete:function (argument) {
+            window.location=(this.url)
+         },
+         error: function(){
+            toastr["error"]("Terjadi Kesalahan", "Error");
+         },
+         // async: false
+      });
+  	}
+
+  	  	function deletePlan(id){
+		    iziToast.show({
+		      color: 'red',
+		      title: 'Peringatan',
+		      message: 'Apakah anda yakin!',
+		      position: 'center', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+		      progressBarColor: 'rgb(0, 255, 184)',
+		      buttons: [
+		        [
+		          '<button>Ok</button>',
+		          function (instance, toast) {
+		            instance.hide({
+		              transitionOut: 'fadeOutUp'
+		            }, toast);
+		    $.ajax({
+		      url : baseUrl + "/purcahse-plan/get-delete-plan/"+id,
+		      type: 'GET',
+		      success : function(response){
+		        if (response.status=='sukses') {
+		          iziToast.success({timeout: 5000, 
+		                          position: "topRight",
+		                          icon: 'fa fa-chrome', 
+		                          title: '', 
+		                          message: 'Data berhasil di hapus.'});
+		          tablex.ajax.reload();
+		        }else{
+		          iziToast.error({position: "topRight",
+		                        title: '', 
+		                        message: 'Data gagal di hapus.'});
+		        }
+		      }
+		    });
+		    }
+		        ],
+		        [
+		          '<button>Close</button>',
+		           function (instance, toast) {
+		            instance.hide({
+		              transitionOut: 'fadeOutUp'
+		            }, toast);
+		          }
+		        ]
+		      ]
+		    }); 
+		  }
+
+	function deletePlan(id)
+   	{
+      	$.confirm({
+			title: 'Ehem!',
+			content: 'Apakah anda yakin?',
+			type: 'red',
+			typeAnimated: true,
+			buttons: {
+			tryAgain: {
+				text: 'Ya',
+				btnClass: 'btn-red',
+				action: function(){
+			      	$.ajax({
+						url: baseUrl +'/purcahse-plan/get-delete-plan/' + id,
+						type: "get",
+						dataType: "JSON",
+						data: {id:id},
+				        success: function(response)
+				        {
+				            if(response.status == "sukses")
+				            {
+				               $('#tablePlan').DataTable().ajax.reload();
+				               $.toast({
+				                  heading: '',
+				                  text: 'Berhasil menghapus data',
+				                  bgColor: '#00b894',
+				                  textColor: 'white',
+				                  loaderBg: '#55efc4',
+				                  icon: 'success'
+				               });
+				            }
+				            else
+				            {
+				               $.toast({
+				                   heading: '',
+				                   text: 'Gagal menghapus data',
+				                   showHideTransition: 'plain',
+				                   icon: 'warning'
+				               })
+				            }
+				        }
+			         
+			    	})
+			   	}
+			},	
+			close: function () {
+			}
+         	}
+      	});
+   	}
+
+   	function lihatHistorybyTgl(){
+		var tgl1 = $('#tanggal3').val();
+		var tgl2 = $('#tanggal4').val();
+		var tampil = $('#tampil_data1').val();
+		alert(tampil);
+		$('#tbl-history').dataTable({
+			"destroy": true,
+			"processing" : true,
+			"serverside" : true,
+			"ajax" : {
+				url: baseUrl + "/purchasing/rencanapembelian/get-data-tabel-history/"+tgl1+"/"+tgl2+"/"+tampil,
+				type: 'GET'
+			},
+			"columns" : [
+				{"data" : "p_code", "width" : "10%"},
+				{"data" : "i_name", "width" : "15%"},
+				{"data" : "s_name", "width" : "10%"},
+				{"data" : "s_company", "width" : "15%"},
+				{"data" : "tglBuat", "width" : "10%"},
+				{"data" : "ppdt_qty", "width" : "5%"},
+				{"data" : "tglConfirm", "width" : "10%"},
+				{"data" : "ppdt_qtyconfirm", "width" : "5%"},
+				{"data" : "status", "width" : "10%"}
+			],
+			/*"rowsGroup": [
+			'first:name'
+			],*/
+			"language": {
+			"searchPlaceholder": "Cari Data",
+			"emptyTable": "Tidak ada data",
+			"sInfo": "Menampilkan _START_ - _END_ Dari _TOTAL_ Data",
+			"sSearch": '<i class="fa fa-search"></i>',
+			"sLengthMenu": "Menampilkan &nbsp; _MENU_ &nbsp; Data",
+			"infoEmpty": "",
+			"paginate": {
+					"previous": "Sebelumnya",
+					"next": "Selanjutnya",
+			  	}
+			}
+		});
+ 	}
+
 </script>
 
 @endsection

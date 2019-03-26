@@ -32,6 +32,14 @@
                                 <fieldset>
                                     <div class="row">
                                         <div class="col-md-2 col-sm-6 col-xs-12">
+                                            <label>Kode Rencama</label>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6 col-xs-12">
+                                            <div class="form-group">
+                                                <input type="text" readonly="" value="{{ $data_header->p_code }}" class="form-control form-control-sm" name="nota">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-12">
                                             <label>Tanggal Rencana Pembelian</label>
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -44,9 +52,13 @@
                                         </div>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                             <select class="form-control form-control-sm select2" id="cari_sup" name="id_supplier" style="width: 100%;" >
-                                                <option value=""> - Pilih Supplier</option>
                                                 @foreach ($supplier as $data)
-                                                  <option value="{{ $data->s_id }}"> {{ $data->s_code }} - {{ $data->s_company }}</option>
+                                                @if ($data->s_id == $data_header->p_supplier)
+                                                    <option  selected="" value="{{ $data->s_id }}"> {{ $data->s_name }}</option>
+                                                @else
+                                                    <option value="{{ $data->s_id }}">{{ $data->s_name }}
+                                                </option>
+                                                @endif
                                                 @endforeach
                                             </select>
                                         </div>
@@ -54,49 +66,49 @@
                                 </fieldset>
                                 <fieldset class="mt-2">
                                     <div class="row">
-                                            <div class="col-md-3" style="padding: 0px">
-                                                <div class="col-12">
-                                                    <label>Masukan Kode / Nama</label>
-                                                </div>
-                                                <div class="col-12" style="padding: 3px">
-                                                    <input type="text" class="form-control form-control-sm" id="searchitem" />
-                                                    <input type="hidden" class="form-control input-sm " name="" id="i_id">
-                                                </div>
+                                        <div class="col-md-3" style="padding: 0px">
+                                            <div class="col-12">
+                                                <label>Masukan Kode / Nama</label>
                                             </div>
-                                            <div class="col-md-3" style="padding: 0px">
-                                                <div class="col-12">
-                                                    <label>Stok</label>
-                                                </div>
-                                                <div class="col-12" style="padding: 3px">
-                                                    <input type="text" class="form-control form-control-sm text-right" readonly="" id="stock" />
-                                                </div>
+                                            <div class="col-12" style="padding: 3px">
+                                                <input type="text" class="form-control form-control-sm" id="searchitem" />
+                                                <input type="hidden" class="form-control form-control-sm" name="" id="i_id">
                                             </div>
-                                            <div class="col-md-2" style="padding: 0px">
-                                                <div class="col-12">
-                                                    <label>Harga</label>
-                                                </div>
-                                                <div class="col-12" style="padding: 3px">
-                                                    <input type="text" class="form-control form-control-sm text-right" readonly="" id="ip_hargaPrev"/>
-                                                </div>
+                                        </div>
+                                        <div class="col-md-3" style="padding: 0px">
+                                            <div class="col-12">
+                                                <label>Stok</label>
                                             </div>
-                                            <div class="col-md-3" style="padding: 0px">
-                                                <div class="col-12">
-                                                    <label>Jumlah</label>
-                                                </div>
-                                                <div class="col-12" style="padding: 3px">
-                                                    <input type="text" class="form-control form-control-sm currenc text-right" id="fQty" />
-                                                </div>
+                                            <div class="col-12" style="padding: 3px">
+                                                <input type="text" class="form-control form-control-sm text-right" readonly="" id="stock" />
                                             </div>
-                                            <div class="col-md-1" style="padding: 0px">
-                                                <div class="col-12">
-                                                    <label>Satuan</label>
-                                                </div>
-                                                <div class="col-12" style="padding: 3px">
-                                                    <select class="form-control form-control-sm" id="ip_sat"></select>
-                                                </div>
+                                        </div>
+                                        <div class="col-md-2" style="padding: 0px">
+                                            <div class="col-12">
+                                                <label>Harga</label>
                                             </div>
+                                            <div class="col-12" style="padding: 3px">
+                                                <input type="text" class="form-control form-control-sm text-right" readonly="" id="ip_hargaPrev"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" style="padding: 0px">
+                                            <div class="col-12">
+                                                <label>Jumlah</label>
+                                            </div>
+                                            <div class="col-12" style="padding: 3px">
+                                                <input type="text" class="form-control form-control-sm currenc text-right" id="fQty" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" style="padding: 0px">
+                                            <div class="col-12">
+                                                <label>Satuan</label>
+                                            </div>
+                                            <div class="col-12" style="padding: 3px">
+                                            <select class="form-control form-control-sm" id="ip_sat"></select>
+                                        </div>
                                     </div>
-                                </fieldset>
+                                </div>
+                            </fieldset>
                             <div class="table-responsive mt-3" style="overflow-y : auto;height : 350px; border: solid 1.5px #bb936a">
                                 <table class="table table-hover table-striped table-bordered display nowrap" id="barang_table">
                                     <thead class="bg-primary">
@@ -110,7 +122,30 @@
                                         </tr>
                                     </thead>
                                     <tbody id="div_item">
-
+                                        @for ($i = 0; $i < count($dataItem['data_isi']); $i++)
+                                        <tr class="detail{{ $dataItem['data_isi'][$i]['i_id'] }}">
+                                            <td width="30%">
+                                                <input style="width:100%" type="hidden" class="kode_item kode" name="ppdt_item[]" value='{{ $dataItem['data_isi'][$i]['i_id'] }}'>
+                                                <div style="padding-top:6px">{{ $dataItem['data_isi'][$i]['i_code'] }} - {{ $dataItem['data_isi'][$i]['i_name'] }}</div>
+                                            </td>
+                                            <td width="20%">
+                                                <input type="text" class="form-control form-control-sm text-right" value="{{ $dataItem['data_stok'][$i]->qtyStok }} {{ $dataItem['data_satuan'][$i] }}" readonly>
+                                            </td>
+                                            <td width="15%">
+                                                <input class="form-control form-control-sm text-right" name="ppdt_prevcost[]" value="{{ number_format($dataItem['data_isi'][$i]['ppdt_prevcost'],2,',','.')}}" readonly>
+                                            </td>
+                                            <td width="20%">
+                                                <input class="form-control form-control-sm text-right currenc" id="qty-{{ $dataItem['data_isi'][$i]['i_id'] }}" name="ppdt_qty[]" value='{{ $dataItem['data_isi'][$i]['ppdt_qty'] }}'>
+                                            </td>
+                                            <td width="10%">
+                                                <input type="text" class="form-control form-control-sm" name="" value='{{ $dataItem['data_isi'][$i]['s_name'] }}' readonly>
+                                                <input type="hidden" class="form-control form-control-sm" name="ppdt_satuan[]" value='{{ $dataItem['data_isi'][$i]['ppdt_satuan'] }}' readonly>
+                                            </td>
+                                            <td width="5%">
+                                                <button type="button" class="btn btn-danger btn_remove" id="{{ $dataItem['data_isi'][$i]['i_id'] }}"><i class="fa fa-trash-o"></i></button>
+                                            </td>
+                                        </tr>
+                                        @endfor
                                     </tbody>
                                 </table>
                             </div>
@@ -118,7 +153,7 @@
                     </section>
                 </div>
                 <div class="card-footer text-right">
-                    <button class="btn btn-primary simpanPlan" type="button" onclick="simpanPlan()" title="Simpan">Simpan</button>
+                    <button class="btn btn-primary update-plan" type="button" onclick="updatePlan('{{ Crypt::encrypt($data_header->p_id) }}')" title="Simpan">Simpan</button>
                     <a href="{{route('rencanapembelian')}}" class="btn btn-secondary">Kembali</a>
                 </div>
             </div>
@@ -223,10 +258,10 @@
 
     });
 
-    var index             = 0;
-    var tamp              = [];
     function setFormDetail()
     {
+        var tamp = [];
+        tamp [0] = $('#i_id').val();
         var item = $('#searchitem').val();
         var i_id = $('#i_id').val();
         var stok =  $('#stock').val();
@@ -236,36 +271,44 @@
         var hasil=satuan.split('|');
         var s_id = hasil[0];
         var s_name = hasil[1];
-        var index = tamp.indexOf(i_id); 
-        if ( index == -1 )
+        var inputs = document.getElementsByClassName('kode_item'),
+                idItem = [].map.call(inputs, function (input) {
+                    return input.value;
+                });
+
+            var res = tamp.filter(function (n) {
+                return !this.has(n)
+            }, new Set(idItem));
+    
+        if ( res.length != 0 )
         {                   
             $('#div_item').append(
-                '<tr class="detail'+i_id+'">'
+                    '<tr class="detail'+i_id+'">'
                     //item
                     +'<td width="30%">'
-                       +'<input style="width:100%" type="hidden" name="ppdt_item[]" value='+i_id+'>'
-                       +'<div style="padding-top:6px">'+item+'</div>'
+                        +'<input style="width:100%" type="hidden" class="kode_item kode" name="ppdt_item[]" value='+i_id+'>'
+                        +'<div style="padding-top:6px">'+item+'</div>'
                     +'</td>'
                     //stock gudang
                     +'<td width="20%">'
-                       +'<input type="text" class="form-control form-control-sm text-right" value="'+stok+'" readonly>'
+                        +'<input type="text" class="form-control form-control-sm text-right" value="'+stok+'" readonly>'
                     +'</td>'
                     //Harga
                     +'<td width="15%">'
-                       +'<input class="form-control form-control-sm text-right" name="ppdt_prevcost[]" value="'+harga+'" readonly>'
+                        +'<input class="form-control form-control-sm text-right" name="ppdt_prevcost[]" value="'+harga+'" readonly>'
                     +'</td>'
                     //qty
                     +'<td width="20%">'
-                       +'<input class="form-control form-control-sm text-right currenc" id="qty-'+i_id+'" name="ppdt_qty[]" value='+qty+'>'
+                        +'<input class="form-control form-control-sm text-right currenc" id="qty-'+i_id+'" name="ppdt_qty[]" value='+qty+'>'
                     +'</td>'
                     //satuan
                     +'<td width="10%">'
-                       +'<input type="text" class="form-control form-control-sm" name="" value='+s_name+' readonly>'
-                       +'<input type="hidden" class="form-control form-control-sm" name="ppdt_satuan[]" value='+s_id+' readonly>'
+                        +'<input type="text" class="form-control form-control-sm  name="" value='+s_name+' readonly>'
+                        +'<input type="hidden" class="form-control form-control-sm name="ppdt_satuan[]" value='+s_id+' readonly>'
                     +'</td>'
                     //hapus tombol
                     +'<td width="5%">'
-                       +'<button type="button" class="btn btn-danger btn_remove" id="'+i_id+'"><i class="fa fa-trash-o"></i></button>'
+                        +'<button type="button" class="btn btn-danger btn_remove" id="'+i_id+'"><i class="fa fa-trash-o"></i></button>'
                     +'</td>'                            
                 +'</tr>'
             );
@@ -278,13 +321,10 @@
                 prefix: '', //Space after $, this will not truncate the first character.
                 rightAlign: false,
                 oncleared: function () { self.Value(''); }
-            }); 
-
-            index++;
-            tamp.push(i_id);          
+            });         
         }
         else
-        {                  
+        {                   
             var qtyLama = parseInt($('#qty-'+i_id).val().replace(/\./g, ''));
             qty = parseInt(qty.replace(/\./g, ''));
             var doubleQty = $('#qty-'+i_id).val(qtyLama + qty);        
@@ -294,28 +334,32 @@
     $(document).on('click', '.btn_remove', function(a)
     {
         var button_id = $(this).attr('id');
-        var arrayIndex = tamp.findIndex(e => e === button_id);
-        tamp.splice(arrayIndex, 1);
         $('.detail'+button_id).remove();
         $('#searchitem').focus();
+
+        var inputs = document.getElementsByClassName('kode'),
+          names = [].map.call(inputs, function (input) {
+              return input.value;
+          });
+        tamp = names;
     });
 
-    function simpanPlan()
+    function updatePlan(id)
     {
-    $('.simpanPlan').attr('disabled', 'disabled');
+        $('.update-plan').attr('disabled', 'disabled');
         $.ajax({
-            url     :  baseUrl+'/purcahse-plan/store-plan',
+            url     :  baseUrl+'/purcahse-plan/update',
             type    : 'GET', 
-            data    :  $('#data').serialize(),
+            data    :  $('#data').serialize() + '&id=' + id,
             dataType: 'json',
             success : function(response)
             {    
                 if(response.status=='sukses')
                 {
-                    var nota = response.nota;                     
+                    var nota = response.nota;
                     $.toast({
                         heading: nota,
-                        text: 'Berhasil di Simpan',                        
+                        text: 'Berhasil di update',
                         bgColor: '#00b894',
                         textColor: 'white',
                         loaderBg: '#55efc4',
@@ -326,12 +370,12 @@
                 else
                 {                      
                     $.toast({
-                        heading: '',
-                        text: 'Ada yang salah',
+                        heading: 'Ada yang salah',
+                        text: 'Periksa data anda.',
                         showHideTransition: 'plain',
                         icon: 'warning'
                     })
-                    $('.simpanPlan').removeAttr('disabled', 'disabled');
+                    $('.update-plan').removeAttr('disabled', 'disabled');
                 }
             }
         });

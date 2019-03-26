@@ -147,7 +147,12 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/purcahse-plan/data-plan', 'Purchasing\purchasePlanController@dataPlan');
 	Route::get('/purchasing/rencanapembelian/get-detail-plan/{id}/{type}', 'Purchasing\purchasePlanController@getDetailPlan');
 	Route::get('/purchasing/rencanapembelian/tambah_rencanapembelian', 'Purchasing\purchasePlanController@tambah_rencanapembelian')->name('tambah_rencanapembelian');
-	Route::get('/seach-item-purchase', 'Purchasing\purchasePlanController@seachItemPurchase')->middleware('auth');
+	Route::get('/seach-item-purchase', 'Purchasing\purchasePlanController@seachItemPurchase');
+	Route::get('/purcahse-plan/store-plan', 'Purchasing\purchasePlanController@storePlan');
+	Route::get('/purcahse-plan/get-edit-plan', 'Purchasing\purchasePlanController@getEditPlan')->middleware('auth');
+	Route::get('/purcahse-plan/update', 'Purchasing\purchasePlanController@updatePlan');
+	Route::get('/purcahse-plan/get-delete-plan/{id}', 'Purchasing\purchasePlanController@deletePlan')->middleware('auth');
+	Route::get('/purchasing/rencanapembelian/get-data-tabel-history/{tgl1}/{tgl2}/{tampil}', 'Purchasing\purchasePlanController@getDataTabelHistory');
 	//end
 
 	// Route::get('/purchasing/rencanapembelian/preview_rencanapembelian/{id}', 'Purchasing\RencanaPembelianController@preview_rencanapembelian')->name('preview_rencanapembelian');

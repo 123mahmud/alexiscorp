@@ -18,6 +18,7 @@ use Response;
 use Auth;
 use App\d_gudangcabang;
 use App\m_supplier;
+use Crypt;
 
 class purchasePlanController extends Controller
 { 
@@ -105,8 +106,8 @@ class purchasePlanController extends Controller
 
    public function tambah_rencanapembelian()
    {
-
-      return view('purchasing.rencanapembelian.tambah_rencanapembelian');
+      $supplier = m_supplier::select('s_id','s_code','s_company')->get();
+      return view('purchasing.rencanapembelian.tambah_rencanapembelian',compact('supplier'));
    }
 
    public function storePlan(Request $request)
@@ -235,7 +236,7 @@ class purchasePlanController extends Controller
                           onclick=detailPlanAll("'.$data->p_id.'")><i class="fa fa-info-circle"></i> 
                       </button>
                       <button class="btn btn-sm btn-warning" title="Edit"
-                          onclick=editPlanAll("'.$data->p_id.'")><i class="fa fa-edit"></i>
+                          onclick=editPlanAll("'.Crypt::encrypt($data->p_id).'")><i class="fa fa-edit"></i>
                       </button>
                       <button class="btn btn-sm btn-danger" title="Hapus"
                           onclick=deletePlan("'.$data->p_id.'")><i class="fa fa-times"></i>
@@ -259,9 +260,9 @@ class purchasePlanController extends Controller
    }
 
 
-   public function getEditPlan($id)
+   public function getEditPlan(Request $request)
    { 
-
+      $id = Crypt::decrypt($request->id);
       $comp = Session::get('user_comp');
       $gudang = DB::table('d_gudangcabang')
          ->select('gc_id','gc_gudang','c_name')
@@ -272,7 +273,7 @@ class purchasePlanController extends Controller
                    ->orWhere('gc_gudang', '=', 'GUDANG BAHAN BAKU');
          })->get();
 
-      $supplier = m_supplier::select('s_id','s_name')->get();
+      $supplier = m_supplier::select('s_id','s_company')->get();
 
       $data_header = d_purchase_plan::join('d_mem','m_id','=','p_mem')
                ->join('m_supplier','p_supplier','=','s_id')
@@ -313,7 +314,7 @@ class purchasePlanController extends Controller
                         'data_satuan' => $dataStok['txt_satuan']
                   );
  
-      return view('Purchase::rencanapembelian/edit',compact('data_header','gudang','supplier','dataItem'));
+      return view('purchasing.rencanapembelian.edit_rencanapembelian',compact('data_header','gudang','supplier','dataItem'));
    }
 
 
@@ -335,11 +336,11 @@ class purchasePlanController extends Controller
          ]);
        }
    }
-   public function updatePlan(Request $request, $id)
+   public function updatePlan(Request $request)
    {         
-      // dd($request->all());
       DB::beginTransaction();
       try {
+         $id = Crypt::decrypt($request->id);
          d_purchase_plan::where('p_id',$id)->delete();
          d_purchaseplan_dt::where('ppdt_pruchaseplan',$id)->delete();
 
@@ -538,11 +539,12 @@ class purchasePlanController extends Controller
         $d2 = substr($tgl2,0,2);
         $tanggal2 = $y2.'-'.$m2.'-'.$d2;
 
-        if ($tampil == 'wait') 
+        if ($tampil == 'WT') 
         { 
           $is_confirm = "FALSE";
           $status = "WT";
-        }elseif ($tampil == 'edit') 
+        }
+        elseif ($tampil == 'edit') 
         {
           $is_confirm = "TRUE";
           $status = "DE";

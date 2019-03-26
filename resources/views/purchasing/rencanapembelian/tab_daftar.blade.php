@@ -20,9 +20,9 @@
                     <div class="col-md-6 col-sm-12">
                       <div class="form-group">
                         <div class="input-group input-group-sm input-daterange">
-                          <input type="text" class="form-control datepicker2" id="tanggal1" name="tanggal1">
+                          <input type="text" class="form-control datepicker2" id="tanggal3" name="tanggal1">
                           <span class="input-group-addon">-</span>
-                          <input type="text" id="tanggal2" class="form-control datepicker2" name="tanggal2">
+                          <input type="text" class="form-control datepicker2" id="tanggal4" name="tanggal4">
                           <div class="input-group-append">
                           	<button class="btn btn-primary" type="button" onclick="tablePlan()"><i class="fa fa-search"></i></button>
                           	<button class="btn btn-secondary" type="button" onclick="tablePlan()"><i class="fa fa-refresh"></i></button>
@@ -33,11 +33,10 @@
 
                     <div class="col-md-3 col-sm-12">
                         <div class="form-group">
-                            <select name="pp_status" id="pp_status" class="form-control form-control-sm">
+                            <select name="pp_status" id="tampil_data" class="form-control form-control-sm">
                                 <option value="">Tampilkan Data : Semua</option>
                                 <option value="WT">Tampilkan Data : Waiting</option>
                                 <option value="AP">Tampilkan Data : Disetujui</option>
-                                <option value="NA">Tampilkan Data : Tidak Disetujui</option>
                             </select>
                         </div>
                     </div>
