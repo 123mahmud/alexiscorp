@@ -27,34 +27,40 @@ class purchasePlanController extends Controller
      return view('purchasing.rencanapembelian.rencanapembelian');
    }
 
-   public function seachItemPurchase(Request $request, $gudang)
+   public function seachItemPurchase(Request $request)
    {
+   // return json_encode($request->all());
+      $term = $request->term;
+      $results = array();
+      $queries = DB::table('m_item')
+        ->select('i_id','i_type','i_sat1','i_sat2','i_sat3','i_code','i_name')
+        ->where('i_name', 'LIKE', '%'.$term.'%')
+        ->where('i_type', 'BJ')
+        ->take(25)->get();
 
-      // return json_encode($request->all());
-
-      $namaGudang = DB::table('d_gudangcabang')
-                    ->where('gc_id',$gudang)
-                    ->select('gc_gudang')->first();
-      if ($namaGudang->gc_gudang == 'GUDANG PENJUALAN') 
+      if ($queries == null) 
       {
-         $term = $request->term;
-         $results = array();
-         $queries = DB::table('m_item')
-           ->select('i_id','i_type','i_sat1','i_sat2','i_sat3','i_code','i_name')
-           ->where('i_name', 'LIKE', '%'.$term.'%')
-           ->where('i_type', 'BJ')
-           ->take(25)->get();
-
-         if ($queries == null) 
+        $results[] = [ 'id' => null, 'label' =>'tidak di temukan data terkait'];
+      } 
+      else 
+      {
+         foreach ($queries as $val) 
          {
-           $results[] = [ 'id' => null, 'label' =>'tidak di temukan data terkait'];
-         } 
-         else 
-         {
-            foreach ($queries as $val) 
+            if ($val->i_type == 'BJ') 
             {
+               $namaGudang = 'GUDANG PENJUALAN'; 
+            }
+            else
+            {
+               $namaGudang = 'GUDANG BAHAN BAKU';
+            }
+            $gudang = DB::table('d_gudangcabang')
+                    ->select('gc_id')
+                    ->where('gc_comp',Session::get('user_comp'))
+                    ->where('gc_gudang',$namaGudang)
+                    ->first();
             //ambil stok berdasarkan type barang
-            $query = DB::select(DB::raw("SELECT IFNULL( (SELECT s_qty FROM d_stock where s_item = '$val->i_id' AND s_comp = '$gudang' AND s_position = '$gudang' limit 1) ,'0') as qtyStok"));
+            $query = DB::select(DB::raw("SELECT IFNULL( (SELECT s_qty FROM d_stock where s_item = '$val->i_id' AND s_comp = '$gudang->gc_id' AND s_position = '$gudang->gc_id' limit 1) ,'0') as qtyStok"));
             $stok = $query[0]->qtyStok;
 
              //get prev cost
@@ -90,72 +96,17 @@ class purchasePlanController extends Controller
                             'satTxt' => [$txtSat1->s_name, $txtSat2->s_name, $txtSat3->s_name],
                             'prevCost' =>number_format((int)$hargaLalu,2,",",".")
                           ];
-           }
-         }
-
-         return Response::json($results);
+        }
       }
-      else
-      {
-         $term = $request->term;
-         $results = array();
-         $queries = DB::table('m_item')
-           ->select('i_id','i_type','i_sat1','i_sat2','i_sat3','i_code','i_name')
-           ->where('i_name', 'LIKE', '%'.$term.'%')
-           ->where('i_type', 'BB')
-           ->take(25)->get();
-         // dd($queries);
-         if ($queries == null) 
-         {
-           $results[] = [ 'id' => null, 'label' =>'tidak di temukan data terkait'];
-         } 
-         else 
-         {
-           foreach ($queries as $val) 
-           {
-            //ambil stok berdasarkan type barang
-            $query = DB::select(DB::raw("SELECT IFNULL( (SELECT s_qty FROM d_stock where s_item = '$val->i_id' AND s_comp = '$gudang' AND s_position = '$gudang' limit 1) ,'0') as qtyStok"));
-            $stok = $query[0]->qtyStok;
-  
-             //get prev cost
-            $idItem = $val->i_id;
-            $prevCost = DB::table('d_stock_mutation')
-                       // ->select(DB::raw('MAX(sm_hpp) as hargaPrev'))
-                       ->select('sm_hpp', 'sm_qty')
-                       ->where('sm_item', '=', $idItem)
-                       ->where('sm_mutcat', '=', "16")
-                       ->orderBy('sm_date', 'desc')
-                       ->limit(1)
-                       ->first();
 
-            if ($prevCost == null) 
-            {
-               $default_cost = 0;
-               $hargaLalu = $default_cost;
-            }
-            else
-            {
-               $hargaLalu = $prevCost->sm_hpp;
-            }
-            
-             //get data txt satuan
-            $txtSat1 = DB::table('m_satuan')->select('s_name', 's_id')->where('s_id','=', $val->i_sat1)->first();
-            $txtSat2 = DB::table('m_satuan')->select('s_name', 's_id')->where('s_id','=', $val->i_sat2)->first();
-            $txtSat3 = DB::table('m_satuan')->select('s_name', 's_id')->where('s_id','=', $val->i_sat3)->first();
-
-            $results[] = [ 'id' => $val->i_id,
-                           'label' => $val->i_code .' - '.$val->i_name,
-                           'stok' => (int)$stok,
-                           'sat' => [$val->i_sat1, $val->i_sat2, $val->i_sat3],
-                           'satTxt' => [$txtSat1->s_name, $txtSat2->s_name, $txtSat3->s_name],
-                           'prevCost' =>number_format((int)$hargaLalu,2,",",".")
-                          ];
-           }
-         }
-         
-         return Response::json($results);
-      }
+      return Response::json($results);
       
+   }
+
+   public function tambah_rencanapembelian()
+   {
+
+      return view('purchasing.rencanapembelian.tambah_rencanapembelian');
    }
 
    public function storePlan(Request $request)
@@ -430,31 +381,6 @@ class purchasePlanController extends Controller
 
    }
    
-
-
-   
-   public function formPlan()
-    {        
-         return view('Purchase::rencanapembelian/create');
-    }
-
-    public function create()
-    {
-        return view('Purchase::rencanapembelian/create');
-    }
-    public function tambah_pembelian()
-    {
-        return view('/purchasing/returnpembelian/tambah_pembelian');
-    }
-    public function tambah_order()
-    {
-        
-    }
-    public function bahan()
-    {
-        return view('/purchasing/rencanabahanbaku/bahan');
-    }
-
    public function getDetailPlan($id,$type)
    {
       $dataHeader = d_purchase_plan::select('p_id',
