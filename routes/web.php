@@ -147,6 +147,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/purcahse-plan/data-plan', 'Purchasing\purchasePlanController@dataPlan');
 	Route::get('/purchasing/rencanapembelian/get-detail-plan/{id}/{type}', 'Purchasing\purchasePlanController@getDetailPlan');
 	Route::get('/purchasing/rencanapembelian/tambah_rencanapembelian', 'Purchasing\purchasePlanController@tambah_rencanapembelian')->name('tambah_rencanapembelian');
+	Route::get('/seach-item-purchase', 'Purchasing\purchasePlanController@seachItemPurchase')->middleware('auth');
 	//end
 
 	// Route::get('/purchasing/rencanapembelian/preview_rencanapembelian/{id}', 'Purchasing\RencanaPembelianController@preview_rencanapembelian')->name('preview_rencanapembelian');
