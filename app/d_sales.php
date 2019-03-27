@@ -11,6 +11,10 @@ class d_sales extends Model
     const CREATED_AT = 's_insert';
     const UPDATED_AT = 's_update';
 
+    public function getSalesDt()
+    {
+      return $this->hasMany('App\d_sales_dt', 'sd_sales', 's_id');
+    }
     public function getCustomer()
     {
       return $this->belongsTo('App\m_customer', 's_customer', 'c_id');
@@ -23,4 +27,5 @@ class d_sales extends Model
     {
       return $this->hasOne('App\d_sales_payment', 'sp_sales', 's_id');
     }
+
 }

@@ -17,4 +17,9 @@ class d_sales_dt extends Model
       ->where('sd_detailid', '=', $this->getAttribute('sd_detailid'));
     return $query;
   }
+
+  public function getItem()
+  {
+    return $this->belongsTo('App\m_item', 'sd_item', 'i_id');
+  }
 }

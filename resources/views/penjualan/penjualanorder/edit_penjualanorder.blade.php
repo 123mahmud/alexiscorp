@@ -2,9 +2,7 @@
 
 @section('content')
 
-@include('penjualan.penjualanorder.modal_cust')
 @include('penjualan.penjualanorder.modal_pembayaran')
-@include('penjualan.penjualanorder.modal_detailpenjualan')
 
 <article class="content">
 
@@ -23,9 +21,6 @@
             <li class="nav-item">
                 <a href="" class="nav-link active" data-target="#pos" aria-controls="pos" data-toggle="tab" role="tab">Penjualan Dengan Order</a>
             </li>
-            <li class="nav-item">
-                <a href="" class="nav-link" data-target="#list_pos" aria-controls="list_pos" data-toggle="tab" role="tab">List Penjualan</a>
-            </li>
         </ul>
 
 		<div class="row">
@@ -33,9 +28,8 @@
 			<div class="col-12">
 
 				<div class="tab-content">
-
-					@include('penjualan.penjualanorder.tab_formpenjualan')
-					@include('penjualan.penjualanorder.tab_list')
+					<input type="hidden" id="salesId" value="{{ $data['id'] }}">
+					@include('penjualan.penjualanorder.tab_editformpenjualan')
 
 				</div>
 
@@ -69,36 +63,6 @@
 <!-- script for tab-penjualan-order -->
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#tambah_cust').on('hidden.bs.modal', function() {
-			$('#newCustomerForm')[0].reset();
-		});
-
-		$('#btn_simpan_customer').on('click', function() {
-			let dataNewCust = $('#newCustomerForm').serialize();
-			$.ajax({
-				url: "{{ route('simpan_datacustomer') }}",
-				data: dataNewCust,
-				type: 'get',
-				dataType : 'json',
-				success : function (response){
-					if (response.status == 'sukses') {
-						$('#idCustomer').val(response.id);
-						$('#customer').val($('#c_name').val());
-						$('#address').val($('#c_address').val());
-						$('#tambah_cust').modal('hide');
-						$('#ket_project').focus();
-						console.log('New customer created: '+ response.message);
-					} else if (response.status == 'gagal') {
-						console.log('gagal: '+ response.message);
-					}
-				},
-				error : function(e){
-					console.log('Error: '+ e);
-				}
-			});
-		});
-
-
 		tb_penjualan = $('#table_penjualan').DataTable({
 			"order": [],
 			"searching": false,
@@ -107,24 +71,7 @@
 			"info": false,
 		});
 
-		$('#customer').on('click', function() {
-			clearCustomer();
-		});
-		$('#customer').autocomplete({
-			source: baseUrl + '/penjualan/penjualanorder/getCustomers',
-			minLength: 2,
-			select: function(event, data){
-				$('#address').val(data.item.address);
-				$('#idCustomer').val(data.item.id);
-				$('#ket_project').focus();
-			}
-		});
-		function clearCustomer()
-		{
-			$('#customer').val('');
-			$('#address').val('');
-			$('#idCustomer').val('');
-		}
+		initItemList($('#salesId').val());
 
 		$('#cal-orderDate').on('click', function() {
 			$('#orderDate').trigger('focus');
@@ -190,6 +137,52 @@
 			SubmitForm(event);
 		});
 	});
+
+	// initiate item-list
+	function initItemList(id)
+	{
+		tb_penjualan.clear().draw();
+		$.ajax({
+			url: baseUrl + "/penjualan/penjualanorder/getDetailPenjualan/" + id,
+			type: 'get',
+			success : function (response){
+				$.each(response.get_sales_dt, function(key, val) {
+					let discH = val.sd_disc_value / val.sd_qty;
+					rowId = tb_penjualan.rows().count();
+					tb_penjualan.row.add([
+						val.get_item.i_name +
+							'<input type="hidden" value="'+ val.get_item.i_id +'" class="barang" name="listItemId[]">',
+						'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listQty[]" value="'+ val.sd_qty +'" onchange="countDiscount('+ val.sd_price +','+ rowId +')">',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'" readonly>' +
+							'<input type="hidden" value="'+ val.get_item.get_satuan1.s_id +'" name="listSatId[]">',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" name="listPrice[]" value="'+ val.sd_price +'" readonly>',
+						'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listDiscP[]" value="'+ val.sd_disc_percent +'" onchange="countDiscount('+ val.sd_price +','+ rowId +')">',
+						'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listDiscH[]" value="'+ discH +'" onchange="countDiscount('+ val.sd_price +','+ rowId +')">',
+						'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm currency text-right" name="listSubTotal[]" value="'+ val.sd_total +'">',
+						'<button class="btn btn-danger btn-hapus-kenangan" type="button" title="Delete"><i class="fa fa-trash-o"></i></button>'
+					]).node().id = rowId;
+					// add manually inputmask to each .currency
+					$.each(tb_penjualan.row(rowId).nodes().to$().find('.currency'), function() {
+						$(this).inputmask("currency", {
+							radixPoint: ".",
+							groupSeparator: ".",
+							digits: 2,
+							autoGroup: true,
+							prefix: '', //Space after $, this will not truncate the first character.
+							rightAlign: false,
+							autoUnmask: true,
+							// unmaskAsNumber: true,
+						});
+					});
+				});
+				tb_penjualan.draw(false);
+			},
+			error : function(e){
+				console.log('Error: '+ e);
+			}
+		});
+
+	}
 
 	function clearSelectItem()
 	{
@@ -430,14 +423,10 @@
 		tb_penjualan.clear().draw();
 	}
 
-	// store-data -> submit form to store data in db
-	function SubmitForm(event)
+	// update-data -> submit form to update data in db
+	function SubmitForm(event, id)
 	{
 		event.preventDefault();
-		// normalize totalAmount (discard comma, extra-00, etc)
-		// normalizingTotalAmount();
-		// normalize totalPenjualan (discard comma, extra-00, etc)
-		// normalizingTotalPenjualan();
 		customer = $('#customerForm').serialize();
 		sales = $('#salesForm').serialize();
 		payment = $('#paymentForm').serialize();
@@ -453,7 +442,7 @@
 		$.ajax({
 			data : data_final,
 			type : "post",
-			url : baseUrl + '/penjualan/penjualanorder/store',
+			url : baseUrl + '/penjualan/penjualanorder/update' + id,
 			dataType : 'json',
 			success : function (response){
 				if(response.status == 'berhasil'){
@@ -474,148 +463,4 @@
 
 </script>
 
-<!-- script for tab-list-penjualan -->
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#date_from_pj').datepicker('setDate', first_day);
-		$('#date_to_pj').datepicker('setDate', last_day);
-
-		TableListPenjualan();
-		$('#date_from_pj').on('change', function() {
-			TableListPenjualan();
-		});
-		$('#date_to_pj').on('change', function() {
-			TableListPenjualan();
-		});
-		$('#btn_search_date_pj').on('click', function() {
-			TableListPenjualan();
-		});
-		$('#btn_refresh_date_pj').on('click', function() {
-			TableListPenjualan();
-		});
-
-		$('#modal_detailpenjualan').on('hidden.bs.modal', function() {
-			$('.detail-penjualan')[0].reset();
-		});
-	});
-
-	// data-table -> function to retrieve DataTable server side
-	var tb_listpenjualan;
-	function TableListPenjualan()
-	{
-		$('#table_listpenjualan').dataTable().fnDestroy();
-		tb_listpenjualan = $('#table_listpenjualan').DataTable({
-			responsive: true,
-			serverSide: true,
-			ajax: {
-				url: "{{ route('penjualanorder.getlistpenjualan') }}",
-				type: "get",
-				data: {
-					"_token": "{{ csrf_token() }}",
-					"date_from" : $('#date_from_pj').val(),
-					"date_to" : $('#date_to_pj').val()
-				}
-			},
-			columns: [
-				{data: 'DT_RowIndex'},
-				{data: 's_note'},
-				{data: 'customer', width: "70%"},
-				{data: 'action'}
-			],
-			pageLength: 10,
-			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
-		});
-	}
-
-	function DetailPenjualan(id)
-	{
-		console.log('DetailPenjualan: '+ id);
-		// initiate tb_detailpenjualan
-		var tb_detailpenjualan;
-		$('#table_detailpenjualan').dataTable().fnDestroy();
-		tb_detailpenjualan = $('#table_detailpenjualan').DataTable({
-			responsive: true,
-			paging: false,
-			info: false,
-			searching: false
-		});
-		tb_detailpenjualan.clear().draw();
-
-		$.ajax({
-			url: baseUrl + "/penjualan/penjualanorder/getDetailPenjualan/" + id,
-			type: 'get',
-			success : function (response){
-				console.log(response);
-				newDate = new Date(response.s_date);
-				$('#dt_date').val(newDate.getDate() +'-'+ (newDate.getMonth() + 1) +'-'+ newDate.getFullYear());
-				$('#dt_nota').val(response.s_note);
-				(response.get_customer != null) ? $('#dt_customer').val(response.get_customer.c_name) : $('#dt_customer').val('(kosong)');
-				$('#dt_subtotal').val(response.s_gross);
-				$('#dt_totaldisc').val(response.s_disc_value);
-				$('#dt_grandtotal').val(response.s_net);
-				(response.get_sales_payment != null) ? $('#dt_totalpayment').val(response.get_sales_payment.sp_nominal) : $('#dt_totalpayment').val('(kosong)');
-
-				$.each(response.get_sales_dt, function(key, val) {
-					let discH = val.sd_disc_value / val.sd_qty;
-					rowId = tb_detailpenjualan.rows().count();
-					tb_detailpenjualan.row.add([
-						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.i_name +'">',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_qty +'">',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'" readonly>',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_price +'" readonly>',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_disc_percent +'" readonly>',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ discH +'" readonly>',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_total +'" readonly>'
-					]).node().id = rowId;
-					// add manually inputmask to each .currency
-					$.each(tb_detailpenjualan.row(rowId).nodes().to$().find('.currency'), function() {
-						$(this).inputmask("currency", {
-							radixPoint: ".",
-							groupSeparator: ".",
-							digits: 2,
-							autoGroup: true,
-							prefix: '', //Space after $, this will not truncate the first character.
-							rightAlign: false,
-							autoUnmask: true,
-							// unmaskAsNumber: true,
-						});
-					});
-				});
-				tb_detailpenjualan.draw(false);
-			},
-			error : function(e){
-				console.log('Error: '+ e);
-			}
-		});
-		$('#modal_detailpenjualan').modal('show');
-	}
-	function EditPenjualan(id)
-	{
-		console.log('EditPenjualan: '+ id);
-		window.location.href = baseUrl + '/penjualan/penjualanorder/edit/' + id;
-	}
-
-</script>
-
-<script type="text/javascript">
-	// $('#input-barang input, #input-barang select').on('change focus blur keyup', function(){
-	// 	if($(this).val() !== '' || $(this).val().length !== 0){
-	// 		$(this).parents('.form-group').removeClass('has-error');
-	// 	}
-	// });
-
-	// function hapus_row(a){
-	// 	tb_penjualan.row($(a).parents('tr')).remove().draw();
-	// }
-
-	// $(document).ready(function(){
-	// 	$('#table_penjualan tbody').on('click', '.btn-hapus-kenangan', function(){
-	// 		hapus_row($(this));
-	// 	});
-		// $('#btn-modal-customer').on('click', function() {
-		// 	$('#tambah_cust').modal('show');
-		// });
-	// });
-
-</script>
 @endsection

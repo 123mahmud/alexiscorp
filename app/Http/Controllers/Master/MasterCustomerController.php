@@ -28,40 +28,40 @@ class MasterCustomerController extends Controller
       })
 
       ->addColumn('c_type', function($data) {
-         if ($data->c_type == 'KT') 
+         if ($data->c_type == 'KT')
          {
             return 'Kontraktor';
-         } 
-         else 
+         }
+         else
          {
             return 'Harian';
          }
       })
 
       ->addColumn('telp', function($data) {
-         if ($data->c_hp2 != null) 
+         if ($data->c_hp2 != null)
          {
             return '<td>'. $data->c_hp1 .'|'. $data->c_hp2 .'</td>';
-         } 
-         else 
+         }
+         else
          {
             return '<td>'. $data->c_hp1 .'</td>';
          }
       })
 
       ->addColumn('action', function($data) {
-         if ($data->c_isactive == 'Y') 
+         if ($data->c_isactive == 'Y')
          {
             return  '<div class="text-center">'.
-                        '<button id="edit" 
+                        '<button id="edit"
                             onclick=edit("'.Crypt::encrypt($data->c_id).'")
-                            class="btn btn-warning btn-sm" 
+                            class="btn btn-warning btn-sm"
                             title="Edit">
                             <i class="fa fa-pencil"></i>
                         </button>'.'
-                        <button id="status'.$data->c_id.'" 
-                            onclick="ubahStatus('.$data->c_id.')" 
-                            class="btn btn-primary btn-sm" 
+                        <button id="status'.$data->c_id.'"
+                            onclick="ubahStatus('.$data->c_id.')"
+                            class="btn btn-primary btn-sm"
                             title="Aktif">
                             <i class="fa fa-check-square" aria-hidden="true"></i>
                         </button>'.'
@@ -70,15 +70,15 @@ class MasterCustomerController extends Controller
          else
          {
             return  '<div class="text-center">'.
-                        '<button id="status'.$data->c_id.'" 
-                            onclick="ubahStatus('.$data->c_id.')" 
-                            class="btn btn-danger btn-sm" 
+                        '<button id="status'.$data->c_id.'"
+                            onclick="ubahStatus('.$data->c_id.')"
+                            class="btn btn-danger btn-sm"
                             title="Tidak Aktif">
                             <i class="fa fa-minus-square" aria-hidden="true"></i>
                         </button>'.
                     '</div>';
          }
-        
+
       })
       ->rawColumns(['telp', 'action'])
       ->make(true);
@@ -140,8 +140,8 @@ class MasterCustomerController extends Controller
 
         // insert Kendaraan
         $nopols = $request->nopol;
-        foreach ($nopols as $nopol) {
-          if ($nopol != null) {
+        if ($nopols != null) {
+          foreach ($nopols as $nopol) {
             $k_id = m_kendaraan::max('k_id') + 1;
             $kendaraan            = new m_kendaraan;
             $kendaraan->k_id      = $k_id;
@@ -154,7 +154,8 @@ class MasterCustomerController extends Controller
 
         DB::commit();
         return response()->json([
-          'status' => 'sukses'
+          'status' => 'sukses',
+          'id' => $id_cust,
         ]);
       } catch (\Exception $e) {
         DB::rollback();
@@ -219,7 +220,7 @@ class MasterCustomerController extends Controller
         $cek = DB::table('m_customer')->select('c_isactive')
             ->where('c_id',$request->id)
             ->first();
-        if ($cek->c_isactive == 'Y') 
+        if ($cek->c_isactive == 'Y')
         {
             DB::table('m_customer')
             ->where('c_id',$request->id)

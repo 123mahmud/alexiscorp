@@ -23,27 +23,21 @@
 												<div class="col-lg-12">
 													<label>Nama Customer</label>
 													<div class="form-group">
-														<div class="input-group">
-															<input type="hidden" name="idCustomer" id="idCustomer">
-															<input type="text" class="form-control form-control-sm" name="customer" id="customer">
-															<div class="input-group-append">
-																<button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#tambah_cust"><i class="fa fa-plus-square"></i></button>
-															</div>
-														</div>
+														<input type="text" class="form-control form-control-sm" value="xxx" readonly>
 													</div>
 												</div>
 
 												<div class="col-lg-12">
 													<label>Alamat</label>
 													<div class="form-group">
-														<input type="text" class="form-control form-control-sm" name="address" id="address" readonly="">
+														<input type="text" class="form-control form-control-sm" value="" readonly>
 													</div>
 												</div>
 
 												<div class="col-lg-12">
 													<label>Keterangan Project</label>
 													<div class="form-group">
-														<textarea class="form-control" name="keterangan" id="ket_project"></textarea>
+														<textarea class="form-control" readonly></textarea>
 													</div>
 												</div>
 											</div>
