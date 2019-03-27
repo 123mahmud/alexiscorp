@@ -39,7 +39,6 @@
       $('.background-loading').fadeOut('slow');
     },500);
 
-
     //mask money
     $('.currency').inputmask("currency", {
       radixPoint: ".",
@@ -51,6 +50,16 @@
       autoUnmask: true,
       // unmaskAsNumber: true,
     });
+
+    $('.currenc').inputmask("currency", {
+         radixPoint: ",",
+         groupSeparator: ".",
+         digits: 0,
+         autoGroup: true,
+         prefix: '', //Space after $, this will not truncate the first character.
+         rightAlign: false,
+         oncleared: function () { self.Value(''); }
+      });
 
     $(".npwp").inputmask("99-999-999-9-999-999");
 
@@ -245,7 +254,7 @@ $.ajaxSetup({
     $.fn.select2.defaults.set( 'dropdownAutoWidth', true );
     $.fn.select2.defaults.set( 'width', 'resolve' );
 
-    $('.select2').select2();
+    $('.select2').select2({width : '100%'});
 
     $('.select2').on('select2:close', function(){
       $(this).focus();
