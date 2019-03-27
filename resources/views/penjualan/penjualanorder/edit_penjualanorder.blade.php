@@ -71,6 +71,9 @@
 			"info": false,
 		});
 
+		$('#table_penjualan tbody').on('click', '.btn-hapus-kenangan', function(){
+			hapus_row($(this));
+		});
 		initItemList($('#salesId').val());
 
 		$('#cal-orderDate').on('click', function() {
@@ -96,9 +99,6 @@
 			}
 		});
 
-		// $('#qty').on('keyup', function() {
-		// 	console.log($(this).val());
-		// });
 		$('#qty').on('click', function() {
 			$(this).val('');
 		});
@@ -133,10 +133,20 @@
 			}
 		});
 
+		$('#modal_bayar').on('hidden.bs.modal', function() {
+			$('#paymentForm')[0].reset();
+		});
+
 		$('#btn_simpan').on('click', function() {
 			SubmitForm(event);
 		});
 	});
+
+	// remove item from item-list
+	function hapus_row(a){
+		tb_penjualan.row($(a).parents('tr')).remove().draw();
+		updateTotalAmount();
+	}
 
 	// initiate item-list
 	function initItemList(id)
@@ -152,11 +162,11 @@
 					tb_penjualan.row.add([
 						val.get_item.i_name +
 							'<input type="hidden" value="'+ val.get_item.i_id +'" class="barang" name="listItemId[]">',
-						'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listQty[]" value="'+ val.sd_qty +'" onchange="countDiscount('+ val.sd_price +','+ rowId +')">',
+						'<input type="text" min="0" class="form-control form-control-sm currency-x text-right" name="listQty[]" value="'+ val.sd_qty +'" onchange="countDiscount('+ val.sd_price +','+ rowId +')">',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'" readonly>' +
 							'<input type="hidden" value="'+ val.get_item.get_satuan1.s_id +'" name="listSatId[]">',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" name="listPrice[]" value="'+ val.sd_price +'" readonly>',
-						'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listDiscP[]" value="'+ val.sd_disc_percent +'" onchange="countDiscount('+ val.sd_price +','+ rowId +')">',
+						'<input type="text" min="0" max="100" class="form-control form-control-sm currency-x text-right" name="listDiscP[]" value="'+ val.sd_disc_percent +'" onchange="countDiscount('+ val.sd_price +','+ rowId +')">',
 						'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listDiscH[]" value="'+ discH +'" onchange="countDiscount('+ val.sd_price +','+ rowId +')">',
 						'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm currency text-right" name="listSubTotal[]" value="'+ val.sd_total +'">',
 						'<button class="btn btn-danger btn-hapus-kenangan" type="button" title="Delete"><i class="fa fa-trash-o"></i></button>'
@@ -174,6 +184,20 @@
 							// unmaskAsNumber: true,
 						});
 					});
+					// add manually inputmask to each .currency-x
+					$.each(tb_penjualan.row(rowId).nodes().to$().find('.currency-x'), function() {
+						$(this).inputmask("currency", {
+							radixPoint: ".",
+							groupSeparator: ".",
+							digits: 0,
+							autoGroup: true,
+							prefix: '', //Space after $, this will not truncate the first character.
+							rightAlign: false,
+							autoUnmask: true,
+							// unmaskAsNumber: true,
+						});
+					});
+					countDiscount(val.sd_price, rowId);
 				});
 				tb_penjualan.draw(false);
 			},
@@ -181,7 +205,6 @@
 				console.log('Error: '+ e);
 			}
 		});
-
 	}
 
 	function clearSelectItem()
@@ -257,6 +280,16 @@
 		price = parseInt(price);
 		discH = parseInt(tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val());
 		discP = parseInt(tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val());
+		// validate if the discP is more than 100 %
+		if (discP > 100) {
+			discP = 100;
+			tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val(100);
+		}
+		// validate if the discH is more than price
+		if (discH > price) {
+			discH = price;
+			tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val(price);
+		}
 		qty = parseInt(tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val());
 		totalPrice = qty * price;
 
@@ -267,6 +300,11 @@
 
 		tb_penjualan.cell(rowId, 6).nodes().to$().find('input').val(finalPrice);
 		tb_penjualan.draw(false);
+		updateTotalAmount();
+	}
+
+	function updateTotalAmount()
+	{
 		totalPenjualan = sumTotalBruto();
 		$('#totalPenjualan').val(totalPenjualan);
 		discountTotal = discTotal();
@@ -282,7 +320,11 @@
 		for (let i = 0; i < tb_penjualan.rows()[0].length; i++) {
 			listTotalPerItem.push(parseInt(tb_penjualan.cell(i, 6).nodes().to$().find('input').val()));
 		}
-		let totalNetto = listTotalPerItem.reduce((partial_sum, a) => partial_sum + a);
+		if (listTotalPerItem.length !== 0) {
+			totalNetto = listTotalPerItem.reduce((partial_sum, a) => partial_sum + a);
+		} else {
+			totalNetto = 0;
+		}
 		return totalNetto;
 	}
 
@@ -298,7 +340,11 @@
 			Bruto = qty * price;
 			listBrutoPerItem.push(Bruto);
 		}
-		totalBruto = listBrutoPerItem.reduce((partial_sum, a) => partial_sum + a);
+		if (listBrutoPerItem.length !== 0) {
+			totalBruto = listBrutoPerItem.reduce((partial_sum, a) => partial_sum + a);
+		} else {
+			totalBruto = 0;
+		}
 		return totalBruto;
 	}
 
@@ -342,11 +388,11 @@
 							tb_penjualan.row.add([
 								$('#itemName').val() +
 									'<input type="hidden" value="'+$('#itemId').val()+'" class="barang" name="listItemId[]">',
-								'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listQty[]" value="'+ $('#qty').val() +'" onchange="checkStock('+ parseInt($('#stock').val()) +','+ response.ip_price +','+ rowId +')">',
+								'<input type="text" min="0" class="form-control form-control-sm currency-x text-right" name="listQty[]" value="'+ $('#qty').val() +'" onchange="checkStock('+ parseInt($('#stock').val()) +','+ response.ip_price +','+ rowId +')">',
 								'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ $('#itemSatName').val() +'" readonly>' +
 									'<input type="hidden" value="'+$('#itemSatId').val()+'" name="listSatId[]">',
 								'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" name="listPrice[]" value="'+ response.ip_price +'" readonly>',
-								'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listDiscP[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
+								'<input type="text" min="0" class="form-control form-control-sm currency-x text-right" name="listDiscP[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
 								'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listDiscH[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
 								'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm currency text-right" name="listSubTotal[]" value="0,00">',
 								'<button class="btn btn-danger btn-hapus-kenangan" type="button" title="Delete"><i class="fa fa-trash-o"></i></button>'
@@ -363,6 +409,19 @@
 						      autoUnmask: true,
 						      // unmaskAsNumber: true,
 						    });
+							});
+							// add manually inputmask to each .currency-x
+							$.each(tb_penjualan.row(rowId).nodes().to$().find('.currency-x'), function() {
+								$(this).inputmask("currency", {
+									radixPoint: ".",
+									groupSeparator: ".",
+									digits: 0,
+									autoGroup: true,
+									prefix: '', //Space after $, this will not truncate the first character.
+									rightAlign: false,
+									autoUnmask: true,
+									// unmaskAsNumber: true,
+								});
 							});
 							checkStock(parseInt($('#stock').val()), response.ip_price, rowId);
 							clearSelectItem();
@@ -448,7 +507,7 @@
 				if(response.status == 'berhasil'){
 					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
 					resetAllInput();
-					// location.reload();
+					$('#modal_bayar').modal('hide');
 				} else if (response.status == 'invalid') {
 					messageFailed('Perhatian', response.message);
 				} else if (response.status == 'gagal') {

@@ -50,6 +50,17 @@
       autoUnmask: true,
       // unmaskAsNumber: true,
     });
+    // add manually inputmask to each .currency
+    $('.currency-x').inputmask("currency", {
+      radixPoint: ".",
+      groupSeparator: ".",
+      digits: 0,
+      autoGroup: true,
+      prefix: '', //Space after $, this will not truncate the first character.
+      rightAlign: false,
+      autoUnmask: true,
+      // unmaskAsNumber: true,
+    });
 
     $('.currenc').inputmask("currency", {
          radixPoint: ",",
