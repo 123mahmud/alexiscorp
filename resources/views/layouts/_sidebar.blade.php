@@ -323,6 +323,9 @@
                         <li class="{{Request::is('keuangan/analisa/*') ? 'active' : ''}}">
                             <a href="{{route('analisa')}}">Analisa</a>
                         </li>
+                        <li class="{{Request::is('keuangan/pembelian/*') ? 'active' : ''}}">
+                            <a href="{{route('pembelian')}}">Konfirmasi Pembelian</a>
+                        </li>
                         
                     </ul>
                 </li>
