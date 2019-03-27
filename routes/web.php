@@ -206,6 +206,8 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/stok/penggunaanbahanbaku/create', 'StokController@tambah_penggunaanbahanbaku')->name('tambah_penggunaanbahanbaku');
 
 	Route::get('/stok/tipemenghitunghpp/index', 'StokController@tipemenghitunghpp')->name('tipemenghitunghpp');
+	
+	Route::get('/stok/stockgudang/index', 'StokController@stockgudang')->name('stockgudang.index');
 
 
 	// Produksi

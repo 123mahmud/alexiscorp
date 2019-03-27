@@ -206,4 +206,10 @@ class StokController extends Controller
     {
     	return view('stok/tipemenghitunghpp/tipemenghitunghpp');
     }
+
+    // Stokc Gudang
+    public function stockgudang()
+    {
+        return view('stok/stockgudang/index');
+    }
 }

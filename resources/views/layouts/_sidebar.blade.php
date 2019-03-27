@@ -161,6 +161,9 @@
                         <li class="{{Request::is('stok/opnamebahanbaku/*') ? 'active' : ''}}">
                             <a href="{{route('opnamebahanbaku')}}">Opname Stock </a>
                         </li>
+                        <li class="{{Request::is('stok/stockgudang/*') ? 'active' : ''}}">
+                            <a href="{{route('stockgudang.index')}}">Stock Gudang</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="{{Request::is('produksi/*') ? 'active open' : ''}}">
