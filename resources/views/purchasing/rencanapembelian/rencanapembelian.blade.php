@@ -56,7 +56,7 @@
 
 		<ul class="nav nav-pills">
             <li class="nav-item">
-                <a href="" class="nav-link active" data-target="#daftar_rencana" aria-controls="daftar_rencana" data-toggle="tab" role="tab">Daftar Rencana Pembelian</a>
+                <a href="" class="nav-link active show" data-target="#daftar_rencana" aria-controls="daftar_rencana" data-toggle="tab" role="tab">Daftar Rencana Pembelian</a>
             </li>
             <li class="nav-item">
                 <a href="" class="nav-link" data-target="#history_rencana" aria-controls="history_rencana" data-toggle="tab" role="tab" onclick="lihatHistorybyTgl()">History Rencana Pembelian</a>

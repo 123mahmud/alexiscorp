@@ -154,33 +154,43 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/purcahse-plan/get-delete-plan/{id}', 'Purchasing\purchasePlanController@deletePlan')->middleware('auth');
 	Route::get('/purchasing/rencanapembelian/get-data-tabel-history/{tgl1}/{tgl2}/{tampil}', 'Purchasing\purchasePlanController@getDataTabelHistory');
 	//end
-
-	// Route::get('/purchasing/rencanapembelian/preview_rencanapembelian/{id}', 'Purchasing\RencanaPembelianController@preview_rencanapembelian')->name('preview_rencanapembelian');
-	// Route::get('/purchasing/rencanapembelian/edit_rencanapembelian/{id}', 'Purchasing\RencanaPembelianController@edit_rencanapembelian')->name('edit_rencanapembelian');
-	// Route::get('/purchasing/rencanapembelian/find_d_purchase_plan', 'Purchasing\RencanaPembelianController@find_d_purchase_plan')->middleware('auth');
-	// Route::get('/purchasing/rencanapembelian/delete_d_purchase_plan/{id}', 'Purchasing\RencanaPembelianController@delete_d_purchase_plan')->middleware('auth');
-	// Route::get('/purchasing/rencanapembelian/find_m_item', 'Purchasing\RencanaPembelianController@find_m_item')->middleware('auth');
-	// Route::post('/purchasing/rencanapembelian/insert_d_purchase_plan', 'Purchasing\RencanaPembelianController@insert_d_purchase_plan')->middleware('auth')->name('insert_d_purchase_plan');
-	// Route::post('/purchasing/rencanapembelian/update_d_purchase_plan', 'Purchasing\RencanaPembelianController@update_d_purchase_plan')->middleware('auth')->name('update_d_purchase_plan');
-	// Route::get('/purchasing/rencanapembelian/approve_d_purchase_plan', 'Purchasing\RencanaPembelianController@approve_d_purchase_plan')->middleware('auth')->name('approve_d_purchase_plan');
-	// Route::get('/purchasing/rencanapembelian/find_m_supplier', 'Purchasing\RencanaPembelianController@find_m_supplier')->middleware('auth');
-
 	// Order pembelian
-	Route::get('/purchasing/orderpembelian/orderpembelian', 'Purchasing\OrderPembelianController@orderpembelian')->name('orderpembelian');
-	Route::get('/purchasing/orderpembelian/tambah_orderpembelian', 'Purchasing\OrderPembelianController@tambah_orderpembelian')->name('tambah_orderpembelian');
-	Route::get('/purchasing/orderpembelian/edit_orderpembelian/{id}', 'Purchasing\OrderPembelianController@edit_orderpembelian')->name('edit_orderpembelian');
-	Route::get('/purchasing/orderpembelian/preview_orderpembelian/{id}', 'Purchasing\OrderPembelianController@preview_orderpembelian')->name('preview_orderpembelian');
-	Route::get('/purchasing/orderpembelian/edit_orderpembelian/{id}', 'Purchasing\OrderPembelianController@edit_orderpembelian')->name('edit_orderpembelian');
-	Route::get('/purchasing/orderpembelian/find_d_purchase_order', 'Purchasing\OrderPembelianController@find_d_purchase_order')->middleware('auth');
-	Route::get('/purchasing/orderpembelian/find_d_purchase_order_dt', 'Purchasing\OrderPembelianController@find_d_purchase_order_dt')->middleware('auth')->name('find_d_purchase_order_dt');
-	Route::get('/purchasing/orderpembelian/delete_d_purchase_order/{id}', 'Purchasing\OrderPembelianController@delete_d_purchase_order')->middleware('auth');
-	Route::get('/purchasing/orderpembelian/find_m_item', 'Purchasing\OrderPembelianController@find_m_item')->middleware('auth');
-	Route::post('/purchasing/orderpembelian/insert_d_purchase_order', 'Purchasing\OrderPembelianController@insert_d_purchase_order')->middleware('auth')->name('insert_d_purchase_order');
-	Route::post('/purchasing/orderpembelian/update_d_purchase_order', 'Purchasing\OrderPembelianController@update_d_purchase_order')->middleware('auth')->name('update_d_purchase_order');
-	Route::get('/purchasing/orderpembelian/approve_d_purchase_order', 'Purchasing\OrderPembelianController@approve_d_purchase_order')->middleware('auth')->name('approve_d_purchase_order');
-	Route::get('/purchasing/orderpembelian/find_m_supplier', 'Purchasing\OrderPembelianController@find_m_supplier')->middleware('auth');
+	Route::get('/purchasing/orderpembelian/orderpembelian', 'Purchasing\purchaseOrderController@orderpembelian')->name('orderpembelian');
+	// Route::get('/purchasing/orderpembelian/tambah_orderpembelian', 'Purchasing\OrderPembelianController@tambah_orderpembelian')->name('tambah_orderpembelian');
+	// Route::get('/purchasing/orderpembelian/edit_orderpembelian/{id}', 'Purchasing\OrderPembelianController@edit_orderpembelian')->name('edit_orderpembelian');
+	// Route::get('/purchasing/orderpembelian/preview_orderpembelian/{id}', 'Purchasing\OrderPembelianController@preview_orderpembelian')->name('preview_orderpembelian');
+	// Route::get('/purchasing/orderpembelian/edit_orderpembelian/{id}', 'Purchasing\OrderPembelianController@edit_orderpembelian')->name('edit_orderpembelian');
+	// Route::get('/purchasing/orderpembelian/find_d_purchase_order', 'Purchasing\OrderPembelianController@find_d_purchase_order')->middleware('auth');
+	// Route::get('/purchasing/orderpembelian/find_d_purchase_order_dt', 'Purchasing\OrderPembelianController@find_d_purchase_order_dt')->middleware('auth')->name('find_d_purchase_order_dt');
+	// Route::get('/purchasing/orderpembelian/delete_d_purchase_order/{id}', 'Purchasing\OrderPembelianController@delete_d_purchase_order')->middleware('auth');
+	// Route::get('/purchasing/orderpembelian/find_m_item', 'Purchasing\OrderPembelianController@find_m_item')->middleware('auth');
+	// Route::post('/purchasing/orderpembelian/insert_d_purchase_order', 'Purchasing\OrderPembelianController@insert_d_purchase_order')->middleware('auth')->name('insert_d_purchase_order');
+	// Route::post('/purchasing/orderpembelian/update_d_purchase_order', 'Purchasing\OrderPembelianController@update_d_purchase_order')->middleware('auth')->name('update_d_purchase_order');
+	// Route::get('/purchasing/orderpembelian/approve_d_purchase_order', 'Purchasing\OrderPembelianController@approve_d_purchase_order')->middleware('auth')->name('approve_d_purchase_order');
+	// Route::get('/purchasing/orderpembelian/find_m_supplier', 'Purchasing\OrderPembelianController@find_m_supplier')->middleware('auth');
 
-	Route::get('/purchasing/orderpembelian/tambah_orderpembelian_tanparencana', 'Purchasing\OrderPembelianController@tambah_orderpembelian_tanparencana')->name('tambah_orderpembelian_tanparencana');
+	// Route::get('/purchasing/orderpembelian/tambah_orderpembelian_tanparencana', 'Purchasing\OrderPembelianController@tambah_orderpembelian_tanparencana')->name('tambah_orderpembelian_tanparencana');
+	//Mahmud
+	Route::get('/purchasing/orderpembelian/get-data-rencana-beli', 'Purchasing\purchaseOrderController@getDataRencanaBeli');
+	Route::get('/purchasing/rencanapembelian/get-supplierorder', 'Purchasing\purchaseOrderController@getDataSupplier');
+	Route::get('/purchasing/orderpembelian/get-data-form/{id}', 'Purchasing\purchaseOrderController@getDataForm');
+	Route::get('/purchasing/orderpembelian/get-order-by-tgl/{tgl1}/{tgl2}', 'Purchasing\purchaseOrderController@getOrderByTgl');
+	Route::get('/purchasing/orderpembelian/get-data-tabel-history/{tgl1}/{tgl2}/{tampil}', 'Purchasing\purchaseOrderController@getDataTabelHistory');
+	Route::get('/purchasing/orderpembelian/get-data-detail/{id}', 'Purchasing\purchaseOrderController@getDataDetail');
+	Route::get('/purchasing/orderpembelian/get-edit-order/{id}', 'Purchasing\purchaseOrderController@getEditOrder');
+	Route::post('/purchasing/orderpembelian/delete-data-order', 'Purchasing\purchaseOrderController@deleteDataOrder');
+	/*Purchasing order*/	
+	Route::get('/purcahse-order/order-index', 'Purchasing\purchaseOrderController@orderIndex')->middleware('auth');
+	Route::get('/purcahse-order/data-order', 'Purchasing\purchaseOrderController@dataOrder')->middleware('auth');
+	Route::get('/purcahse-order/form-order', 'Purchasing\purchaseOrderController@formOrder')->middleware('auth');
+	Route::get('/purcahse-order/get-data-form/{id}', 'Purchasing\purchaseOrderController@getDataForm')->middleware('auth');
+	Route::get('/purcahse-order/get-data-detail/{id}', 'Purchasing\purchaseOrderController@getDataDetail')->middleware('auth');
+	Route::get('/purcahse-order/get-data-edit/{id}', 'Purchasing\purchaseOrderController@getDataEdit')->middleware('auth');
+	Route::get('/purcahse-order/get-data-code-plan', 'Purchasing\purchaseOrderController@getDataCodePlan')->middleware('auth');
+	Route::get('/purcahse-order/seach-supplier', 'Purchasing\purchaseOrderController@seachSupplier')->middleware('auth');
+	Route::get('/purcahse-order/delete-data-order', 'Purchasing\purchaseOrderController@deleteDataOrder')->middleware('auth');
+	Route::get('/purcahse-order/save-po', 'Purchasing\purchaseOrderController@savePo')->middleware('auth');
+	Route::get('/purchasing/orderpembelian/print/{id}', 'Purchasing\purchaseOrderController@print');
 
 	// Return pembelian
 	Route::get('/purchasing/returnpembelian/returnpembelian', 'Purchasing\ReturnPembelianController@returnpembelian')->name('returnpembelian');
@@ -298,12 +308,6 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 
 	Route::get('/danasosial/index', 'DanaController@danasosial')->name('danasosial');
 
-	// Route::get('/danasosial/kampung/kampung', 'DanaController@kampung');
-	// Route::get('/danasosial/koramil/koramil', 'DanaController@koramil');
-	// Route::get('/danasosial/masjid/masjid', 'DanaController@masjid');
-	// Route::get('/danasosial/polsek/polsek', 'DanaController@polsek');
-	// Route::get('/danasosial/sumbangan/sumbangan', 'DanaController@sumbangan');
-
 	// Aset
 	Route::get('/aset/datagolongan/index', 'AsetController@datagolongan')->name('datagolongan');
 	Route::get('/aset/datagolongan/create', 'AsetController@tambah_datagolongan')->name('tambah_datagolongan');
@@ -311,14 +315,6 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/aset/dataaset/create', 'AsetController@tambah_dataaset')->name('tambah_dataaset');
 
 	// Keuangan
-	// Route::get('/keuangan/a_3bottomline/a_3bottomline', 'KeuanganController@a_3bottomline');
-	// Route::get('/keuangan/a_cashflow/a_cashflow', 'KeuanganController@a_cashflow');
-	// Route::get('/keuangan/a_commonsize/a_commonsize', 'KeuanganController@a_commonsize');
-	// Route::get('/keuangan/a_net/a_net', 'KeuanganController@a_net');
-	// Route::get('/keuangan/a_pertumbuhanaset/a_pertumbuhanaset', 'KeuanganController@a_pertumbuhanaset');
-	// Route::get('/keuangan/a_progress/a_progress', 'KeuanganController@a_progress');
-	// Route::get('/keuangan/a_rasiokeuangan/a_rasiokeuangan', 'KeuanganController@a_rasiokeuangan');
-	// Route::get('/keuangan/a_roe/a_roe', 'KeuanganController@a_roe');
 	Route::get('/keuangan/laporaninputtransaksi/laporaninputtransaksi', 'KeuanganController@laporaninputtransaksi');
 	Route::get('/keuangan/laporankeuangan/select', 'KeuanganController@laporankeuangan')->name('laporankeuangan');
 	Route::get('/keuangan/laporankeuangan/jurnal', 'KeuanganController@jurnal')->name('jurnal');
@@ -337,21 +333,24 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/keuangan/analisa/pertumbuhan_aset', 'KeuanganController@pertumbuhan_aset')->name('pertumbuhan_aset');
 	Route::get('/keuangan/analisa/aset_ekuitas', 'KeuanganController@aset_ekuitas')->name('aset_ekuitas');
 
-
-	// Suplier
-	// Route::get('/suplier/barangsuplier/barangsuplier', 'SuplierController@barangsuplier')->name('barangsuplier');
-	// Route::get('/suplier/barangsuplier/tambah_barang', 'SuplierController@tambah_barang')->name('tambah_barang');
-	// Route::get('/suplier/barangsuplier/edit_barang', 'SuplierController@edit_barang')->name('edit_barang');
-	// Route::get('/suplier/barangsuplier/tambah_suplier', 'SuplierController@tambah_suplier')->name('tambah_suplier');
-	// Route::get('/suplier/barangsuplier/edit_suplier', 'SuplierController@edit_suplier')->name('edit_suplier');
-	// Route::get('/suplier/dataarmada/dataarmada', 'SuplierController@dataarmada');
-
 	// Admin System
 	Route::get('/system/manajemenhakakses/index', 'SystemController@manajemenhakakses')->name('manajemenhakakses');
 	Route::get('/system/manajemenhakakses/create', 'SystemController@tambah_manajemenhakakses')->name('tambah_manajemenhakakses');
 	Route::get('/system/manajemenuser/index', 'SystemController@manajemenuser')->name('manajemenuser');
 	Route::get('/system/profilperusahaan/index', 'SystemController@profilperusahaan')->name('profilperusahaan');
 	Route::get('/system/tahunfinansial/index', 'SystemController@tahunfinansial')->name('tahunfinansial');
+
+// Konfirmasi Pembelian
+	Route::get('/konfirmasi-purchase/index', 'Keuangan\purchaseConfirmController@confirmIndex')->name('pembelian');
+	Route::get('/keuangan/konfirmasipembelian/get-data-tabel-daftar', 'Keuangan\purchaseConfirmController@getDataRencanaPembelian');
+	Route::get('/keuangan/konfirmasipembelian/confirm-plan/{id}/{type}', 'Keuangan\purchaseConfirmController@confirmRencanaPembelian');
+	Route::get('/keuangan/konfirmasipembelian/confirm-plan-submit', 'Keuangan\purchaseConfirmController@submitRencanaPembelian');
+	Route::get('keuangan/konfirmasipembelian/get-data-tabel-order','Keuangan\purchaseConfirmController@getDataOrderPembelian')->middleware('auth');
+	Route::get('keuangan/konfirmasipembelian/confirm-order/{id}/{type}','Keuangan\purchaseConfirmController@confirmOrderPembelian')->middleware('auth');
+	Route::get('/keuangan/konfirmasipembelian/confirm-order-submit', 'Keuangan\purchaseConfirmController@submitOrderPembelian');
+	Route::get('/keuangan/konfirmasipembelian/get-data-tabel-return', 'Keuangan\purchaseConfirmController@getDataReturnPembelian');
+	Route::get('/keuangan/konfirmasipembelian/confirm-return/{id}/{type}', 'Keuangan\purchaseConfirmController@confirmReturnPembelian');
+	Route::post('/keuangan/konfirmasipembelian/confirm-return-submit', 'Keuangan\purchaseConfirmController@submitReturnPembelian');
 
 }); // End Route Group
 
