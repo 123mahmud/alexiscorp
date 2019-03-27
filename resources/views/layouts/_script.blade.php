@@ -47,6 +47,8 @@
       autoGroup: true,
       prefix: '', //Space after $, this will not truncate the first character.
       rightAlign: false,
+      autoUnmask: true,
+      // unmaskAsNumber: true,
     });
 
     $('.currenc').inputmask("currency", {
@@ -61,8 +63,11 @@
 
     $(".npwp").inputmask("99-999-999-9-999-999");
 
-    $('.hp').inputmask("9999 9999 9999");
+    $('.hp').inputmask("9999 9999 9999", {
+      autoUnmask: true,
+    });
 
+    $('.email').inputmask({alias: "email"});
   });
 
   function messageSuccess(title, message) {

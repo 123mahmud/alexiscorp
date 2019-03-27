@@ -82,7 +82,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/master/datacustomer/index', 'Master\MasterCustomerController@index')->name('datacustomer');
 	Route::get('/master/datacustomer/getlist', 'Master\MasterCustomerController@getlist')->name('getlist_datacustomer');
 	Route::get('/master/datacustomer/create', 'Master\MasterCustomerController@create')->name('tambah_datacustomer');
-	Route::get('/master/datacustomer/save', 'Master\MasterCustomerController@store');
+	Route::get('/master/datacustomer/save', 'Master\MasterCustomerController@store')->name('simpan_datacustomer');
 ;
 	Route::get('/master/datacustomer/update', 'Master\MasterCustomerController@update');
 	Route::get('/master/datacustomer/ubahstatus', 'Master\MasterCustomerController@ubahStatus');
@@ -256,6 +256,9 @@ Route::group(['middleware' => ['auth', 'web']], function() {
   Route::get('/penjualan/penjualanorder/getStock', 'Penjualan\PenjualanOrderController@getStock')->name('penjualanorder.getstock');
   Route::get('/penjualan/penjualanorder/getPrice', 'Penjualan\PenjualanOrderController@getPrice')->name('penjualanorder.getprice');
 	Route::post('/penjualan/penjualanorder/store', 'Penjualan\PenjualanOrderController@store')->name('penjualanorder.store');
+	Route::get('/penjualan/penjualanorder/getDetailPenjualan/{id}', 'Penjualan\PenjualanOrderController@getDetailPenjualan')->name('penjualanorder.getdetailpenjualan');
+	Route::get('/penjualan/penjualanorder/edit/{id}', 'Penjualan\PenjualanOrderController@edit')->name('penjualanorder.edit');
+	Route::post('/penjualan/penjualanorder/update/{id}', 'Penjualan\PenjualanOrderController@update')->name('penjualanorder.update');
 
 	Route::get('/penjualan/penjualantanpaorder/index', 'Penjualan\PenjualanTOController@index')->name('penjualantanpaorder');
 	Route::get('/penjualan/penjualantanpaorder/getListPenjualan', 'Penjualan\PenjualanTOController@getListPenjualan')->name('penjualantanpaorder.getlistpenjualan');
