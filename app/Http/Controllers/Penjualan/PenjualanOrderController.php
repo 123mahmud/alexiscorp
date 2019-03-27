@@ -159,8 +159,8 @@ class PenjualanOrderController extends Controller
       })
       ->addColumn('action', function($datas) {
         return '<div class="btn-group btn-group-sm">
-        <button class="btn btn-warning hint--top hint--warning" onclick="EditAgen('.$datas->a_id.')" rel="tooltip" data-placement="top" aria-label="Edit data"><i class="fa fa-pencil"></i></button>
-        <button class="btn btn-danger hint--top hint--error" onclick="DisableAgen('.$datas->a_id.')" rel="tooltip" data-placement="top" aria-label="Nonaktifkan data"><i class="fa fa-times-circle"></i></button>
+        <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
+        <button class="btn btn-warning" onclick="EditPenjualan('.$datas->s_id.')" rel="tooltip" title="Edit"><i class="fa fa-pencil"></i></button>
         </div>';
       })
       ->rawColumns(['customer', 'action'])
@@ -168,41 +168,18 @@ class PenjualanOrderController extends Controller
     }
 
     /**
-    * Return DataTable list for view.
-    *
-    * @return Yajra/DataTables
-    */
-    public function getListPembayaran(Request $request)
+     * return detail of a 'penjualan'.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getDetailPenjualan($id)
     {
-      $from = Carbon::parse($request->date_from)->format('Y-m-d');
-      $to = Carbon::parse($request->date_to)->format('Y-m-d');
-      $datas = d_sales::where('s_channel', 'OD')
-      ->whereBetween('s_date', [$from, $to])
-      ->with('getCustomer')
-      ->with('getSalesPayment')
-      ->orderBy('s_note', 'desc')
-      ->get();
-
-      return Datatables::of($datas)
-      ->addIndexColumn()
-      ->addColumn('customer', function($datas) {
-        return $datas->getCustomer['c_name'];
-      })
-      ->addColumn('amount', function($datas) {
-        return '<input type="text" class="form-control form-control-plaintext currency text-right" value="'. number_format((float)$datas->s_net, 2) .'">';
-      })
-      ->addColumn('status', function($datas) {
-        if ($datas->s_status == 'PR') {
-          return '<label class="badge badge-pill bg-secondary text-white">Belum Bayar</label>';
-        } elseif ($datas->s_status == 'FN') {
-          return '<label class="badge badge-pill bg-success text-white">Lunas</label>';
-        }
-      })
-      ->addColumn('action', function($datas) {
-        return '<button class="btn btn-primary btn-sm" type="button" title="Bayar" data-toggle="modal" data-target="#modal_bayar"><i class="fa fa-money"></i></button>';
-      })
-      ->rawColumns(['customer', 'amount', 'status', 'action'])
-      ->make(true);
+      $data = d_sales::where('s_id', $id)
+        ->with('getCustomer')
+        ->with('getSalesDt.getItem.getSatuan1')
+        ->with('getSalesPayment')
+        ->firstOrFail();
+      return $data;
     }
 
     /**
@@ -237,8 +214,6 @@ class PenjualanOrderController extends Controller
      */
     public function store(Request $request)
     {
-      // dd($request->all());
-
       // validate request
       $isValidRequest = $this->validate_req($request);
       if ($isValidRequest != '1') {
@@ -340,7 +315,12 @@ class PenjualanOrderController extends Controller
      */
     public function edit($id)
     {
-        //
+      $data['group_harga'] = DB::table('m_price_group')
+        ->get();
+      $data['tipe_pembayaran'] = DB::table('m_paymentmethod')
+        ->get();
+      $data['id'] = $id;
+      return view('penjualan/penjualanorder/edit_penjualanorder', compact('data'));
     }
 
     /**

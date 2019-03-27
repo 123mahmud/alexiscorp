@@ -132,8 +132,9 @@ class MasterCustomerController extends Controller
 
         // insert Kendaraan
         $nopols = $request->nopol;
-        foreach ($nopols as $nopol) {
-          if ($nopol != null) {
+
+        if ($nopols != null) {
+          foreach ($nopols as $nopol) {
             $nopol =  str_replace('_', '', $nopol);
 
             $k_id = m_kendaraan::max('k_id') + 1;
