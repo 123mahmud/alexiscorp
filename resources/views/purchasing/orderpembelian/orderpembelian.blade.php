@@ -51,10 +51,10 @@
                                     <div class="input-group input-group-sm input-daterange">
                                        <input type="text" class="form-control datepicker1" name="tanggal1" id="tanggal1">
                                        <span class="input-group-addon">-</span>
-                                       <input type="text" class="form-control datepicker1" name="tanggal2"  id="tanggal2">
+                                       <input type="text" class="form-control datepicker2" name=""  id="tanggal2" value="{{ date('d-m-Y') }}">
                                        <div class="input-group-append">
                                           <button class="btn btn-primary" type="button"  onclick="lihatOrderByTanggal()"><i class="fa fa-search"></i></button>
-                                          <button class="btn btn-secondary" type="button"  onclick="refreshTabelIndex()"><i class="fa fa-refresh"></i></button>
+                                          <button class="btn btn-secondary" type="button"  onclick="lihatOrderByTanggal()"><i class="fa fa-refresh"></i></button>
                                        </div>
                                     </div>
                                  </div>
@@ -68,14 +68,13 @@
                                  <thead class="bg-primary">
                                     <tr>
                                        <th>Tgl Order</th>
-                                       <th>No Order</th>
+                                       <th>Nota</th>
                                        <th>Staff</th>
-                                       <th>Suplier</th>
-                                       <th>Cara Bayar</th>
+                                       <th>Supplier</th>
+                                       <th>Pembayaran</th>
                                        <th>Total</th>
                                        <th>Tgl Kirim</th>
                                        <th>Status</th>
-                                       <th>Ubah Status</th>
                                        <th>Aksi</th>
                                     </tr>
                                  </thead>
@@ -245,12 +244,7 @@
               targets: 6,
               className: 'right format_money'
           }, ],
-          "columns": [{
-                  "data": "DT_Row_Index",
-                  orderable: true,
-                  searchable: false,
-                  "width": "5%"
-              }, //memanggil column row
+          "columns": [
               {
                   "data": "tglOrder",
                   "width": "10%"
@@ -381,8 +375,8 @@
   }
 
   function lihatHistorybyTgl() {
-      var tgl1 = $('#tanggal1').val();
-      var tgl2 = $('#tanggal2').val();
+      var tgl1 = $('#tanggal3').val();
+      var tgl2 = $('#tanggal4').val();
       var tampil = $('#tampil_data').val();
       $('#tbl-history').dataTable({
           "destroy": true,

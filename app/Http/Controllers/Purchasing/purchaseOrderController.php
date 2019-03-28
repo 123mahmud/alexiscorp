@@ -18,7 +18,7 @@ use Datatables;
 use Session;
 use App\d_gudangcabang;
 use App\d_purchasing;
-use d_purchasing_dt;
+use App\d_purchasing_dt;
 
 class purchaseOrderController extends Controller
 {
@@ -171,7 +171,7 @@ class purchaseOrderController extends Controller
     {
         $dataHeader = d_purchasing::select('d_purchasing.*', 
                                           'm_supplier.s_company', 
-                                          'm_supplier.s_name',
+                                          'm_supplier.s_company',
                                           'd_mem.m_id',
                                           'd_mem.m_name')
                ->join('m_supplier','d_purchasing.s_id','=','m_supplier.s_id')
@@ -348,20 +348,20 @@ class purchaseOrderController extends Controller
       $term = trim($request->q);
       if (empty($term)) {
           $sup = DB::table('m_supplier')
-            ->where('s_active','Y')
+            ->where('s_isactive','Y')
             ->take(10)->get();
           foreach ($sup as $val) {
-              $formatted_tags[] = ['id' => $val->s_id, 'text' => $val->s_company];
+              $formatted_tags[] = ['id' => $val->s_id, 'text' => $val->s_code.' - '.$val->s_company];
           }
           return Response::json($formatted_tags);
       }
       else
       {
           $sup = DB::table('m_supplier')
-            ->where('s_active','Y')
+            ->where('s_isactive','Y')
             ->where('s_company', 'LIKE', '%'.$term.'%')->take(10)->get();
           foreach ($sup as $val) {
-              $formatted_tags[] = ['id' => $val->s_id, 'text' => $val->s_company];
+              $formatted_tags[] = ['id' => $val->s_id, 'text' => $val->s_code.' - '.$val->s_company];
           }
 
           return Response::json($formatted_tags);  
@@ -780,7 +780,7 @@ class purchaseOrderController extends Controller
     {
       $dataHeader = d_purchasing::join('m_supplier','d_purchasing.s_id','=','m_supplier.s_id')
                 ->join('d_mem','d_purchasing.d_pcs_staff','=','d_mem.m_id')
-                ->select('d_purchasing.*', 'm_supplier.s_company', 'm_supplier.s_name', 'd_mem.m_name', 'd_mem.m_id')
+                ->select('d_purchasing.*', 'm_supplier.s_company', 'm_supplier.s_company', 'd_mem.m_name', 'd_mem.m_id')
                 ->where('d_pcs_id', '=', $id)
                 ->orderBy('d_pcs_date_created', 'DESC')
                 ->get();
@@ -914,7 +914,7 @@ class purchaseOrderController extends Controller
 
       $dataHeader = d_purchasing::join('m_supplier','d_purchasing.s_id','=','m_supplier.s_id')
                 ->join('d_mem','d_purchasing.d_pcs_staff','=','d_mem.m_id')
-                ->select('d_purchasing.*', 'm_supplier.s_company', 'm_supplier.s_name','d_mem.m_id','d_mem.m_name', DB::raw('SUM(d_purchasing.d_pcs_disc_percent) * SUM(d_purchasing.d_pcs_total_gross) as disc_total'))
+                ->select('d_purchasing.*', 'm_supplier.s_company', 'm_supplier.s_company','d_mem.m_id','d_mem.m_name', DB::raw('SUM(d_purchasing.d_pcs_disc_percent) * SUM(d_purchasing.d_pcs_total_gross) as disc_total'))
                 ->where('d_pcs_id', '=', $id)
                 ->orderBy('d_pcs_date_created', 'DESC')
                 ->get()->toArray();
