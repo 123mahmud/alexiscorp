@@ -7,29 +7,43 @@ use App\d_stock;
 
 use DB;
 
-class mutation{
-    public static function mutasiMasuk(
-        $date,
+class mutasi{
+    /*($item,
+    $totalPermintaan,
+    $compTujuan,
+    $positionTujuan,
+    'TransferProduksi',
+    11,
+    $sm_reff,
+    '',
+    '',
+    $getBarang[$k]->sm_hpp,
+    $date)*/
+    public static function tambahmutasi(
+        $item,
+        $totalPermintaan,
         $comp,
         $position,
-        $item,
-        $totalPermintaan,        
-        $sm_detail,
+        $flag,
         $mutcat,
         $sm_reff,
-        $hpp,        
-        $sell
+        $flagTujuan,
+        $idMutasiTujuan,
+        $hpp,
+        $date
         ){
         return DB::transaction(function () use (
-        $date,
-        $comp,
-        $position,
-        $item,
-        $totalPermintaan,        
-        $sm_detail,
-        $mutcat,
-        $sm_reff,
-        $hpp        
+            $item,
+            $totalPermintaan,
+            $comp,
+            $position,
+            $flag,
+            $mutcat,
+            $sm_reff,
+            $flagTujuan,
+            $idMutasiTujuan,
+            $hpp,
+            $date
             ) {              
 
                 $totalHpp='';
@@ -69,7 +83,7 @@ class mutation{
                 'sm_qty_used'=>0,
                 'sm_qty_sisa'=>$totalPermintaan,
                 'sm_qty_expired'=>0,
-                'sm_detail'=>$sm_detail,
+                'sm_detail'=>$flag,
                 'sm_hpp'=>$hpp,
                 'sm_reff'=>$sm_reff,            
             ]);
@@ -83,10 +97,16 @@ class mutation{
 
 
 
-      public static function perbaruiMutasiMasuk($comp,$position,$item,$totalPermintaan,$sm_detail,$mutcat,$sm_reff,$hpp){
-    return DB::transaction(function () use ($comp,$position,$item,$totalPermintaan,$sm_detail,$mutcat,$sm_reff,$hpp){
+      public static function perbaruimutasi($item,$totalPermintaan,$comp,$position,$flag,$idFlag,$sm_reff,$flagTujuan,$idMutasiTujuan,$hpp){
+    return DB::transaction(function () use ($item,$totalPermintaan,$comp,$position,$flag,$idFlag,$sm_reff,$flagTujuan,$idMutasiTujuan,$hpp){
                 $totalHpp='';
+
                 $updateMutasi=d_stock_mutation::where('sm_reff',$sm_reff)->where('sm_item',$item)->where('sm_qty','>',0); 
+
+
+
+                
+
                 $updateStock=d_stock::where('s_item',$item)->where('s_comp',$comp)->where('s_position',$position);
                 
                         $qty=$updateStock->first()->s_qty+$totalPermintaan;                                     
@@ -94,6 +114,10 @@ class mutation{
                         $updateStock->update([
                                 's_qty'=>$qty
                             ]);             
+            
+            
+            
+            
             $updateMutasi->update([
                 'sm_stock'=>$updateStock->first()->s_id,                                                                 
                 'sm_qty'=>$updateMutasi->first()->sm_qty+$totalPermintaan,                
@@ -109,39 +133,45 @@ class mutation{
 
 
     }
-public static function hapusMutasiMasuk($comp,$position,$item,$permintaan,$sm_reff){
-    return DB::transaction(function () use ($comp,$position,$item,$permintaan,$sm_reff){
+public static function hapusMutasi($item,$permintaan,$comp,$position,$flag,$sm_reff){
+    return DB::transaction(function () use ($item,$permintaan,$comp,$position,$flag,$sm_reff) {   
           $totalHpp=0;
-          $updateStock=d_stock::where('s_item',$item)->where('s_comp',$comp)->where('s_position',$position);
+
+          $updateStock=d_stock::where('s_item',$item)->where('s_comp',$comp)->where('s_position',$position);                                
                         $qty=$updateStock->first()->s_qty-$permintaan;             
                         $updateStock->update([
                                 's_qty'=>$qty
                             ]);             
-    $d_stock_mutation=d_stock_mutation::where('sm_reff',$sm_reff)->where('sm_item',$item)->where('sm_qty',$permintaan);
-    $d_stock_mutation->delete(); 
-    $data=['true'=>true,'totalHpp'=>$totalHpp];
-    return $data;
+            
+
+
+        $d_stock_mutation=d_stock_mutation::where('sm_reff',$sm_reff)->where('sm_item',$item)->where('sm_qty',$permintaan);
+
+        
+        $d_stock_mutation->delete(); 
+
+            $data=['true'=>true,'totalHpp'=>$totalHpp];
+            return $data;
+
+
+
+
     });
 }
-// satu tujuan
-public static function mutasiTransaksiOne($date,$comp,$position,$item,$totalPermintaan,$sm_detailid='',$mutcat='',$sm_reff='',$sm_ket=''){	
-        return DB::transaction(function () use ($date,$comp,$position,$item,$totalPermintaan,$sm_detailid,$mutcat,$sm_reff,$sm_ket) {   
+
+	public static function mutasiStok($item,$totalPermintaan,$comp,$position,$flag='Penjualan Toko',$sm_reff,$sm_ket='',$date,$mutcat=null){	
+        return DB::transaction(function () use ($item,$totalPermintaan,$comp,$position,$flag,$sm_reff,$sm_ket,$date,
+            $mutcat) {   
 
 
             $totalPermintaan= format::format($totalPermintaan);
             $totalHpp=0;
-
+            
 			$updateStock=d_stock::where('s_item',$item)->where('s_comp',$comp)->where('s_position',$position);		
 
-            if(!$updateStock->first()->s_qty){
-                $idStock=d_stock::max('s_id')+1;
-                d_stock::create([
-                        's_id'=>$idStock,
-                        's_comp'=>$comp,
-                        's_position'=>$position,
-                        's_item'=>$item,
-                        's_qty'=>$totalPermintaan,
-                    ]);
+            if(empty($updateStock->first())) {
+                 $data=['true'=>false,'totalHpp'=>$totalHpp,'text'=>"Ma'af, Stok Tidak Mencukupi"];
+                 return $data;
             }else{
     			if($updateStock->first()->s_qty>=$totalPermintaan){
     				$qty=$updateStock->first()->s_qty-$totalPermintaan;				
@@ -157,6 +187,8 @@ public static function mutasiTransaksiOne($date,$comp,$position,$item,$totalPerm
             }
 		 	$getBarang=d_stock_mutation::where('sm_qty_sisa','>',0)->where('sm_item',$item)->where('sm_comp',$comp)
 		 			   ->where('sm_position',$position)->get();		 	
+            
+            /*$totalPermintaan = 35;*/
             $newMutasi=[];
             $updateMutasi=[];
             
@@ -185,11 +217,6 @@ public static function mutasiTransaksiOne($date,$comp,$position,$item,$totalPerm
                                 'sm_qty_sisa'=>$qty_sisa
                             ]);
 
-
-
-
-
-
                         	$newMutasi[$k]['sm_stock']=$getBarang[$k]->sm_stock;
                             $newMutasi[$k]['sm_detailid'] = $sm_detailidInsert;
                             $newMutasi[$k]['sm_date'] = $date;
@@ -198,7 +225,7 @@ public static function mutasiTransaksiOne($date,$comp,$position,$item,$totalPerm
                             $newMutasi[$k]['sm_item'] = $item;
                             $newMutasi[$k]['sm_qty'] = -$totalPermintaan;
                             $newMutasi[$k]['sm_hpp'] = $getBarang[$k]->sm_hpp;
-                            $newMutasi[$k]['sm_detail'] =$sm_detail;
+                            $newMutasi[$k]['sm_detail'] =$flag;
                             $newMutasi[$k]['sm_keterangan'] =$sm_ket;
                             $newMutasi[$k]['sm_reff'] = $sm_reff;  
                             $newMutasi[$k]['sm_stockreff'] = $getBarang[$k]->sm_stock;  
@@ -232,7 +259,7 @@ public static function mutasiTransaksiOne($date,$comp,$position,$item,$totalPerm
                             $newMutasi[$k]['sm_item'] = $item;
                             $newMutasi[$k]['sm_qty'] = -$totalQty;
                             $newMutasi[$k]['sm_hpp'] = $getBarang[$k]->sm_hpp;
-                            $newMutasi[$k]['sm_detail'] =$sm_detail;
+                            $newMutasi[$k]['sm_detail'] =$flag;
                             $newMutasi[$k]['sm_reff'] = $sm_reff; 
                             $newMutasi[$k]['sm_keterangan'] =$sm_ket;
 
@@ -252,6 +279,7 @@ public static function mutasiTransaksiOne($date,$comp,$position,$item,$totalPerm
                     return $data;
                 });
 	}
+    
     public static function updateMutasi($item,$totalPermintaan,$comp,$position,$flag='',$sm_reff='',$sm_ket='',$date='',$mutcat=''){
         return DB::transaction(function () use ($item,$totalPermintaan,$comp,$position,$flag,$sm_reff,$sm_ket,$date,$mutcat) {   
 
@@ -357,7 +385,8 @@ $totalPermintaan=abs($awaltotalPermintaan);
                             ]);
             }
 
-            $updateStock=d_stock::where('s_item',$item)->where('s_comp',$comp)->where('s_position',$position);          
+            $updateStock=d_stock::where('s_item',$item)->where('s_comp',$comp)->where('s_position',$position);
+
             $qty=$updateStock->first()->s_qty+$awaltotalPermintaan; 
 
             $updateStock->update([
@@ -372,7 +401,15 @@ $totalPermintaan=abs($awaltotalPermintaan);
     });
 
     }
- 
+    public static function u(){
+        $m=new mutasi;
+
+        return $m->v();
+    }
+     public function v(){
+        return 'f';
+    }
+
     public static function deleteMutasi($item,$totalPermintaan,$comp,$position,$flag='',$sm_reff=''){
           $getBarang=d_stock_mutation::where('sm_item',$item)->where('sm_comp',$comp)
                        ->where('sm_position',$position)->where('sm_reff',$sm_reff)
