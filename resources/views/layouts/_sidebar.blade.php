@@ -338,9 +338,9 @@
                         <i class="fa arrow"></i>
                     </a>
                     <ul class="sidebar-nav">
-                        <li class="{{Request::is('system/manajemenuser/*') ? 'active' : ''}}">
+{{--                         <li class="{{Request::is('system/manajemenuser/*') ? 'active' : ''}}">
                             <a href="{{route('manajemenuser')}}"> Manajemen User</a>
-                        </li>
+                        </li> --}}
                         <li class="{{Request::is('system/manajemenhakakses/*') ? 'active' : ''}}">
                             <a href="{{route('manajemenhakakses')}}"> Manajemen Hak Akses</a>
                         </li>

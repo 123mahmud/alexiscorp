@@ -1,126 +1,153 @@
-<!-- Modal -->
-<div id="modal_detail_order" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header bg-gradient-info">
-        <h4 class="modal-title">Detail Order Pembelian</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        
-        <label>Status : </label> <span class="badge badge-pill po_status_label">Barang sudah diterima</span>
-        
-        <fieldset>
-          <div class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold">No Order Pembelian</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="po_code">PO/201901/1</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold">Cara Pembayaran</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="po_method">CASH</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold">Tanggal Order Pembelian</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="po_tanggal_label">2 Jan 2019</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold">Tanggal Pengiriman</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="po_tanggal_kirim_label">3 Jan 2019</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold">Suplier</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="s_name">Alpha</label>
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="font-weight-bold">Petugas</label>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-              <label class="name">Alpha</label>
-            </div>
-          </div>
-        </fieldset>
-        <hr>
-
-        <div class="table-responsive">
-          <table class="table table-striped table-hover" cellspacing="0" id="tabel_detail">
-            <thead class="bg-primary">
-              <tr>
-                <th>Kode Barang</th>
-                <th>Nama Barang</th>
-                <th>Satuan</th>
-                <th>Qty</th>
-                <th>Stock Gudang</th>
-                <th>Harga Prev</th>
-                <th>Harga</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-             
-            </tbody>
-          </table>
+<div class="modal fade" id="modal-detail" role="dialog">
+  <div class="modal-dialog modal-full" style="width: 90%;margin: auto; font-size:10pt;">
+      
+    <form method="get" action="#">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #e77c38;">
+          <h4 class="modal-title" style="color: white;">Detail Order Pembelian</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
-          <div class="row mt-3">
-            <div class="offset-md-6 col-md-6 col-sm-12">
-              <fieldset>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <label>Total Harga :</label>
-                    <input type="text" readonly="" class="text-right po_total_gross form-control form-control-sm" name="" >
-                  </div>
-
-                  <div class="col-lg-12">
-                    <label>Potongan Harga :</label>
-                    <input type="text" readonly="" class="text-right form-control form-control-sm po_disc_value" name="" >
-                  </div>
-
-                  <div class="col-lg-12">
-                    <label>Total Diskon(%):</label>
-                    <input type="text" readonly="" class="text-right po_disc_percent form-control form-control-sm" name="" >
-                  </div>
-
-                  <div class="col-lg-12">
-                    <label>PPN(%) :</label>
-                    <input type="text" readonly="" class="text-right po_tax_percent form-control form-control-sm" name="">
-                  </div>
-
-                  <div class="col-lg-12">
-                    <label>Total :</label>
-                    <input type="text" readonly="" class="text-right po_total_net form-control form-control-sm" name="">
-                  </div>
-                </div>
-              </fieldset>
+        <div class="modal-body">
+          <label class="tebal">Status : </label>&nbsp;&nbsp;
+          <span class="" id="txt_span_status_detail"></span>
+          <div class="col-md-12 col-sm-12 col-xs-12 row" style="margin-top:10px;padding-bottom: 10px;padding-top: 20px;margin-bottom: 15px;">                          
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <label class="tebal">No Order Pembelian</label>
             </div>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
 
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label id="lblNoOrder"></label>
+              </div>  
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <label class="tebal">Cara Pembayaran</label>
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label id="lblCaraBayar"></label>
+              </div>  
+            </div>
+            
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <label class="tebal">Tanggal Order Pembelian</label>
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label id="lblTglOrder"></label>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <label class="tebal">Nama Staff</label>
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label id="lblStaff"></label>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <label class="tebal">Tanggal Pengiriman</label>
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label id="lblTglKirim"></label>
+              </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <label class="tebal">Suplier</label>
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label id="lblSupplier"></label>
+              </div>
+            </div>
+
+            <div id="append-modal-detail"></div>
+
+          </div>
+          
+          <div class="table-responsive">
+            <table id="tabel-order" class="table tabelan table-bordered table-striped">
+              <thead class="bg-primary">
+                <tr>
+                  <th width="5%">No</th>
+                  <th width="20%">Nama Item</th>
+                  <th width="10%">Satuan</th>
+                  <th width="10%">Qty</th>
+                  <th width="10%">Stok Gudang</th>
+                  <th width="15%">Harga Prev</th>
+                  <th width="15%">Harga</th>
+                  <th width="15%">Total</th>
+                </tr>
+              </thead>
+              <tbody id="div_item">
+              </tbody>
+            </table>
+
+            <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px; padding-bottom:5px;padding-top: 10px;">
+
+              <div class="col-md-10 col-sm-12 col-xs-12">
+                <label class="tebal" style="float: right;">Total Harga : </label>
+              </div>
+
+              <div class="col-md-2 col-sm-12 col-xs-12">
+                <div class="form-group">
+                  <input type="text" readonly="" class="input-sm form-control" name="totalHarga">
+                </div>
+              </div>
+
+              <div class="col-md-10 col-sm-12 col-xs-12">
+                <label class="tebal" style="float: right;">Total Diskon : </label>
+              </div>
+
+              <div class="col-md-2 col-sm-12 col-xs-12">
+                <div class="form-group">
+                  <input type="text" readonly="" class="input-sm form-control" name="diskonHarga">
+                </div>
+              </div>
+
+              <div class="col-md-10 col-sm-12 col-xs-12">
+                <label class="tebal" style="float: right;">PPN : </label>
+              </div>
+
+              <div class="col-md-2 col-sm-12 col-xs-12">
+                <div class="form-group">
+                  <input type="text" readonly="" class="input-sm form-control" name="ppnHarga">
+                </div>
+              </div>
+
+              <div class="col-md-10 col-sm-12 col-xs-12">
+                <label class="tebal" style="float: right;">Total : </label>
+              </div>
+
+              <div class="col-md-2 col-sm-12 col-xs-12">
+                <div class="form-group">
+                  <input type="text" readonly="" class="input-sm form-control" name="totalHargaFinal">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="append-footer-detail" class="modal-footer" style="border-top: none;">
+          <!-- Button di Script di purchasing/index.blade.php -->
+        </div>
+
+      </div>
+      <!-- /Modal content-->
+    </form>   
+    <!-- /Form-->
   </div>
 </div>

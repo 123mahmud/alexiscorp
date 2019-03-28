@@ -335,10 +335,16 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 
 	// Admin System
 	Route::get('/system/manajemenhakakses/index', 'SystemController@manajemenhakakses')->name('manajemenhakakses');
-	Route::get('/system/manajemenhakakses/create', 'SystemController@tambah_manajemenhakakses')->name('tambah_manajemenhakakses');
-	Route::get('/system/manajemenuser/index', 'SystemController@manajemenuser')->name('manajemenuser');
 	Route::get('/system/profilperusahaan/index', 'SystemController@profilperusahaan')->name('profilperusahaan');
 	Route::get('/system/tahunfinansial/index', 'SystemController@tahunfinansial')->name('tahunfinansial');
+	Route::get('/system/manajemenuser/index', 'System\hakuserController@manajemenuser')->name('manajemenuser');
+	Route::get('/system/manajemenhakakses/create', 'System\hakuserController@tambah')->name('tambah_manajemenhakakses');
+	Route::post('/system/hakuser/simpan', 'System\hakuserController@simpan');
+	Route::get('/system/hakuser/edit-user-akses/{id}/edit', 'System\hakuserController@editUserAkses');
+	Route::get('/system/hakuser/tableuser', 'System\hakuserController@tableUser');
+	Route::get('/system/hakuser/autocomplete-pegawai', 'System\hakuserController@autocompletePegawai');
+	Route::get('/system/hakuser/perbarui-user/{id}', 'System\hakuserController@perbaruiUser');
+	Route::post('/system/hakuser/hapus-user', 'System\hakuserController@hapusUser');
 
 // Konfirmasi Pembelian
 	Route::get('/konfirmasi-purchase/index', 'Keuangan\purchaseConfirmController@confirmIndex')->name('pembelian');
