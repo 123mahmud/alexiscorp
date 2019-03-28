@@ -218,9 +218,7 @@
 	{
 		$.ajax({
 			data : {
-				"itemId": $('#itemId').val(),
-				"comp": "{{ Auth::user()->m_id }}",
-				"positionId": "{{ Session::get('user_comp') }}"
+				"itemId": $('#itemId').val()
 			},
 			type : "get",
 			url : "{{ route('penjualanorder.getstock') }}",
@@ -573,7 +571,8 @@
 			columns: [
 				{data: 'DT_RowIndex'},
 				{data: 's_note'},
-				{data: 'customer', width: "70%"},
+				{data: 'staff', width: "30%"},
+				{data: 'customer', width: "40%"},
 				{data: 'action'}
 			],
 			pageLength: 10,
@@ -615,7 +614,7 @@
 					rowId = tb_detailpenjualan.rows().count();
 					tb_detailpenjualan.row.add([
 						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.i_name +'">',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_qty +'">',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_qty +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_price +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_disc_percent +'" readonly>',

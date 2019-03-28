@@ -32,6 +32,7 @@
     						<tr>
     							<th>No</th>
     							<th>Nota</th>
+    							<th>Staff</th>
     							<th>Customer</th>
     							<th>Aksi</th>
     						</tr>

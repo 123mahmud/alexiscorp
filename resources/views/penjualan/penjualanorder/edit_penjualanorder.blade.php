@@ -2,6 +2,7 @@
 
 @section('content')
 
+@include('penjualan.penjualanorder.modal_cust')
 @include('penjualan.penjualanorder.modal_pembayaran')
 
 <article class="content">
@@ -29,6 +30,7 @@
 
 				<div class="tab-content">
 					<input type="hidden" id="salesId" value="{{ $data['id'] }}">
+					<input type="hidden" id="totalBayarHidden">
 					@include('penjualan.penjualanorder.tab_editformpenjualan')
 
 				</div>
@@ -63,6 +65,35 @@
 <!-- script for tab-penjualan-order -->
 <script type="text/javascript">
 	$(document).ready(function() {
+		$('#tambah_cust').on('hidden.bs.modal', function() {
+			$('#newCustomerForm')[0].reset();
+		});
+
+		$('#btn_simpan_customer').on('click', function() {
+			let dataNewCust = $('#newCustomerForm').serialize();
+			$.ajax({
+				url: "{{ route('simpan_datacustomer') }}",
+				data: dataNewCust,
+				type: 'get',
+				dataType : 'json',
+				success : function (response){
+					if (response.status == 'sukses') {
+						$('#idCustomer').val(response.id);
+						$('#customer').val($('#c_name').val());
+						$('#address').val($('#c_address').val());
+						$('#tambah_cust').modal('hide');
+						$('#ket_project').focus();
+						console.log('New customer created: '+ response.message);
+					} else if (response.status == 'gagal') {
+						console.log('gagal: '+ response.message);
+					}
+				},
+				error : function(e){
+					console.log('Error: '+ e);
+				}
+			});
+		});
+
 		tb_penjualan = $('#table_penjualan').DataTable({
 			"order": [],
 			"searching": false,
@@ -70,6 +101,25 @@
 			"paging": false,
 			"info": false,
 		});
+
+		$('#customer').on('click', function() {
+			clearCustomer();
+		});
+		$('#customer').autocomplete({
+			source: baseUrl + '/penjualan/penjualanorder/getCustomers',
+			minLength: 2,
+			select: function(event, data){
+				$('#address').val(data.item.address);
+				$('#idCustomer').val(data.item.id);
+				$('#ket_project').focus();
+			}
+		});
+		function clearCustomer()
+		{
+			$('#customer').val('');
+			$('#address').val('');
+			$('#idCustomer').val('');
+		}
 
 		$('#table_penjualan tbody').on('click', '.btn-hapus-kenangan', function(){
 			hapus_row($(this));
@@ -135,7 +185,14 @@
 
 		$('#modal_bayar').on('hidden.bs.modal', function() {
 			$('#paymentForm')[0].reset();
-			$('#btn_simpan').attr('disabled', true);
+		});
+		$('#modal_bayar').on('shown.bs.modal', function() {
+			$('#totalBayar').val($('#totalBayarHidden').val());
+			$('#totalBayar').trigger('change');
+			$('#totalBayar').attr('readonly', true);
+			totalAmount = sumTotalAmount();
+			$('.totalAmount').val(totalAmount);
+			$('#btn_simpan').attr('disabled', false);
 		});
 
 		$('#btn_simpan').on('click', function() {
@@ -143,6 +200,16 @@
 			SubmitForm(event, salesId);
 		});
 
+		$('#btn_finalisasi').on('click', function() {
+			$('#modal_bayar').modal('show');
+			$('#status_edit').val('FN');
+			console.log($('#status_edit').val());
+		});
+		$('#btn_proses').on('click', function() {
+			$('#modal_bayar').modal('show');
+			$('#status_edit').val('PR');
+			console.log($('#status_edit').val());
+		});
 		$('#btn_back').on('click', function() {
 			window.location.href = baseUrl + '/penjualan/penjualanorder/index';
 		})
@@ -167,12 +234,14 @@
 				console.log($('#idCustomer').val());
 				$('#customer').val(response.get_customer.c_name);
 				$('#address').val(response.get_customer.c_address);
-				$('#ket').val(response.s_info);
+				$('#ket_project').val(response.s_info);
 				orderDate = new Date(response.s_date);
 				$('#orderDate').datepicker('setDate', orderDate);
 				dueDate = new Date(response.s_jatuh_tempo);
 				$('#dueDate').datepicker('setDate', dueDate);
 				$('#ppn').val(response.s_tax);
+				$('#totalBayarHidden').val(response.get_sales_payment.sp_nominal);
+
 				$.each(response.get_sales_dt, function(key, val) {
 					let discH = val.sd_disc_value / val.sd_qty;
 					rowId = tb_penjualan.rows().count();
@@ -490,11 +559,6 @@
 		totalBayar = $('#totalBayar').val();
 
 		kembalian = totalBayar - totalAmount;
-		if (totalBayar > 0 && kembalian >= 0) {
-			$('#btn_simpan').attr('disabled', false);
-		} else {
-			$('#btn_simpan').attr('disabled', true);
-		}
 		return kembalian;
 	}
 

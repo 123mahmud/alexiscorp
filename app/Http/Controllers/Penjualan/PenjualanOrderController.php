@@ -9,10 +9,12 @@ use DB;
 use Auth;
 use Session;
 use Validator;
+use App\lib\mutasi;
 use App\d_stock;
 use App\d_sales;
 use App\d_sales_dt;
 use App\d_sales_payment;
+use App\d_gudangcabang;
 use App\m_item;
 use App\m_item_price;
 use App\m_customer;
@@ -113,9 +115,15 @@ class PenjualanOrderController extends Controller
      */
     public function getStock(Request $request)
     {
+      $userComp = Session::get('user_comp');
+      $gudangCabang = d_gudangcabang::where('gc_comp', $userComp)
+        ->where('gc_gudang', 'GUDANG PENJUALAN')
+        ->firstOrFail();
+      $gudangCabangId = $gudangCabang->gc_id;
+
       $stock = d_stock::where('s_item', $request->itemId)
-        ->where('s_comp',  $request->comp)
-        ->where('s_position',  $request->positionId)
+        ->where('s_comp',  $gudangCabangId)
+        ->where('s_position',  $gudangCabangId)
         ->firstOrFail();
       return $stock;
     }
@@ -153,6 +161,7 @@ class PenjualanOrderController extends Controller
         ->where('s_comp', Session::get('user_comp'))
         ->whereBetween('s_date', [$from, $to])
         ->with('getCustomer')
+        ->with('getStaff')
         ->orderBy('s_note', 'desc')
         ->get();
 
@@ -160,6 +169,9 @@ class PenjualanOrderController extends Controller
       ->addIndexColumn()
       ->addColumn('customer', function($datas) {
         return $datas->getCustomer['c_name'];
+      })
+      ->addColumn('staff', function($datas) {
+        return $datas->getStaff['m_name'];
       })
       ->addColumn('action', function($datas) {
         if ($datas->s_status == 'PR') {
@@ -173,7 +185,7 @@ class PenjualanOrderController extends Controller
           </div>';
         }
       })
-      ->rawColumns(['customer', 'action'])
+      ->rawColumns(['customer', 'staff', 'action'])
       ->make(true);
     }
 
@@ -367,15 +379,19 @@ class PenjualanOrderController extends Controller
         $sales->s_tax = $request->ppn;
         $sales->s_jatuh_tempo = Carbon::parse($request->dueDate)->format('Y-m-d');
         $sales->s_net = $request->totalAmount;
-        $sales->s_status = 'PR'; // PR: Progress || FN: Final
+        if ($request->status_edit == 'PR') {
+          $sales->s_status = 'PR'; // PR: Progress || FN: Final
+        } elseif ($request->status_edit == 'FN') {
+          $sales->s_status = 'FN'; // PR: Progress || FN: Final
+        }
         $sales->s_info = $request->keterangan;
         $sales->save();
 
         // delete sales-detail from selected salesId
         $salesDt = d_sales_dt::where('sd_sales', $id)
           ->get();
-        foreach ($salesDt as $sales) {
-          $sales->delete();
+        foreach ($salesDt as $salesX) {
+          $salesX->delete();
         }
 
         // insert sales-detail
@@ -398,6 +414,26 @@ class PenjualanOrderController extends Controller
             $salesDt->sd_disc_value = $valDiscH;
             $salesDt->sd_total = $request->listSubTotal[$loopCount];
             $salesDt->save();
+
+            // update stock (using mutation)
+            $userComp = Session::get('user_comp');
+            $gudangCabang = d_gudangcabang::where('gc_comp', $userComp)
+              ->where('gc_gudang', 'GUDANG PENJUALAN')
+              ->firstOrFail();
+            $gudangCabangId = $gudangCabang->gc_id;
+            if ($request->status_edit == 'FN') {
+              mutasi::mutasiStok($request->listItemId[$loopCount],
+              $request->listQty[$loopCount],
+              $gudangCabangId,
+              $gudangCabangId,
+              'MENGURANGI',
+              $sales->s_note,
+              'MENGURANGI',
+              Carbon::now(),
+              1){
+                dd('error om')
+              };
+            }
           }
           $loopCount++;
         }
