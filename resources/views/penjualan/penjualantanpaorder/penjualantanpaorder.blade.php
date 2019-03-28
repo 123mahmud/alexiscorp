@@ -68,6 +68,35 @@
 <!-- script for tab-penjualan-order -->
 <script type="text/javascript">
 	$(document).ready(function() {
+		$('#tambah_cust').on('hidden.bs.modal', function() {
+			$('#newCustomerForm')[0].reset();
+		});
+
+		$('#btn_simpan_customer').on('click', function() {
+			let dataNewCust = $('#newCustomerForm').serialize();
+			$.ajax({
+				url: "{{ route('simpan_datacustomer') }}",
+				data: dataNewCust,
+				type: 'get',
+				dataType : 'json',
+				success : function (response){
+					if (response.status == 'sukses') {
+						$('#idCustomer').val(response.id);
+						$('#customer').val($('#c_name').val());
+						$('#address').val($('#c_address').val());
+						$('#tambah_cust').modal('hide');
+						$('#ket_project').focus();
+						console.log('New customer created: '+ response.message);
+					} else if (response.status == 'gagal') {
+						console.log('gagal: '+ response.message);
+					}
+				},
+				error : function(e){
+					console.log('Error: '+ e);
+				}
+			});
+		});
+
 		tb_penjualan = $('#table_penjualan').DataTable({
 			"order": [],
 			"searching": false,
@@ -115,7 +144,6 @@
 			}
 		});
 
-		// $('#qty').inputmask('999.999.999.999', {placeholder: " "});
 		$('#qty').on('click', function() {
 			$(this).val('');
 		});
@@ -150,10 +178,22 @@
 			}
 		});
 
+		$('#modal_bayar').on('hidden.bs.modal', function() {
+			$('#paymentForm')[0].reset();
+			$('#btn_simpan').attr('disabled', true);
+		});
+
 		$('#btn_simpan').on('click', function() {
 			SubmitForm(event);
 		});
 	});
+
+	function hapus_row(a){
+		// console.log(tb_penjualan.row($(a).parents('tr')).index());
+		// rowId = tb_penjualan.row($(a).parents('tr')).index();
+		tb_penjualan.row($(a).parents('tr')).remove().draw();
+		updateTotalAmount();
+	}
 
 	function clearSelectItem()
 	{
@@ -192,8 +232,6 @@
 	{
 		qty = parseInt($('#qty').val());
 		stock = parseInt($('#stock').val());
-		console.log(stock);
-		console.log(qty);
 		if (stock >= qty) {
 			return 'Y';
 		} else {
@@ -205,11 +243,11 @@
 	function isAlreadyExists()
 	{
 		var filteredData = tb_penjualan
-		.column(0)
-		.data()
-		.filter( function ( value, index ) {
-			return value.indexOf($('#itemName').val()) >= 0 ? true : false;
-		} );
+			.column(0)
+			.data()
+			.filter( function ( value, index ) {
+				return value.indexOf($('#itemName').val()) >= 0 ? true : false;
+			} );
 		return filteredData;
 	}
 
@@ -228,9 +266,24 @@
 	function countDiscount(price, rowId)
 	{
 		price = parseInt(price);
-		discH = tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val();
-		discP = tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val();
-		qty = tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val();
+		discH = parseInt(b_penjualan.cell(rowId, 5).nodes().to$().find('input').val());
+		discP = parseInt(b_penjualan.cell(rowId, 4).nodes().to$().find('input').val());
+		// validate if the discP is more than 100 %
+		if (discP > 100) {
+			discP = 100;
+			tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val(100);
+		}
+		// validate if the discP is less than 0 % or is-NaN
+		if (discP < 0 || isNaN(discP)) {
+			discP = 0;
+			tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val(0);
+		}
+		// validate if the discH is more than price
+		if (discH > price) {
+			discH = price;
+			tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val(price);
+		}
+		qty = parseInt(b_penjualan.cell(rowId, 1).nodes().to$().find('input').val());
 		totalPrice = qty * price;
 
 		totalDiscP = (totalPrice * discP) / 100;
@@ -240,6 +293,11 @@
 
 		tb_penjualan.cell(rowId, 6).nodes().to$().find('input').val(finalPrice);
 		tb_penjualan.draw(false);
+		updateTotalAmount();
+	}
+
+	function updateTotalAmount()
+	{
 		totalPenjualan = sumTotalBruto();
 		$('#totalPenjualan').val(totalPenjualan);
 		discountTotal = discTotal();
@@ -255,7 +313,11 @@
 		for (let i = 0; i < tb_penjualan.rows()[0].length; i++) {
 			listTotalPerItem.push(parseInt(tb_penjualan.cell(i, 6).nodes().to$().find('input').val()));
 		}
-		let totalNetto = listTotalPerItem.reduce((partial_sum, a) => partial_sum + a);
+		if (listTotalPerItem.length !== 0) {
+			totalNetto = listTotalPerItem.reduce((partial_sum, a) => partial_sum + a);
+		} else {
+			totalNetto = 0;
+		}
 		return totalNetto;
 	}
 
@@ -271,7 +333,11 @@
 			Bruto = qty * price;
 			listBrutoPerItem.push(Bruto);
 		}
-		totalBruto = listBrutoPerItem.reduce((partial_sum, a) => partial_sum + a);
+		if (listBrutoPerItem.length !== 0) {
+			totalBruto = listBrutoPerItem.reduce((partial_sum, a) => partial_sum + a);
+		} else {
+			totalBruto = 0;
+		}
 		return totalBruto;
 	}
 
@@ -314,17 +380,43 @@
 						rowId = tb_penjualan.rows().count();
 						if (alreadyExists.length == 0) {
 							tb_penjualan.row.add([
-							$('#itemName').val() +
-							'<input type="hidden" value="'+$('#itemId').val()+'" class="barang" name="listItemId[]">',
-							'<input type="number" min="0" class="form-control form-control-sm" name="listQty[]" value="'+ qty +'" onchange="checkStock('+ parseInt($('#stock').val()) +','+ response.ip_price +','+ rowId +')">',
-							'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ $('#itemSatName').val() +'" readonly>' +
-							'<input type="hidden" value="'+$('#itemSatId').val()+'" name="listSatId[]">',
-							'<input type="text" class="form-control form-control-plaintext form-control-sm" name="listPrice[]" value="'+ response.ip_price +'" readonly>',
-							'<input type="number" min="0" class="form-control form-control-sm" name="listDiscP[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
-							'<input type="number" min="0" class="form-control form-control-sm" name="listDiscH[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
-							'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm text-right" name="listSubTotal[]" value="0">',
-							'<button class="btn btn-danger btn-hapus-kenangan" type="button" title="Delete"><i class="fa fa-trash-o"></i></button>'
+								$('#itemName').val() +
+									'<input type="hidden" value="'+$('#itemId').val()+'" class="barang" name="listItemId[]">',
+								'<input type="text" min="0" class="form-control form-control-sm currency-x text-right" name="listQty[]" value="'+ $('#qty').val() +'" onchange="checkStock('+ parseInt($('#stock').val()) +','+ response.ip_price +','+ rowId +')">',
+								'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ $('#itemSatName').val() +'" readonly>' +
+									'<input type="hidden" value="'+$('#itemSatId').val()+'" name="listSatId[]">',
+								'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" name="listPrice[]" value="'+ response.ip_price +'" readonly>',
+								'<input type="text" min="0" class="form-control form-control-sm currency-x text-right" name="listDiscP[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
+								'<input type="text" min="0" class="form-control form-control-sm currency text-right" name="listDiscH[]" value="0" onchange="countDiscount('+ response.ip_price +','+ rowId +')">',
+								'<input type="text" readonly="" class="form-control form-control-plaintext form-control-sm currency text-right" name="listSubTotal[]" value="0,00">',
+								'<button class="btn btn-danger btn-hapus-kenangan" type="button" title="Delete"><i class="fa fa-trash-o"></i></button>'
 							]).node().id = rowId;
+							// add manually inputmask to each .currency
+							$.each(tb_penjualan.row(rowId).nodes().to$().find('.currency'), function() {
+								$(this).inputmask("currency", {
+						      radixPoint: ".",
+						      groupSeparator: ".",
+						      digits: 2,
+						      autoGroup: true,
+						      prefix: '', //Space after $, this will not truncate the first character.
+						      rightAlign: false,
+						      autoUnmask: true,
+						      // unmaskAsNumber: true,
+						    });
+							});
+							// add manually inputmask to each .currency-x
+							$.each(tb_penjualan.row(rowId).nodes().to$().find('.currency-x'), function() {
+								$(this).inputmask("currency", {
+									radixPoint: ".",
+									groupSeparator: ".",
+									digits: 0,
+									autoGroup: true,
+									prefix: '', //Space after $, this will not truncate the first character.
+									rightAlign: false,
+									autoUnmask: true,
+									// unmaskAsNumber: true,
+								});
+							});
 							checkStock(parseInt($('#stock').val()), response.ip_price, rowId);
 							clearSelectItem();
 						} else {
@@ -348,6 +440,14 @@
 		totalPenjualan = $('#totalPenjualan').val();
 		totalDisc = $('#totalDisc').val();
 		ppn = $('#ppn').val();
+		// validate if ppn is more than 100 % or is less than 0 or is null
+		if (ppn > 100) {
+			ppn = 100;
+			$('#ppn').val(100);
+		} else if (ppn < 0 || isNaN(ppn) || ppn === '') {
+			ppn = 0;
+			$('#ppn').val(0);
+		}
 
 		totalNetto = sumTotalNetto();
 		ppnVal = totalNetto * ppn / 100;
@@ -355,36 +455,14 @@
 		return totalAmount;
 	}
 
-	// duplicate value of totalAmountM and normalize it, then store it to totalAmountHidden
-	function normalizingTotalPenjualan()
-	{
-		totalPenjualan = $('#totalPenjualan').val();
-		totalPenjualan = totalPenjualan.replace(/,/g, '');
-		totalPenjualan = totalPenjualan.replace('.00', '');
-		$('#totalPenjualanHidden').val(totalPenjualan);
-	}
-
-	// duplicate value of totalAmountM and normalize it, then store it to totalAmountHidden
-	function normalizingTotalAmount()
-	{
-		totalAmount = $('#totalAmountM').val();
-		totalAmount = totalAmount.replace(/,/g, '');
-		totalAmount = totalAmount.replace('.00', '');
-		$('#totalAmountHidden').val(totalAmount);
-	}
-
 	// return total kembalian (change for customer)
 	function sumTotalKembalian()
 	{
-		normalizingTotalAmount();
-		totalAmount = $('#totalAmountHidden').val();
+		totalAmount = $('#totalAmount').val();
 		totalBayar = $('#totalBayar').val();
-		totalBayar = totalBayar.replace(/,/g, '');
-		totalBayar = totalBayar.replace('.00', '');
-		$('#totalBayarHidden').val(totalBayar);
 
 		kembalian = totalBayar - totalAmount;
-		if (kembalian >= 0) {
+		if (totalBayar > 0 && kembalian >= 0) {
 			$('#btn_simpan').attr('disabled', false);
 		} else {
 			$('#btn_simpan').attr('disabled', true);
@@ -396,6 +474,7 @@
 	function resetAllInput()
 	{
 		$('.totalAmount').val('0,00');
+		$('#newCustomerForm')[0].reset();
 		$('#customerForm')[0].reset();
 		$('#salesForm')[0].reset();
 		$('#paymentForm')[0].reset();
@@ -406,11 +485,6 @@
 	function SubmitForm(event)
 	{
 		event.preventDefault();
-		// normalize totalAmount (discard comma, extra-00, etc)
-		normalizingTotalAmount();
-		// normalize totalPenjualan (discard comma, extra-00, etc)
-		normalizingTotalPenjualan();
-
 		customer = $('#customerForm').serialize();
 		sales = $('#salesForm').serialize();
 		payment = $('#paymentForm').serialize();
@@ -422,7 +496,6 @@
 		let dataListItems = listItems.find('input').serialize();
 
 		data_final = customer +'&'+ sales +'&'+ payment +'&'+ dataListItems;
-		console.log(data_final);
 
 		$.ajax({
 			data : data_final,
@@ -433,7 +506,7 @@
 				if(response.status == 'berhasil'){
 					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
 					resetAllInput();
-					// location.reload();
+					$('#modal_bayar').modal('hide');
 				} else if (response.status == 'invalid') {
 					messageFailed('Perhatian', response.message);
 				} else if (response.status == 'gagal') {
@@ -467,6 +540,10 @@
 		$('#btn_refresh_date_pj').on('click', function() {
 			TableListPenjualan();
 		});
+
+		$('#modal_detailpenjualan').on('hidden.bs.modal', function() {
+			$('.detail-penjualan')[0].reset();
+		});
 	});
 
 	// data-table -> function to retrieve DataTable server side
@@ -496,6 +573,76 @@
 			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
 		});
 	}
+
+	function DetailPenjualan(id)
+	{
+		console.log('DetailPenjualan: '+ id);
+		// initiate tb_detailpenjualan
+		var tb_detailpenjualan;
+		$('#table_detailpenjualan').dataTable().fnDestroy();
+		tb_detailpenjualan = $('#table_detailpenjualan').DataTable({
+			responsive: true,
+			paging: false,
+			info: false,
+			searching: false
+		});
+		tb_detailpenjualan.clear().draw();
+
+		$.ajax({
+			url: baseUrl + "/penjualan/penjualantanpaorder/getDetailPenjualan/" + id,
+			type: 'get',
+			success : function (response){
+				console.log(response);
+				newDate = new Date(response.s_date);
+				$('#dt_date').val(newDate.getDate() +'-'+ (newDate.getMonth() + 1) +'-'+ newDate.getFullYear());
+				$('#dt_nota').val(response.s_note);
+				(response.get_customer != null) ? $('#dt_customer').val(response.get_customer.c_name) : $('#dt_customer').val('(kosong)');
+				$('#dt_subtotal').val(response.s_gross);
+				$('#dt_totaldisc').val(response.s_disc_value);
+				$('#dt_ppn').val(response.s_tax);
+				$('#dt_grandtotal').val(response.s_net);
+				(response.get_sales_payment != null) ? $('#dt_totalpayment').val(response.get_sales_payment.sp_nominal) : $('#dt_totalpayment').val('(kosong)');
+
+				$.each(response.get_sales_dt, function(key, val) {
+					let discH = val.sd_disc_value / val.sd_qty;
+					rowId = tb_detailpenjualan.rows().count();
+					tb_detailpenjualan.row.add([
+						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.i_name +'">',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_qty +'">',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'" readonly>',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_price +'" readonly>',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_disc_percent +'" readonly>',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ discH +'" readonly>',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_total +'" readonly>'
+					]).node().id = rowId;
+					// add manually inputmask to each .currency
+					$.each(tb_detailpenjualan.row(rowId).nodes().to$().find('.currency'), function() {
+						$(this).inputmask("currency", {
+							radixPoint: ".",
+							groupSeparator: ".",
+							digits: 2,
+							autoGroup: true,
+							prefix: '', //Space after $, this will not truncate the first character.
+							rightAlign: false,
+							autoUnmask: true,
+							// unmaskAsNumber: true,
+						});
+					});
+				});
+				tb_detailpenjualan.draw(false);
+			},
+			error : function(e){
+				console.log('Error: '+ e);
+			}
+		});
+		$('#modal_detailpenjualan').modal('show');
+	}
+	function EditPenjualan(id)
+	{
+		console.log('EditPenjualan: '+ id);
+		window.location.href = baseUrl + '/penjualan/penjualantanpaorder/edit/' + id;
+	}
+
 </script>
 
 

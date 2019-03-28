@@ -92,7 +92,7 @@
           <div class="row">
 
             <div class="col-md-6 col-sm-6 col-12">
-              <label>Nama Barang</label>
+              <label>Pilih Barang / Jasa</label>
               <div class="form-group">
                 <input type="hidden" name="itemId" id="itemId">
                 <input type="hidden" name="itemName" id="itemName">
@@ -105,19 +105,14 @@
             <div class="col-md-3 col-sm-3 col-12">
               <label>Qty</label>
               <div class="form-group">
-                <div class="input-group">
-                  <input type="number" min="0" class="form-control form-control-sm text-right" id="qty">
-                  <div class="input-group-append">
-                    <button class="btn btn-primary btn-sm btn-tambah" title="Tambah" type="button"><i class="fa fa-plus"></i></button>
-                  </div>
-                </div>
+                <input type="text" min="0" id="qty" class="form-control form-control-sm currency-x text-right">
               </div>
             </div>
 
             <div class="col-md-3 col-sm-3 col-12">
-              <label>Stok</label>
+              <label>Kuantitas Stok</label>
               <div class="form-group">
-                <input type="text" class="form-control form-control-sm" readonly="" name="stock" id="stock">
+                <input type="text" class="form-control form-control-sm currency-x text-right" readonly="" name="stock" id="stock">
               </div>
             </div>
 
@@ -149,8 +144,7 @@
                   <div class="col-md-12">
                     <label>Total Penjualan</label>
                     <div class="form-group">
-                      <input type="hidden" id="totalPenjualanHidden" name="totalPenjualan">
-                      <input type="text" class="form-control form-control-sm currency text-right" readonly="" id="totalPenjualan" value="0">
+                      <input type="text" class="form-control form-control-sm currency text-right" readonly="" id="totalPenjualan" name="totalPenjualan" value="0">
                     </div>
                   </div>
                   <div class="col-md-12">
