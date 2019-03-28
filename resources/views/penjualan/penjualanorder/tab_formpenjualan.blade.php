@@ -112,7 +112,7 @@
 										<label>Qty</label>
 										<div class="form-group">
 											<div class="input-group">
-												<input type="text" min="0" id="qty" class="form-control form-control-sm currency text-right">
+												<input type="text" min="0" id="qty" class="form-control form-control-sm currency-x text-right">
 											</div>
 										</div>
 									</div>
@@ -120,7 +120,7 @@
 									<div class="col-md-3 col-sm-12">
 										<label>Kuantitas Stok</label>
 										<div class="form-group">
-											<input type="text" readonly="" class="form-control form-control-sm currency text-right" name="stock" id="stock">
+											<input type="text" readonly="" class="form-control form-control-sm currency-x text-right" name="stock" id="stock">
 										</div>
 									</div>
 								</div>
@@ -166,7 +166,7 @@
 													<label>PPn</label>
 													<div class="form-group">
 														<div class="input-group">
-															<input type="text" min="0" class="form-control form-control-sm currency text-right" name="ppn" id="ppn" value="0">
+															<input type="text" min="0" class="form-control form-control-sm currency-x text-right" name="ppn" id="ppn" value="0">
 															<div class="input-group-append">
 																<span class="input-group-text">%</span>
 															</div>

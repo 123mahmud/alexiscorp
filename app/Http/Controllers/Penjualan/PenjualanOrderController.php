@@ -34,13 +34,15 @@ class PenjualanOrderController extends Controller
         'idCustomer' => 'required',
         'orderDate' => 'required',
         'dueDate' => 'required',
-        'ppn' => 'required'
+        'ppn' => 'required',
+        'listItemId' => 'required'
       ],
       [
         'idCustomer.required' => 'Silahkan pilih customer terlebih dahulu !',
         'orderDate.required' => 'Silahkan isi tanggal order terlebih dahulu !',
         'dueDate.required' => 'Silahkan isi tanggal jatuh tempo terlebih dahulu !',
-        'ppn.required' => 'ppn masih kosong !',
+        'ppn.required' => 'PPN masih kosong !',
+        'listItemId.required' => 'Item masih kosong !'
       ]);
       if($validator->fails())
       {
@@ -332,7 +334,85 @@ class PenjualanOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      // validate request
+      $isValidRequest = $this->validate_req($request);
+      if ($isValidRequest != '1') {
+        $errors = $isValidRequest;
+        return response()->json([
+          'status' => 'invalid',
+          'message' => $errors
+        ]);
+      }
+
+      DB::beginTransaction();
+      try {
+        // insert sales
+        $discPercent = ($request->totalDisc * 100) / $request->totalPenjualan;
+        $sales = d_sales::where('s_id', $id)
+          ->firstOrFail();
+        $sales->s_date = Carbon::parse($request->orderDate)->format('Y-m-d');
+        $sales->s_staff = Auth::user()->m_id;
+        $sales->s_gross = $request->totalPenjualan;
+        $sales->s_disc_percent = $discPercent;
+        $sales->s_disc_value = $request->totalDisc;
+        $sales->s_tax = $request->ppn;
+        $sales->s_jatuh_tempo = Carbon::parse($request->dueDate)->format('Y-m-d');
+        $sales->s_net = $request->totalAmount;
+        $sales->s_status = 'PR'; // PR: Progress || FN: Final
+        $sales->s_info = $request->keterangan;
+        $sales->save();
+
+        // delete sales-detail from selected salesId
+        $salesDt = d_sales_dt::where('sd_sales', $id)
+          ->get();
+        foreach ($salesDt as $sales) {
+          $sales->delete();
+        }
+
+        // insert sales-detail
+        $listItems = $request->listItemId;
+        $loopCount = 0;
+        foreach ($listItems as $item) {
+          if ($item != null) {
+            $valDiscP = ($request->listQty[$loopCount] * $request->listPrice[$loopCount]) * $request->listDiscP[$loopCount] / 100;
+            $valDiscH = $request->listQty[$loopCount] * $request->listDiscH[$loopCount];
+            $salesDtId = d_sales_dt::where('sd_sales', $id)
+              ->max('sd_detailid') + 1;
+            $salesDt = new d_sales_dt;
+            $salesDt->sd_sales = $id;
+            $salesDt->sd_detailid = $salesDtId;
+            $salesDt->sd_item = $request->listItemId[$loopCount];
+            $salesDt->sd_qty = $request->listQty[$loopCount];
+            $salesDt->sd_price = $request->listPrice[$loopCount];
+            $salesDt->sd_disc_percent = $request->listDiscP[$loopCount];
+            $salesDt->sd_disc_vpercent = $valDiscP;
+            $salesDt->sd_disc_value = $valDiscH;
+            $salesDt->sd_total = $request->listSubTotal[$loopCount];
+            $salesDt->save();
+          }
+          $loopCount++;
+        }
+
+        // insert sales-payment
+        $salesPay = d_sales_payment::where('sp_sales', $id)
+          ->firstOrFail();
+        $salesPay->sp_paymentid = 1;
+        $salesPay->sp_method = $request->paymentMethod;
+        $salesPay->sp_nominal = $request->totalBayar;
+        // $salesPay->sp_ref =
+        $salesPay->save();
+
+        DB::commit();
+        return response()->json([
+          'status' => 'berhasil'
+        ]);
+      } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json([
+          'status' => 'gagal',
+          'message' => $e->getMessage()
+        ]);
+      }
     }
 
     /**

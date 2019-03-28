@@ -23,21 +23,22 @@
 												<div class="col-lg-12">
 													<label>Nama Customer</label>
 													<div class="form-group">
-														<input type="text" class="form-control form-control-sm" value="xxx" readonly>
+														<input type="hidden" name="idCustomer" id="idCustomer">
+														<input type="text" class="form-control form-control-sm" value="" id="customer" readonly>
 													</div>
 												</div>
 
 												<div class="col-lg-12">
 													<label>Alamat</label>
 													<div class="form-group">
-														<input type="text" class="form-control form-control-sm" value="" readonly>
+														<input type="text" class="form-control form-control-sm" value="" id="address" readonly>
 													</div>
 												</div>
 
 												<div class="col-lg-12">
 													<label>Keterangan Project</label>
 													<div class="form-group">
-														<textarea class="form-control" readonly></textarea>
+														<textarea class="form-control form-control-sm" id="ket" readonly></textarea>
 													</div>
 												</div>
 											</div>
@@ -182,7 +183,8 @@
             </section>
         </div>
         <div class="card-footer text-right">
-    	<button class="btn btn-primary" data-toggle="modal" data-target="#modal_bayar" type="button">Proses</button>
+					<button class="btn btn-primary" data-toggle="modal" data-target="#modal_bayar" type="button">Proses</button>
+    			<button class="btn btn-primary" type="button" id="btn_back">Kembali</button>
         </div>
     </div>
 </div>
