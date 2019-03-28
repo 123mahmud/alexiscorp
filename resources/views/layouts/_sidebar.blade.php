@@ -14,7 +14,7 @@
                     @endforeach
                 </select>
             </li>
-            <li class="dropdown topbar-user"><a href="#"><img alt="" class="img-responsive rounded-circle" src="{{asset('assets/assets/faces/4.jpg')}}" style="width:30px; height:30px;">&nbsp;<span class="hidden-xs">{{ Auth::user()->m_name }}</span></a>
+            <li class="dropdown topbar-user"><a href="#"><img alt="" class="img-responsive rounded-circle" src="{{asset('assets/assets/faces/4.jpg')}}" style="width:30px; height:30px;">&nbsp;<span class="hidden-xs">{{ Auth::user()->m_username }}</span></a>
             </li>
             <li class="dropdown">
                 
