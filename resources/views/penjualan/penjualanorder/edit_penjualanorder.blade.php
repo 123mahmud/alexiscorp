@@ -135,11 +135,17 @@
 
 		$('#modal_bayar').on('hidden.bs.modal', function() {
 			$('#paymentForm')[0].reset();
+			$('#btn_simpan').attr('disabled', true);
 		});
 
 		$('#btn_simpan').on('click', function() {
-			SubmitForm(event);
+			salesId = $('#salesId').val();
+			SubmitForm(event, salesId);
 		});
+
+		$('#btn_back').on('click', function() {
+			window.location.href = baseUrl + '/penjualan/penjualanorder/index';
+		})
 	});
 
 	// remove item from item-list
@@ -156,6 +162,17 @@
 			url: baseUrl + "/penjualan/penjualanorder/getDetailPenjualan/" + id,
 			type: 'get',
 			success : function (response){
+				console.log(response);
+				$('#idCustomer').val(response.get_customer.c_id);
+				console.log($('#idCustomer').val());
+				$('#customer').val(response.get_customer.c_name);
+				$('#address').val(response.get_customer.c_address);
+				$('#ket').val(response.s_info);
+				orderDate = new Date(response.s_date);
+				$('#orderDate').datepicker('setDate', orderDate);
+				dueDate = new Date(response.s_jatuh_tempo);
+				$('#dueDate').datepicker('setDate', dueDate);
+				$('#ppn').val(response.s_tax);
 				$.each(response.get_sales_dt, function(key, val) {
 					let discH = val.sd_disc_value / val.sd_qty;
 					rowId = tb_penjualan.rows().count();
@@ -284,6 +301,11 @@
 		if (discP > 100) {
 			discP = 100;
 			tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val(100);
+		}
+		// validate if the discP is less than 0 % or is-NaN
+		if (discP < 0 || isNaN(discP)) {
+			discP = 0;
+			tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val(0);
 		}
 		// validate if the discH is more than price
 		if (discH > price) {
@@ -446,11 +468,17 @@
 		totalPenjualan = $('#totalPenjualan').val();
 		totalDisc = $('#totalDisc').val();
 		ppn = $('#ppn').val();
+		// validate if ppn is more than 100 % or is less than 0 or is null
+		if (ppn > 100) {
+			ppn = 100;
+			$('#ppn').val(100);
+		} else if (ppn < 0 || isNaN(ppn) || ppn === '') {
+			ppn = 0;
+			$('#ppn').val(0);
+		}
 
 		totalNetto = sumTotalNetto();
 		ppnVal = totalNetto * ppn / 100;
-		// console.log('netto: ' + totalNetto);
-		// console.log('ppn: ' + ppnVal);
 		totalAmount = totalNetto + ppnVal;
 		return totalAmount;
 	}
@@ -458,28 +486,16 @@
 	// return total kembalian (change for customer)
 	function sumTotalKembalian()
 	{
-		// normalizingTotalAmount();
 		totalAmount = $('#totalAmount').val();
 		totalBayar = $('#totalBayar').val();
 
 		kembalian = totalBayar - totalAmount;
-		if (kembalian >= 0) {
+		if (totalBayar > 0 && kembalian >= 0) {
 			$('#btn_simpan').attr('disabled', false);
 		} else {
 			$('#btn_simpan').attr('disabled', true);
 		}
 		return kembalian;
-	}
-
-	// reset all input-field
-	function resetAllInput()
-	{
-		$('.totalAmount').val('0,00');
-		$('#newCustomerForm')[0].reset();
-		$('#customerForm')[0].reset();
-		$('#salesForm')[0].reset();
-		$('#paymentForm')[0].reset();
-		tb_penjualan.clear().draw();
 	}
 
 	// update-data -> submit form to update data in db
@@ -501,13 +517,13 @@
 		$.ajax({
 			data : data_final,
 			type : "post",
-			url : baseUrl + '/penjualan/penjualanorder/update' + id,
+			url : baseUrl + '/penjualan/penjualanorder/update/' + id,
 			dataType : 'json',
 			success : function (response){
 				if(response.status == 'berhasil'){
 					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
-					resetAllInput();
 					$('#modal_bayar').modal('hide');
+					// resetAllInput();
 				} else if (response.status == 'invalid') {
 					messageFailed('Perhatian', response.message);
 				} else if (response.status == 'gagal') {

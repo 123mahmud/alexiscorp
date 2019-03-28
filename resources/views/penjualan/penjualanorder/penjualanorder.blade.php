@@ -184,6 +184,7 @@
 
 		$('#modal_bayar').on('hidden.bs.modal', function() {
 			$('#paymentForm')[0].reset();
+			$('#btn_simpan').attr('disabled', true);
 		});
 
 		$('#btn_simpan').on('click', function() {
@@ -275,6 +276,11 @@
 		if (discP > 100) {
 			discP = 100;
 			tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val(100);
+		}
+		// validate if the discP is less than 0 % or is-NaN
+		if (discP < 0 || isNaN(discP)) {
+			discP = 0;
+			tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val(0);
 		}
 		// validate if the discH is more than price
 		if (discH > price) {
@@ -437,11 +443,17 @@
 		totalPenjualan = $('#totalPenjualan').val();
 		totalDisc = $('#totalDisc').val();
 		ppn = $('#ppn').val();
+		// validate if ppn is more than 100 % or is less than 0 or is null
+		if (ppn > 100) {
+			ppn = 100;
+			$('#ppn').val(100);
+		} else if (ppn < 0 || isNaN(ppn) || ppn === '') {
+			ppn = 0;
+			$('#ppn').val(0);
+		}
 
 		totalNetto = sumTotalNetto();
 		ppnVal = totalNetto * ppn / 100;
-		// console.log('netto: ' + totalNetto);
-		// console.log('ppn: ' + ppnVal);
 		totalAmount = totalNetto + ppnVal;
 		return totalAmount;
 	}
@@ -449,12 +461,11 @@
 	// return total kembalian (change for customer)
 	function sumTotalKembalian()
 	{
-		// normalizingTotalAmount();
 		totalAmount = $('#totalAmount').val();
 		totalBayar = $('#totalBayar').val();
 
 		kembalian = totalBayar - totalAmount;
-		if (kembalian >= 0) {
+		if (totalBayar > 0 && kembalian >= 0) {
 			$('#btn_simpan').attr('disabled', false);
 		} else {
 			$('#btn_simpan').attr('disabled', true);
@@ -591,6 +602,7 @@
 				(response.get_customer != null) ? $('#dt_customer').val(response.get_customer.c_name) : $('#dt_customer').val('(kosong)');
 				$('#dt_subtotal').val(response.s_gross);
 				$('#dt_totaldisc').val(response.s_disc_value);
+				$('#dt_ppn').val(response.s_tax);
 				$('#dt_grandtotal').val(response.s_net);
 				(response.get_sales_payment != null) ? $('#dt_totalpayment').val(response.get_sales_payment.sp_nominal) : $('#dt_totalpayment').val('(kosong)');
 
