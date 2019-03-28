@@ -4,6 +4,7 @@
 
 @include('penjualan.penjualantanpaorder.modal_cust')
 @include('penjualan.penjualantanpaorder.modal_bayar')
+@include('penjualan.penjualantanpaorder.modal_detailpenjualan')
 
 <article class="content">
 
@@ -182,6 +183,10 @@
 			$('#paymentForm')[0].reset();
 			$('#btn_simpan').attr('disabled', true);
 		});
+		$('#modal_bayar').on('shown.bs.modal', function() {
+			totalAmount = sumTotalAmount();
+			$('.totalAmount').val(totalAmount);
+		});
 
 		$('#btn_simpan').on('click', function() {
 			SubmitForm(event);
@@ -266,8 +271,8 @@
 	function countDiscount(price, rowId)
 	{
 		price = parseInt(price);
-		discH = parseInt(b_penjualan.cell(rowId, 5).nodes().to$().find('input').val());
-		discP = parseInt(b_penjualan.cell(rowId, 4).nodes().to$().find('input').val());
+		discH = parseInt(tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val());
+		discP = parseInt(tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val());
 		// validate if the discP is more than 100 %
 		if (discP > 100) {
 			discP = 100;
@@ -283,7 +288,7 @@
 			discH = price;
 			tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val(price);
 		}
-		qty = parseInt(b_penjualan.cell(rowId, 1).nodes().to$().find('input').val());
+		qty = parseInt(tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val());
 		totalPrice = qty * price;
 
 		totalDiscP = (totalPrice * discP) / 100;

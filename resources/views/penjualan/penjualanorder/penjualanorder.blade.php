@@ -186,6 +186,10 @@
 			$('#paymentForm')[0].reset();
 			$('#btn_simpan').attr('disabled', true);
 		});
+		$('#modal_bayar').on('shown.bs.modal', function() {
+			totalAmount = sumTotalAmount();
+			$('.totalAmount').val(totalAmount);
+		});
 
 		$('#btn_simpan').on('click', function() {
 			SubmitForm(event);

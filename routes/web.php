@@ -179,7 +179,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/purchasing/orderpembelian/get-data-detail/{id}', 'Purchasing\purchaseOrderController@getDataDetail');
 	Route::get('/purchasing/orderpembelian/get-edit-order/{id}', 'Purchasing\purchaseOrderController@getEditOrder');
 	Route::post('/purchasing/orderpembelian/delete-data-order', 'Purchasing\purchaseOrderController@deleteDataOrder');
-	/*Purchasing order*/	
+	/*Purchasing order*/
 	Route::get('/purcahse-order/order-index', 'Purchasing\purchaseOrderController@orderIndex')->middleware('auth');
 	Route::get('/purcahse-order/data-order', 'Purchasing\purchaseOrderController@dataOrder')->middleware('auth');
 	Route::get('/purcahse-order/form-order', 'Purchasing\purchaseOrderController@formOrder')->middleware('auth');
@@ -227,7 +227,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/stok/penggunaanbahanbaku/create', 'StokController@tambah_penggunaanbahanbaku')->name('tambah_penggunaanbahanbaku');
 
 	Route::get('/stok/tipemenghitunghpp/index', 'StokController@tipemenghitunghpp')->name('tipemenghitunghpp');
-	
+
 	Route::get('/stok/stockgudang/index', 'StokController@stockgudang')->name('stockgudang.index');
 
 
@@ -250,7 +250,6 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	// Penjualan
   Route::get('/penjualan/penjualanorder/index', 'Penjualan\PenjualanOrderController@index')->name('penjualanorder');
   Route::get('/penjualan/penjualanorder/getListPenjualan', 'Penjualan\PenjualanOrderController@getListPenjualan')->name('penjualanorder.getlistpenjualan');
-  Route::get('/penjualan/penjualanorder/getListPembayaran', 'Penjualan\PenjualanOrderController@getListPembayaran')->name('penjualanorder.getlistpembayaran');
   Route::get('/penjualan/penjualanorder/getCustomers', 'Penjualan\PenjualanOrderController@getCustomers')->name('penjualanorder.getcustomers');
   Route::get('/penjualan/penjualanorder/getItems', 'Penjualan\PenjualanOrderController@getItems')->name('penjualanorder.getitems');
   Route::get('/penjualan/penjualanorder/getStock', 'Penjualan\PenjualanOrderController@getStock')->name('penjualanorder.getstock');
@@ -268,6 +267,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
   Route::get('/penjualan/penjualantanpaorder/getPrice', 'Penjualan\PenjualanTOController@getPrice')->name('penjualantanpaorder.getprice');
 	Route::get('/penjualan/penjualantanpaorder/create', 'Penjualan\PenjualanTOController@create')->name('penjualantanpaorder.create');
 	Route::post('/penjualan/penjualantanpaorder/store', 'Penjualan\PenjualanTOController@store')->name('penjualantanpaorder.store');
+	Route::get('/penjualan/penjualantanpaorder/getDetailPenjualan/{id}', 'Penjualan\PenjualanTOController@getDetailPenjualan')->name('penjualantanpaorder.getdetailpenjualan');
 
 	Route::get('/penjualan/diskonpenjualan/index', 'PenjualanController@diskonpenjualan')->name('diskonpenjualan');
 	Route::get('/penjualan/diskonpenjualan/create', 'PenjualanController@tambah_diskonpenjualan')->name('tambah_diskonpenjualan');

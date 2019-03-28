@@ -150,14 +150,14 @@
                   <div class="col-md-12">
                     <label>Total Diskon</label>
                     <div class="form-group">
-                      <input type="text" class="form-control form-control-sm text-right" readonly="" name="totalDisc" id="totalDisc" value="0">
+                      <input type="text" class="form-control form-control-sm currency text-right" readonly="" name="totalDisc" id="totalDisc" value="0">
                     </div>
                   </div>
                   <div class="col-md-12">
                     <label>PPn</label>
                     <div class="form-group">
                       <div class="input-group">
-                        <input type="number" min="0" class="form-control form-control-sm text-right" name="ppn" id="ppn" value="0">
+                        <input type="text" min="0" class="form-control form-control-sm currency-x text-right" name="ppn" id="ppn" value="0">
                         <div class="input-group-append">
                           <span class="input-group-text">%</span>
                         </div>
@@ -167,8 +167,7 @@
                   <div class="col-md-12">
                     <label>Total Amount</label>
                     <div class="form-group">
-                      <input type="hidden" id="totalAmountHidden" name="totalAmount">
-                      <input type="text" class="form-control form-control-sm text-right currency text-right totalAmount" readonly="" value="0">
+                      <input type="text" class="form-control form-control-sm text-right currency text-right totalAmount" readonly="" id="totalAmount" name="totalAmount" value="0">
                     </div>
                   </div>
                 </div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use DB;
 use Auth;
+use Session;
 use Validator;
 use App\d_stock;
 use App\d_sales;
@@ -149,6 +150,7 @@ class PenjualanOrderController extends Controller
       $from = Carbon::parse($request->date_from)->format('Y-m-d');
       $to = Carbon::parse($request->date_to)->format('Y-m-d');
       $datas = d_sales::where('s_channel', 'OD')
+        ->where('s_comp', Session::get('user_comp'))
         ->whereBetween('s_date', [$from, $to])
         ->with('getCustomer')
         ->orderBy('s_note', 'desc')
@@ -160,10 +162,16 @@ class PenjualanOrderController extends Controller
         return $datas->getCustomer['c_name'];
       })
       ->addColumn('action', function($datas) {
-        return '<div class="btn-group btn-group-sm">
-        <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
-        <button class="btn btn-warning" onclick="EditPenjualan('.$datas->s_id.')" rel="tooltip" title="Edit"><i class="fa fa-pencil"></i></button>
-        </div>';
+        if ($datas->s_status == 'PR') {
+          return '<div class="btn-group btn-group-sm">
+          <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
+          <button class="btn btn-warning" onclick="EditPenjualan('.$datas->s_id.')" rel="tooltip" title="Edit"><i class="fa fa-pencil"></i></button>
+          </div>';
+        } elseif ($datas->s_status == 'FN') {
+          return '<div class="btn-group btn-group-sm">
+          <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
+          </div>';
+        }
       })
       ->rawColumns(['customer', 'action'])
       ->make(true);
@@ -237,6 +245,7 @@ class PenjualanOrderController extends Controller
         $sales->s_channel = 'OD'; // OD: Order || TO: Tanpa Order
         $sales->s_date = Carbon::parse($request->orderDate)->format('Y-m-d');
         $sales->s_note = $salesNota;
+        $sales->s_comp = Session::get('user_comp');
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_customer = $request->idCustomer;
         $sales->s_gross = $request->totalPenjualan;
