@@ -9,6 +9,7 @@ use DB;
 use Auth;
 use Session;
 use Validator;
+use App\lib\mutasi;
 use App\d_stock;
 use App\d_sales;
 use App\d_sales_dt;
@@ -114,8 +115,8 @@ class PenjualanTOController extends Controller
     {
       $userComp = Session::get('user_comp');
       $gudangCabang = d_gudangcabang::where('gc_comp', $userComp)
-      ->where('gc_gudang', 'GUDANG PENJUALAN')
-      ->firstOrFail();
+        ->where('gc_gudang', 'GUDANG PENJUALAN')
+        ->firstOrFail();
       $gudangCabangId = $gudangCabang->gc_id;
 
       $stock = d_stock::where('s_item', $request->itemId)
@@ -285,7 +286,12 @@ class PenjualanTOController extends Controller
             $salesDt->save();
 
             // update stock (using mutation)
-            mutasi::mutasiStok($request->listItemId[$loopCount],
+            $userComp = Session::get('user_comp');
+            $gudangCabang = d_gudangcabang::where('gc_comp', $userComp)
+              ->where('gc_gudang', 'GUDANG PENJUALAN')
+              ->firstOrFail();
+            $gudangCabangId = $gudangCabang->gc_id;
+            $mutasi = mutasi::mutasiStok($request->listItemId[$loopCount],
             $request->listQty[$loopCount],
             $gudangCabangId,
             $gudangCabangId,
@@ -293,9 +299,13 @@ class PenjualanTOController extends Controller
             $sales->s_note,
             'MENGURANGI',
             Carbon::now(),
-            1){
-              dd('error om')
-            };
+            1);
+            if ($mutasi['true'] == false) {
+              return response()->json([
+                'status' => 'gagal',
+                'message' => 'Mutasi gagal, Hubungi pengembang !'
+              ]);
+            }
           }
           $loopCount++;
         }

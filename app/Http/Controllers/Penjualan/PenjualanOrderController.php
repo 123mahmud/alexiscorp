@@ -422,7 +422,7 @@ class PenjualanOrderController extends Controller
               ->firstOrFail();
             $gudangCabangId = $gudangCabang->gc_id;
             if ($request->status_edit == 'FN') {
-              mutasi::mutasiStok($request->listItemId[$loopCount],
+              $mutasi = mutasi::mutasiStok($request->listItemId[$loopCount],
               $request->listQty[$loopCount],
               $gudangCabangId,
               $gudangCabangId,
@@ -430,9 +430,15 @@ class PenjualanOrderController extends Controller
               $sales->s_note,
               'MENGURANGI',
               Carbon::now(),
-              1){
-                dd('error om')
-              };
+              1);
+              if ($mutasi['true'] == false) {
+                return response()->json([
+                  'status' => 'gagal',
+                  'message' => 'Mutasi gagal, Hubungi pengembang !'
+                ]);
+              }
+              // DB::rollback();
+              // dd($mutasi);
             }
           }
           $loopCount++;

@@ -614,10 +614,10 @@
 					rowId = tb_detailpenjualan.rows().count();
 					tb_detailpenjualan.row.add([
 						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.i_name +'">',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_qty +'" readonly>',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm digits text-right" value="'+ val.sd_qty +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_price +'" readonly>',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_disc_percent +'" readonly>',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm digits text-right" value="'+ val.sd_disc_percent +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ discH +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_total +'" readonly>'
 					]).node().id = rowId;
@@ -627,6 +627,19 @@
 							radixPoint: ".",
 							groupSeparator: ".",
 							digits: 2,
+							autoGroup: true,
+							prefix: '', //Space after $, this will not truncate the first character.
+							rightAlign: false,
+							autoUnmask: true,
+							// unmaskAsNumber: true,
+						});
+					});
+					// add manually inputmask to each .digits
+					$.each(tb_detailpenjualan.row(rowId).nodes().to$().find('.digits'), function() {
+						$(this).inputmask("currency", {
+							radixPoint: ".",
+							groupSeparator: ".",
+							digits: 0,
 							autoGroup: true,
 							prefix: '', //Space after $, this will not truncate the first character.
 							rightAlign: false,

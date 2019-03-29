@@ -72,42 +72,50 @@
                 <div class="row">
                   <div class="col-sm-6 col-md-4 col-lg-4">
                     <label>Sub-Total</label>
-                    <div class="form-group">
-                      <div class="input-group">
-                        <input type="text" class="form-control form-control-sm currency text-right" id="dt_subtotal" readonly>
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Rp</span>
                       </div>
+                      <input type="text" class="form-control form-control-sm currency text-right" id="dt_subtotal" readonly>
                     </div>
                   </div>
 
                   <div class="col-sm-6 col-md-4 col-lg-4">
                     <label>Total Diskon</label>
-                    <div class="form-group">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Rp</span>
+                      </div>
                       <input type="text" class="form-control form-control-sm currency text-right" id="dt_totaldisc" readonly>
                     </div>
                   </div>
 
                   <div class="col-sm-6 col-md-4 col-lg-4">
                     <label>PPN</label>
-                    <div class="form-group">
-                      <div class="input-group">
-                        <input type="text" class="form-control form-control-sm currency text-right" id="dt_ppn" readonly>
-                        <div class="input-group-append">
-                          <span class="input-group-text">%</span>
-                        </div>
+                    <div class="input-group">
+                      <input type="text" class="form-control form-control-sm currency text-right" id="dt_ppn" readonly>
+                      <div class="input-group-append">
+                        <span class="input-group-text">%</span>
                       </div>
                     </div>
                   </div>
 
                   <div class="col-sm-6 col-md-4 col-lg-4">
                     <label>Grand Total</label>
-                    <div class="form-group">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Rp</span>
+                      </div>
                       <input type="text" class="form-control form-control-sm currency text-right" id="dt_grandtotal" readonly>
                     </div>
                   </div>
 
                   <div class="col-sm-6 col-md-4 col-lg-4">
                     <label>Total Bayar</label>
-                    <div class="form-group">
+                    <div class="input-group input-group-sm">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Rp</span>
+                      </div>
                       <input type="text" class="form-control form-control-sm currency text-right" id="dt_totalpayment" readonly>
                     </div>
                   </div>

@@ -585,7 +585,11 @@
 			dataType : 'json',
 			success : function (response){
 				if(response.status == 'berhasil'){
-					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
+					messageSuccess('Berhasil', 'Data berhasil diperbarui !');
+					console.log($('#status_edit').val());
+					if ($('#status_edit').val() == 'FN') {
+						$('#btn_back').trigger('click');
+					}
 					$('#modal_bayar').modal('hide');
 					// resetAllInput();
 				} else if (response.status == 'invalid') {
