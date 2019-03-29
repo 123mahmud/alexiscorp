@@ -5,21 +5,22 @@ namespace App\Http\Controllers\Penjualan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use DB;
-use Auth;
-use Session;
-use Validator;
-use App\lib\mutasi;
-use App\d_stock;
+use App\d_gudangcabang;
+use App\d_mem;
 use App\d_sales;
 use App\d_sales_dt;
 use App\d_sales_payment;
-use App\d_gudangcabang;
+use App\d_stock;
+use App\m_customer;
 use App\m_item;
 use App\m_item_price;
-use App\m_customer;
+use App\lib\mutasi;
+use Auth;
 use carbon\Carbon;
 use CodeGenerator;
+use DB;
+use Session;
+use Validator;
 use Yajra\DataTables\DataTables;
 
 class PenjualanTOController extends Controller
@@ -181,6 +182,95 @@ class PenjualanTOController extends Controller
     }
 
     /**
+    * Return DataTable list for view.
+    *
+    * @return Yajra/DataTables
+    */
+    public function getLaporanPenjualan(Request $request)
+    {
+      $from = Carbon::parse($request->date_from)->format('Y-m-d');
+      $to = Carbon::parse($request->date_to)->format('Y-m-d');
+
+      if ($request->staff == 'x') {
+        if ($request->status == 'AL') {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+            $query
+            ->where('s_channel', 'TO')
+            ->whereBetween('s_date', [$from, $to])
+            ->orderBy('s_note', 'desc');
+          })
+          ->with('getItem.getSatuan1')
+          ->get();
+        } else {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+            $query
+            ->where('s_channel', 'TO')
+            ->whereBetween('s_date', [$from, $to])
+            ->where('s_status', $request->status)
+            ->orderBy('s_note', 'desc');
+          })
+          ->with('getItem.getSatuan1')
+          ->get();
+        }
+      } else {
+        if ($request->status == 'AL') {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+            $query
+            ->where('s_channel', 'TO')
+            ->whereBetween('s_date', [$from, $to])
+            ->where('s_staff', $request->staff)
+            ->orderBy('s_note', 'desc');
+          })
+          ->with('getItem.getSatuan1')
+          ->get();
+        } else {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+            $query
+            ->where('s_channel', 'TO')
+            ->whereBetween('s_date', [$from, $to])
+            ->where('s_staff', $request->staff)
+            ->where('s_status', $request->status)
+            ->orderBy('s_note', 'desc');
+          })
+          ->with('getItem.getSatuan1')
+          ->get();
+        }
+      }
+
+      return Datatables::of($datas)
+      ->addIndexColumn()
+      ->addColumn('item', function($datas) {
+        return $datas->getItem['i_name'];
+      })
+      ->addColumn('nota', function($datas) {
+        return $datas->getSales['s_note'];
+      })
+      ->addColumn('date', function($datas) {
+        return $datas->getSales['s_date'];
+      })
+      ->addColumn('satuan', function($datas) {
+        return $datas->getItem['getSatuan1']['s_name'];
+      })
+      ->addColumn('qty', function($datas) {
+        return '<div class="text-right">'. $datas->sd_qty .'</div>';
+      })
+      ->addColumn('price', function($datas) {
+        return '<div class="text-right">'. $datas->sd_price .'</div>';
+      })
+      ->addColumn('discount', function($datas) {
+        return '<div class="text-right">'. $datas->sd_disc_percent .'</div>';
+      })
+      ->addColumn('discount_value', function($datas) {
+        return '<div class="text-right">'. $datas->sd_disc_value .'</div>';
+      })
+      ->addColumn('sub_total', function($datas) {
+        return '<div class="text-right">'. $datas->sd_total .'</div>';
+      })
+      ->rawColumns(['item', 'satuan', 'qty', 'price', 'discount', 'discount_value', 'sub_total'])
+      ->make(true);
+    }
+
+    /**
     * return detail of a 'penjualan'.
     *
     * @return \Illuminate\Http\Response
@@ -205,6 +295,8 @@ class PenjualanTOController extends Controller
       $data['group_harga'] = DB::table('m_price_group')
         ->get();
       $data['tipe_pembayaran'] = DB::table('m_paymentmethod')
+        ->get();
+      $data['staff'] = d_mem::whereHas('getPegawaiMan')
         ->get();
       return view('penjualan/penjualantanpaorder/penjualantanpaorder', compact('data'));
     }

@@ -22,4 +22,8 @@ class d_sales_dt extends Model
   {
     return $this->belongsTo('App\m_item', 'sd_item', 'i_id');
   }
+  public function getSales()
+  {
+    return $this->belongsTo('App\d_sales', 'sd_sales', 's_id');
+  }
 }
