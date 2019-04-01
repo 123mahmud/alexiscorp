@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Penjualan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Exports\LaporanPenjualanODExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use App\d_gudangcabang;
 use App\d_mem;
@@ -695,6 +697,17 @@ class PenjualanOrderController extends Controller
       }
 
       return view('penjualan/penjualanorder/laporan', compact('data'));
+    
+    }
+
+    /**
+    * Export 'laporan Penjualan'.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    */
+    public function exportToExcel(Request $request)
+    {
+      return Excel::download(new LaporanPenjualanODExport, 'LaporanPenjualanOrder.xlsx');
     }
 
 }
