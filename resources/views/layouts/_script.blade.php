@@ -62,16 +62,6 @@
       // unmaskAsNumber: true,
     });
 
-    $('.currenc').inputmask("currency", {
-         radixPoint: ",",
-         groupSeparator: ".",
-         digits: 0,
-         autoGroup: true,
-         prefix: '', //Space after $, this will not truncate the first character.
-         rightAlign: false,
-         oncleared: function () { self.Value(''); }
-      });
-
     $(".npwp").inputmask("99-999-999-9-999-999");
 
     $('.hp').inputmask("9999 9999 9999", {

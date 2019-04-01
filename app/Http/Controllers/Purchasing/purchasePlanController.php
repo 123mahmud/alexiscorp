@@ -95,7 +95,7 @@ class purchasePlanController extends Controller
                             'stok' => (int)$stok,
                             'sat' => [$val->i_sat1, $val->i_sat2, $val->i_sat3],
                             'satTxt' => [$txtSat1->s_name, $txtSat2->s_name, $txtSat3->s_name],
-                            'prevCost' =>number_format((int)$hargaLalu,2,",",".")
+                            'prevCost' =>number_format((int)$hargaLalu,2,",","."),
                           ];
         }
       }
