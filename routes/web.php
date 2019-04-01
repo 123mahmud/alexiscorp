@@ -222,10 +222,6 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/stok/penggunaanbahanbaku/index', 'StokController@penggunaanbahanbaku')->name('penggunaanbahanbaku');
 	Route::get('/stok/penggunaanbahanbaku/create', 'StokController@tambah_penggunaanbahanbaku')->name('tambah_penggunaanbahanbaku');
 	Route::get('/stok/tipemenghitunghpp/index', 'StokController@tipemenghitunghpp')->name('tipemenghitunghpp');
-<<<<<<< HEAD
-
-=======
->>>>>>> 2fee630d1cb356a1ef4c174f7c67a9c18dc05079
 	Route::get('/stok/stockgudang/index', 'StokController@stockgudang')->name('stockgudang.index');
 	//opname
 	Route::get('/stok/opnamebahanbaku/index', 'Stok\stockOpnameController@index')->name('opnamebahanbaku');
@@ -241,8 +237,8 @@ Route::group(['middleware' => ['auth', 'web']], function() {
     Route::get('/inventory/namaitem/simpanopname/pengajuan', 'Stok\stockOpnameController@simpanPengajuan');
     Route::get('/inventory/namaitem/confirm/{tgl1}/{tgl2}/{gudang}', 'Stok\stockOpnameController@tableConfirm');
     Route::get('/inventory/namaitem/detail/confirm', 'Stok\stockOpnameController@getConfirm');
-    Route::get('/inventory/simpanopname/update/status/{id}', 'Stok\stockOpnameController@updateStatusConfirm');  
-    Route::get('/inventory/namaitem/ubahstok/{id}', 'Stok\stockOpnameController@updateStock'); 
+    Route::get('/inventory/simpanopname/update/status/{id}', 'Stok\stockOpnameController@updateStatusConfirm');
+    Route::get('/inventory/namaitem/ubahstok/{id}', 'Stok\stockOpnameController@updateStock');
 
 	// Produksi
 	Route::get('/produksi/pencatatanhasil/index', 'ProduksiController@pencatatanhasil')->name('pencatatanhasil');
