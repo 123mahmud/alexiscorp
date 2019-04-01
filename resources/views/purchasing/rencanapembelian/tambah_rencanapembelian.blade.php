@@ -84,7 +84,7 @@
                                                     <label>Jumlah</label>
                                                 </div>
                                                 <div class="col-12" style="padding: 3px">
-                                                    <input type="text" class="form-control form-control-sm currenc text-right" id="fQty" />
+                                                    <input type="text" class="form-control form-control-sm currency-x text-right" id="fQty" />
                                                 </div>
                                             </div>
                                             <div class="col-md-1" style="padding: 0px">
@@ -267,7 +267,7 @@
                     +'<td width="5%">'
                        +'<button type="button" class="btn btn-danger btn_remove" id="'+i_id+'"><i class="fa fa-trash-o"></i></button>'
                     +'</td>'                            
-                +'</tr>'
+                '</tr>'+
             );
 
             $('.currenc').inputmask("currency", {
