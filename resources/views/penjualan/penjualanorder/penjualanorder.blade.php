@@ -682,6 +682,12 @@
 		});
 
 		TableLaporanPenjualan();
+		$('#date_from_lpj').on('change', function() {
+			TableLaporanPenjualan();
+		});
+		$('#date_to_lpj').on('change', function() {
+			TableLaporanPenjualan();
+		});
 		$('#btn_search_date_lpj').on('click', function() {
 			TableLaporanPenjualan();
 		});
@@ -696,6 +702,9 @@
 	{
 		$('#table_laporanpenjualan').dataTable().fnDestroy();
 		tb_laporanpenjualan = $('#table_laporanpenjualan').DataTable({
+			buttons: [
+				'print'
+			],
 			responsive: true,
 			serverSide: true,
 			ajax: {

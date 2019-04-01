@@ -681,6 +681,12 @@
 		});
 
 		TableLaporanPenjualan();
+		$('#date_from_lpj').on('change', function() {
+			TableLaporanPenjualan();
+		});
+		$('#date_to_lpj').on('change', function() {
+			TableLaporanPenjualan();
+		});
 		$('#btn_search_date_lpj').on('click', function() {
 			TableLaporanPenjualan();
 		});
