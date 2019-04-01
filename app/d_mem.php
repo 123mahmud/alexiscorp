@@ -24,5 +24,9 @@ class d_mem extends Model
     public $incrementing = false;
     public $remember_token = false;
     public $timestamps = false;
-}
 
+    public function getPegawaiMan()
+    {
+      return $this->belongsTo('App\m_pegawai_man', 'm_pegawai_id', 'c_id');
+    }
+}

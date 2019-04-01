@@ -26,6 +26,9 @@
             <li class="nav-item">
                 <a href="" class="nav-link" data-target="#list_pos" aria-controls="list_pos" data-toggle="tab" role="tab">List Penjualan</a>
             </li>
+            <li class="nav-item">
+                <a href="" class="nav-link" data-target="#laporan_penjualan" aria-controls="laporan_penjualan" data-toggle="tab" role="tab">Laporan Penjualan</a>
+            </li>
         </ul>
 
 		<div class="row">
@@ -36,6 +39,7 @@
 
 					@include('penjualan.penjualanorder.tab_formpenjualan')
 					@include('penjualan.penjualanorder.tab_list')
+					@include('penjualan.penjualanorder.tab_laporanpenjualan')
 
 				</div>
 
@@ -186,6 +190,10 @@
 			$('#paymentForm')[0].reset();
 			$('#btn_simpan').attr('disabled', true);
 		});
+		$('#modal_bayar').on('shown.bs.modal', function() {
+			totalAmount = sumTotalAmount();
+			$('.totalAmount').val(totalAmount);
+		});
 
 		$('#btn_simpan').on('click', function() {
 			SubmitForm(event);
@@ -214,9 +222,7 @@
 	{
 		$.ajax({
 			data : {
-				"itemId": $('#itemId').val(),
-				"comp": "{{ Auth::user()->m_id }}",
-				"positionId": "{{ Session::get('user_comp') }}"
+				"itemId": $('#itemId').val()
 			},
 			type : "get",
 			url : "{{ route('penjualanorder.getstock') }}",
@@ -569,7 +575,8 @@
 			columns: [
 				{data: 'DT_RowIndex'},
 				{data: 's_note'},
-				{data: 'customer', width: "70%"},
+				{data: 'staff', width: "30%"},
+				{data: 'customer', width: "40%"},
 				{data: 'action'}
 			],
 			pageLength: 10,
@@ -611,10 +618,10 @@
 					rowId = tb_detailpenjualan.rows().count();
 					tb_detailpenjualan.row.add([
 						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.i_name +'">',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_qty +'">',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm digits text-right" value="'+ val.sd_qty +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_price +'" readonly>',
-						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_disc_percent +'" readonly>',
+						'<input type="text" class="form-control form-control-plaintext form-control-sm digits text-right" value="'+ val.sd_disc_percent +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ discH +'" readonly>',
 						'<input type="text" class="form-control form-control-plaintext form-control-sm currency text-right" value="'+ val.sd_total +'" readonly>'
 					]).node().id = rowId;
@@ -624,6 +631,19 @@
 							radixPoint: ".",
 							groupSeparator: ".",
 							digits: 2,
+							autoGroup: true,
+							prefix: '', //Space after $, this will not truncate the first character.
+							rightAlign: false,
+							autoUnmask: true,
+							// unmaskAsNumber: true,
+						});
+					});
+					// add manually inputmask to each .digits
+					$.each(tb_detailpenjualan.row(rowId).nodes().to$().find('.digits'), function() {
+						$(this).inputmask("currency", {
+							radixPoint: ".",
+							groupSeparator: ".",
+							digits: 0,
 							autoGroup: true,
 							prefix: '', //Space after $, this will not truncate the first character.
 							rightAlign: false,
@@ -644,6 +664,74 @@
 	{
 		console.log('EditPenjualan: '+ id);
 		window.location.href = baseUrl + '/penjualan/penjualanorder/edit/' + id;
+	}
+
+</script>
+
+<!-- script for tab-laporan-penjualan -->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#date_from_lpj').datepicker('setDate', first_day);
+		$('#date_to_lpj').datepicker('setDate', last_day);
+
+		$('#staff_lpj').on('change', function() {
+			TableLaporanPenjualan();
+		});
+		$('#status_lpj').on('change', function() {
+			TableLaporanPenjualan();
+		});
+
+		TableLaporanPenjualan();
+		$('#date_from_lpj').on('change', function() {
+			TableLaporanPenjualan();
+		});
+		$('#date_to_lpj').on('change', function() {
+			TableLaporanPenjualan();
+		});
+		$('#btn_search_date_lpj').on('click', function() {
+			TableLaporanPenjualan();
+		});
+		$('#btn_refresh_date_lpj').on('click', function() {
+			TableLaporanPenjualan();
+		});
+	});
+
+	// data-table -> function to retrieve DataTable server side
+	var tb_laporanpenjualan;
+	function TableLaporanPenjualan()
+	{
+		$('#table_laporanpenjualan').dataTable().fnDestroy();
+		tb_laporanpenjualan = $('#table_laporanpenjualan').DataTable({
+			buttons: [
+				'print'
+			],
+			responsive: true,
+			serverSide: true,
+			ajax: {
+				url: "{{ route('penjualanorder.getlaporanpenjualan') }}",
+				type: "get",
+				data: {
+					"_token": "{{ csrf_token() }}",
+					"date_from": $('#date_from_lpj').val(),
+					"date_to": $('#date_to_lpj').val(),
+					"staff": $('#staff_lpj').val(),
+					"status": $('#status_lpj').val()
+				}
+			},
+			columns: [
+				{data: 'item'},
+				{data: 'nota'},
+				{data: 'date'},
+				{data: 'satuan'},
+				{data: 'qty'},
+				{data: 'price'},
+				{data: 'discount'},
+				{data: 'discount_value'},
+				{data: 'sub_total'}
+			],
+			pageLength: 10,
+			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
+		});
 	}
 
 </script>

@@ -22,9 +22,12 @@
 											<div class="row">
 												<div class="col-lg-12">
 													<label>Nama Customer</label>
-													<div class="form-group">
+													<div class="input-group">
 														<input type="hidden" name="idCustomer" id="idCustomer">
-														<input type="text" class="form-control form-control-sm" value="" id="customer" readonly>
+														<input type="text" class="form-control form-control-sm" name="customer" id="customer">
+														<div class="input-group-append">
+															<button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#tambah_cust"><i class="fa fa-plus-square"></i></button>
+														</div>
 													</div>
 												</div>
 
@@ -38,7 +41,7 @@
 												<div class="col-lg-12">
 													<label>Keterangan Project</label>
 													<div class="form-group">
-														<textarea class="form-control form-control-sm" id="ket" readonly></textarea>
+														<textarea class="form-control form-control-sm" id="ket_project" name="keterangan"></textarea>
 													</div>
 												</div>
 											</div>
@@ -183,8 +186,9 @@
             </section>
         </div>
         <div class="card-footer text-right">
-					<button class="btn btn-primary" data-toggle="modal" data-target="#modal_bayar" type="button">Proses</button>
-    			<button class="btn btn-primary" type="button" id="btn_back">Kembali</button>
+					<button class="btn btn-info" type="button" id="btn_finalisasi">Finalisasi</button>
+					<button class="btn btn-primary" type="button" id="btn_proses">Proses</button>
+    			<button class="btn btn-warning" type="button" id="btn_back">Kembali</button>
         </div>
     </div>
 </div>

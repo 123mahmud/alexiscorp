@@ -17,6 +17,7 @@
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <div class="form-group">
+                <input type="hidden" name="status_edit" id="status_edit">
                 <input type="text" readonly="" class="form-control form-control-sm text-right currency text-right totalAmount" id="totalAmountM" value="0">
               </div>
             </div>

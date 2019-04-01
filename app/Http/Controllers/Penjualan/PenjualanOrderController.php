@@ -5,18 +5,22 @@ namespace App\Http\Controllers\Penjualan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use DB;
-use Auth;
-use Validator;
-use App\d_stock;
+use App\d_gudangcabang;
+use App\d_mem;
 use App\d_sales;
 use App\d_sales_dt;
 use App\d_sales_payment;
+use App\d_stock;
+use App\m_customer;
 use App\m_item;
 use App\m_item_price;
-use App\m_customer;
+use App\lib\mutasi;
+use Auth;
 use carbon\Carbon;
 use CodeGenerator;
+use DB;
+use Session;
+use Validator;
 use Yajra\DataTables\DataTables;
 
 class PenjualanOrderController extends Controller
@@ -77,6 +81,30 @@ class PenjualanOrderController extends Controller
       }
       return response()->json($results);
     }
+    //
+    // /**
+    // * Return list of customers from 'd_mem' where 'pegawai manajemen'.
+    // *
+    // * @return \Illuminate\Http\Response
+    // */
+    // public function getStaff(Request $request)
+    // {
+    //   $term = $request->term;
+    //   $staff = d_mem::where('m_name', 'like', '%'.$term.'%')
+    //     ->whereHas('getPegawaiMan')
+    //     ->get();
+    //   if (sizeof($staff) > 0) {
+    //     foreach ($staff as $staf) {
+    //       $results[] = [
+    //         'id' => $staf->m_id,
+    //         'label' => $staf->m_name .', '. $staf->m_addr,
+    //       ];
+    //     }
+    //   } else {
+    //     $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+    //   }
+    //   return response()->json($results);
+    // }
 
     /**
     * Return list of customers from 'm_customer'.
@@ -112,9 +140,15 @@ class PenjualanOrderController extends Controller
      */
     public function getStock(Request $request)
     {
+      $userComp = Session::get('user_comp');
+      $gudangCabang = d_gudangcabang::where('gc_comp', $userComp)
+        ->where('gc_gudang', 'GUDANG PENJUALAN')
+        ->firstOrFail();
+      $gudangCabangId = $gudangCabang->gc_id;
+
       $stock = d_stock::where('s_item', $request->itemId)
-        ->where('s_comp',  $request->comp)
-        ->where('s_position',  $request->positionId)
+        ->where('s_comp',  $gudangCabangId)
+        ->where('s_position',  $gudangCabangId)
         ->firstOrFail();
       return $stock;
     }
@@ -149,8 +183,10 @@ class PenjualanOrderController extends Controller
       $from = Carbon::parse($request->date_from)->format('Y-m-d');
       $to = Carbon::parse($request->date_to)->format('Y-m-d');
       $datas = d_sales::where('s_channel', 'OD')
+        ->where('s_comp', Session::get('user_comp'))
         ->whereBetween('s_date', [$from, $to])
         ->with('getCustomer')
+        ->with('getStaff')
         ->orderBy('s_note', 'desc')
         ->get();
 
@@ -159,13 +195,111 @@ class PenjualanOrderController extends Controller
       ->addColumn('customer', function($datas) {
         return $datas->getCustomer['c_name'];
       })
-      ->addColumn('action', function($datas) {
-        return '<div class="btn-group btn-group-sm">
-        <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
-        <button class="btn btn-warning" onclick="EditPenjualan('.$datas->s_id.')" rel="tooltip" title="Edit"><i class="fa fa-pencil"></i></button>
-        </div>';
+      ->addColumn('staff', function($datas) {
+        return $datas->getStaff['m_name'];
       })
-      ->rawColumns(['customer', 'action'])
+      ->addColumn('action', function($datas) {
+        if ($datas->s_status == 'PR') {
+          return '<div class="btn-group btn-group-sm">
+          <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
+          <button class="btn btn-warning" onclick="EditPenjualan('.$datas->s_id.')" rel="tooltip" title="Edit"><i class="fa fa-pencil"></i></button>
+          </div>';
+        } elseif ($datas->s_status == 'FN') {
+          return '<div class="btn-group btn-group-sm">
+          <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
+          </div>';
+        }
+      })
+      ->rawColumns(['customer', 'staff', 'action'])
+      ->make(true);
+    }
+
+    /**
+    * Return DataTable list for view.
+    *
+    * @return Yajra/DataTables
+    */
+    public function getLaporanPenjualan(Request $request)
+    {
+      $from = Carbon::parse($request->date_from)->format('Y-m-d');
+      $to = Carbon::parse($request->date_to)->format('Y-m-d');
+
+      if ($request->staff == 'x') {
+        if ($request->status == 'AL') {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+              $query
+                ->where('s_channel', 'OD')
+                ->whereBetween('s_date', [$from, $to])
+                ->orderBy('s_note', 'desc');
+            })
+            ->with('getItem.getSatuan1')
+            ->get();
+        } else {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+              $query
+                ->where('s_channel', 'OD')
+                ->whereBetween('s_date', [$from, $to])
+                ->where('s_status', $request->status)
+                ->orderBy('s_note', 'desc');
+            })
+            ->with('getItem.getSatuan1')
+            ->get();
+        }
+      } else {
+        if ($request->status == 'AL') {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+              $query
+                ->where('s_channel', 'OD')
+                ->whereBetween('s_date', [$from, $to])
+                ->where('s_staff', $request->staff)
+                ->orderBy('s_note', 'desc');
+            })
+            ->with('getItem.getSatuan1')
+            ->get();
+        } else {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+              $query
+                ->where('s_channel', 'OD')
+                ->whereBetween('s_date', [$from, $to])
+                ->where('s_staff', $request->staff)
+                ->where('s_status', $request->status)
+                ->orderBy('s_note', 'desc');
+            })
+            ->with('getItem.getSatuan1')
+            ->get();
+        }
+      }
+
+      return Datatables::of($datas)
+      ->addIndexColumn()
+      ->addColumn('item', function($datas) {
+        return $datas->getItem['i_name'];
+      })
+      ->addColumn('nota', function($datas) {
+        return $datas->getSales['s_note'];
+      })
+      ->addColumn('date', function($datas) {
+        return $datas->getSales['s_date'];
+      })
+      ->addColumn('satuan', function($datas) {
+        return $datas->getItem['getSatuan1']['s_name'];
+      })
+      ->addColumn('qty', function($datas) {
+        return '<div class="text-right">'. $datas->sd_qty .'</div>';
+      })
+      ->addColumn('price', function($datas) {
+        return '<div class="text-right">'. $datas->sd_price .'</div>';
+      })
+      ->addColumn('discount', function($datas) {
+        return '<div class="text-right">'. $datas->sd_disc_percent .'</div>';
+      })
+      ->addColumn('discount_value', function($datas) {
+        return '<div class="text-right">'. (int)$datas->sd_disc_value / (int)$datas->sd_qty .'</div>';
+      })
+      ->addColumn('sub_total', function($datas) {
+        return '<div class="text-right">'. $datas->sd_total .'</div>';
+      })
+      ->rawColumns(['item', 'satuan', 'qty', 'price', 'discount', 'discount_value', 'sub_total'])
       ->make(true);
     }
 
@@ -194,6 +328,8 @@ class PenjualanOrderController extends Controller
       $data['group_harga'] = DB::table('m_price_group')
         ->get();
       $data['tipe_pembayaran'] = DB::table('m_paymentmethod')
+        ->get();
+      $data['staff'] = d_mem::whereHas('getPegawaiMan')
         ->get();
     	return view('penjualan/penjualanorder/penjualanorder', compact('data'));
     }
@@ -237,6 +373,8 @@ class PenjualanOrderController extends Controller
         $sales->s_channel = 'OD'; // OD: Order || TO: Tanpa Order
         $sales->s_date = Carbon::parse($request->orderDate)->format('Y-m-d');
         $sales->s_note = $salesNota;
+        $sales->s_comp = Session::get('user_comp');
+        /////------------------------------------------------ warning
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_customer = $request->idCustomer;
         $sales->s_gross = $request->totalPenjualan;
@@ -358,15 +496,19 @@ class PenjualanOrderController extends Controller
         $sales->s_tax = $request->ppn;
         $sales->s_jatuh_tempo = Carbon::parse($request->dueDate)->format('Y-m-d');
         $sales->s_net = $request->totalAmount;
-        $sales->s_status = 'PR'; // PR: Progress || FN: Final
+        if ($request->status_edit == 'PR') {
+          $sales->s_status = 'PR'; // PR: Progress || FN: Final
+        } elseif ($request->status_edit == 'FN') {
+          $sales->s_status = 'FN'; // PR: Progress || FN: Final
+        }
         $sales->s_info = $request->keterangan;
         $sales->save();
 
         // delete sales-detail from selected salesId
         $salesDt = d_sales_dt::where('sd_sales', $id)
           ->get();
-        foreach ($salesDt as $sales) {
-          $sales->delete();
+        foreach ($salesDt as $salesX) {
+          $salesX->delete();
         }
 
         // insert sales-detail
@@ -389,6 +531,32 @@ class PenjualanOrderController extends Controller
             $salesDt->sd_disc_value = $valDiscH;
             $salesDt->sd_total = $request->listSubTotal[$loopCount];
             $salesDt->save();
+
+            // update stock (using mutation)
+            $userComp = Session::get('user_comp');
+            $gudangCabang = d_gudangcabang::where('gc_comp', $userComp)
+              ->where('gc_gudang', 'GUDANG PENJUALAN')
+              ->firstOrFail();
+            $gudangCabangId = $gudangCabang->gc_id;
+            if ($request->status_edit == 'FN') {
+              $mutasi = mutasi::mutasiStok($request->listItemId[$loopCount],
+              $request->listQty[$loopCount],
+              $gudangCabangId,
+              $gudangCabangId,
+              'MENGURANGI',
+              $sales->s_note,
+              'MENGURANGI',
+              Carbon::now(),
+              1);
+              if ($mutasi['true'] == false) {
+                return response()->json([
+                  'status' => 'gagal',
+                  'message' => 'Mutasi gagal, Hubungi pengembang !'
+                ]);
+              }
+              // DB::rollback();
+              // dd($mutasi);
+            }
           }
           $loopCount++;
         }
@@ -425,4 +593,108 @@ class PenjualanOrderController extends Controller
     {
         //
     }
+
+    /**
+    * Print 'laporan'.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    */
+    public function printLaporan(Request $request)
+    {
+      $from = Carbon::parse($request->date_from)->format('Y-m-d');
+      $to = Carbon::parse($request->date_to)->format('Y-m-d');
+
+      if ($request->staff == 'x') {
+        if ($request->status == 'AL') {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+            $query
+            ->where('s_channel', 'OD')
+            ->whereBetween('s_date', [$from, $to]);
+          })
+          ->with('getItem.getSatuan1')
+          ->with('getSales.getCustomer')
+          ->join('d_sales', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
+          ->join('m_item', 'd_sales_dt.sd_item', '=', 'm_item.i_id')
+          ->orderBy('i_name', 'asc')
+          ->orderBy('s_note', 'asc')
+          ->get();
+        } else {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+            $query
+            ->where('s_channel', 'OD')
+            ->whereBetween('s_date', [$from, $to])
+            ->where('s_status', $request->status);
+          })
+          ->with('getItem.getSatuan1')
+          ->with('getSales.getCustomer')
+          ->join('d_sales', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
+          ->join('m_item', 'd_sales_dt.sd_item', '=', 'm_item.i_id')
+          ->orderBy('i_name', 'asc')
+          ->orderBy('s_note', 'asc')
+          ->get();
+        }
+      } else {
+        if ($request->status == 'AL') {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+            $query
+            ->where('s_channel', 'OD')
+            ->whereBetween('s_date', [$from, $to])
+            ->where('s_staff', $request->staff);
+          })
+          ->with('getItem.getSatuan1')
+          ->with('getSales.getCustomer')
+          ->join('d_sales', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
+          ->join('m_item', 'd_sales_dt.sd_item', '=', 'm_item.i_id')
+          ->orderBy('i_name', 'asc')
+          ->orderBy('s_note', 'asc')
+          ->get();
+        } else {
+          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+            $query
+            ->where('s_channel', 'OD')
+            ->whereBetween('s_date', [$from, $to])
+            ->where('s_staff', $request->staff)
+            ->where('s_status', $request->status);
+          })
+          ->with('getItem.getSatuan1')
+          ->with('getSales.getCustomer')
+          ->join('d_sales', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
+          ->join('m_item', 'd_sales_dt.sd_item', '=', 'm_item.i_id')
+          ->orderBy('i_name', 'asc')
+          ->orderBy('s_note', 'asc')
+          ->get();
+        }
+      }
+
+      $from = Carbon::parse($request->date_from)->format('d M Y');
+      $to = Carbon::parse($request->date_to)->format('d M Y');
+
+      $staff = d_mem::where('m_id', $request->staff)->select('m_name')->first();
+
+      $data['sales'] = $datas;
+      $data['date_from'] = $from;
+      $data['date_to'] = $to;
+      ($staff != null) ? $data['staff'] = $staff->m_name : $data['staff'] = '[ Semua Staff ]';
+      if ($request->status == 'AL') {
+        $data['status'] = '[ Semua Status ]';
+      } elseif ($request->status == 'PR') {
+        $data['status'] = '[ Progress ]';
+      } elseif ($request->status == 'FN') {
+        $data['status'] = '[ Final ]';
+      }
+
+      $data['salesdate'] = array();
+      $data['totalDiscP'] = 0;
+      $data['totalDiscH'] = 0;
+      $data['grandTotal'] = 0;
+      foreach ($data['sales'] as $index => $sales) {
+        array_push($data['salesdate'], Carbon::parse($data['sales'][$index]->getSales->s_date)->format('d M Y'));
+        $data['totalDiscP'] += $sales->sd_disc_vpercent;
+        $data['totalDiscH'] += ($sales->sd_disc_value / $sales->sd_qty);
+        $data['grandTotal'] += $sales->sd_total;
+      }
+
+      return view('penjualan/penjualanorder/laporan', compact('data'));
+    }
+
 }

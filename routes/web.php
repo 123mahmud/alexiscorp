@@ -179,7 +179,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/purchasing/orderpembelian/get-data-detail/{id}', 'Purchasing\purchaseOrderController@getDataDetail');
 	Route::get('/purchasing/orderpembelian/get-edit-order/{id}', 'Purchasing\purchaseOrderController@getEditOrder');
 	Route::post('/purchasing/orderpembelian/delete-data-order', 'Purchasing\purchaseOrderController@deleteDataOrder');
-	/*Purchasing order*/	
+	/*Purchasing order*/
 	Route::get('/purcahse-order/order-index', 'Purchasing\purchaseOrderController@orderIndex')->middleware('auth');
 	Route::get('/purcahse-order/data-order', 'Purchasing\purchaseOrderController@dataOrder')->middleware('auth');
 	Route::get('/purcahse-order/form-order', 'Purchasing\purchaseOrderController@formOrder')->middleware('auth');
@@ -237,8 +237,8 @@ Route::group(['middleware' => ['auth', 'web']], function() {
     Route::get('/inventory/namaitem/simpanopname/pengajuan', 'Stok\stockOpnameController@simpanPengajuan');
     Route::get('/inventory/namaitem/confirm/{tgl1}/{tgl2}/{gudang}', 'Stok\stockOpnameController@tableConfirm');
     Route::get('/inventory/namaitem/detail/confirm', 'Stok\stockOpnameController@getConfirm');
-    Route::get('/inventory/simpanopname/update/status/{id}', 'Stok\stockOpnameController@updateStatusConfirm');  
-    Route::get('/inventory/namaitem/ubahstok/{id}', 'Stok\stockOpnameController@updateStock'); 
+    Route::get('/inventory/simpanopname/update/status/{id}', 'Stok\stockOpnameController@updateStatusConfirm');
+    Route::get('/inventory/namaitem/ubahstok/{id}', 'Stok\stockOpnameController@updateStock');
 
 	// Produksi
 	Route::get('/produksi/pencatatanhasil/index', 'ProduksiController@pencatatanhasil')->name('pencatatanhasil');
@@ -259,7 +259,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	// Penjualan
   Route::get('/penjualan/penjualanorder/index', 'Penjualan\PenjualanOrderController@index')->name('penjualanorder');
   Route::get('/penjualan/penjualanorder/getListPenjualan', 'Penjualan\PenjualanOrderController@getListPenjualan')->name('penjualanorder.getlistpenjualan');
-  Route::get('/penjualan/penjualanorder/getListPembayaran', 'Penjualan\PenjualanOrderController@getListPembayaran')->name('penjualanorder.getlistpembayaran');
+  Route::get('/penjualan/penjualanorder/getLaporanPenjualan', 'Penjualan\PenjualanOrderController@getLaporanPenjualan')->name('penjualanorder.getlaporanpenjualan');
   Route::get('/penjualan/penjualanorder/getCustomers', 'Penjualan\PenjualanOrderController@getCustomers')->name('penjualanorder.getcustomers');
   Route::get('/penjualan/penjualanorder/getItems', 'Penjualan\PenjualanOrderController@getItems')->name('penjualanorder.getitems');
   Route::get('/penjualan/penjualanorder/getStock', 'Penjualan\PenjualanOrderController@getStock')->name('penjualanorder.getstock');
@@ -268,15 +268,19 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/penjualan/penjualanorder/getDetailPenjualan/{id}', 'Penjualan\PenjualanOrderController@getDetailPenjualan')->name('penjualanorder.getdetailpenjualan');
 	Route::get('/penjualan/penjualanorder/edit/{id}', 'Penjualan\PenjualanOrderController@edit')->name('penjualanorder.edit');
 	Route::post('/penjualan/penjualanorder/update/{id}', 'Penjualan\PenjualanOrderController@update')->name('penjualanorder.update');
+	Route::post('/penjualan/penjualanorder/printLaporan', 'Penjualan\PenjualanOrderController@printLaporan')->name('penjualanorder.printlaporan');
 
 	Route::get('/penjualan/penjualantanpaorder/index', 'Penjualan\PenjualanTOController@index')->name('penjualantanpaorder');
 	Route::get('/penjualan/penjualantanpaorder/getListPenjualan', 'Penjualan\PenjualanTOController@getListPenjualan')->name('penjualantanpaorder.getlistpenjualan');
+  Route::get('/penjualan/penjualantanpaorder/getLaporanPenjualan', 'Penjualan\PenjualanTOController@getLaporanPenjualan')->name('penjualantanpaorder.getlaporanpenjualan');
   Route::get('/penjualan/penjualantanpaorder/getCustomers', 'Penjualan\PenjualanTOController@getCustomers')->name('penjualantanpaorder.getcustomers');
   Route::get('/penjualan/penjualantanpaorder/getItems', 'Penjualan\PenjualanTOController@getItems')->name('penjualantanpaorder.getitems');
   Route::get('/penjualan/penjualantanpaorder/getStock', 'Penjualan\PenjualanTOController@getStock')->name('penjualantanpaorder.getstock');
   Route::get('/penjualan/penjualantanpaorder/getPrice', 'Penjualan\PenjualanTOController@getPrice')->name('penjualantanpaorder.getprice');
 	Route::get('/penjualan/penjualantanpaorder/create', 'Penjualan\PenjualanTOController@create')->name('penjualantanpaorder.create');
 	Route::post('/penjualan/penjualantanpaorder/store', 'Penjualan\PenjualanTOController@store')->name('penjualantanpaorder.store');
+	Route::get('/penjualan/penjualantanpaorder/getDetailPenjualan/{id}', 'Penjualan\PenjualanTOController@getDetailPenjualan')->name('penjualantanpaorder.getdetailpenjualan');
+	Route::post('/penjualan/penjualantanpaorder/printLaporan', 'Penjualan\PenjualanTOController@printLaporan')->name('penjualantanpaorder.printlaporan');
 
 	Route::get('/penjualan/diskonpenjualan/index', 'PenjualanController@diskonpenjualan')->name('diskonpenjualan');
 	Route::get('/penjualan/diskonpenjualan/create', 'PenjualanController@tambah_diskonpenjualan')->name('tambah_diskonpenjualan');

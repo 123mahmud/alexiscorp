@@ -92,8 +92,8 @@
 
                   <div class="col-sm-6 col-md-4 col-lg-4">
                     <label>PPN</label>
-                    <div class="input-group input-group-sm">
-                      <input type="text" class="form-control form-control-sm currency-x text-right" id="dt_ppn" readonly>
+                    <div class="input-group">
+                      <input type="text" class="form-control form-control-sm currency text-right" id="dt_ppn" readonly>
                       <div class="input-group-append">
                         <span class="input-group-text">%</span>
                       </div>
