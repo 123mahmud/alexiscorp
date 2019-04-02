@@ -4,16 +4,19 @@ namespace App\Exports;
 
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 use App\d_mem;
 use App\d_sales_dt;
 use carbon\Carbon;
-class LaporanPenjualanTOExport implements FromCollection
+class LaporanPenjualanTOExport implements FromView, ShouldAutoSize
 {
+  use Exportable;
+
   public function view(): View
   {
     $request = request();
-
     $from = Carbon::parse($request->date_from)->format('Y-m-d');
     $to = Carbon::parse($request->date_to)->format('Y-m-d');
 
@@ -45,9 +48,7 @@ class LaporanPenjualanTOExport implements FromCollection
       ->orderBy('s_note', 'asc')
       ->get();
     }
-
-    // dd($datas);
-
+    
     $from = Carbon::parse($request->date_from)->format('d M Y');
     $to = Carbon::parse($request->date_to)->format('d M Y');
 
