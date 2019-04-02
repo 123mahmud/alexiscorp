@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laporan Penjualan AlexisCorp</title>
+    <title>Laporan Penjualan Alexis</title>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
@@ -44,7 +44,7 @@
 
   <div class="col-6">
 
-    <h1 class="m-unset">AlexisCorp</h1>
+    <h1 class="m-unset">Alexis</h1>
     <h3>Laporan Penjualan</h3>
 
   </div>
