@@ -19,7 +19,7 @@
 				<a href="" class="nav-link" data-target="#list" aria-controls="list" data-toggle="tab" role="tab" onclick="getTanggal()">List Opname Stock</a>
 			</li>
 			<li class="nav-item">
-				<a href="" class="nav-link" data-target="#list" aria-controls="list" data-toggle="tab" role="tab" onclick="getTanggalKonfirmasi()">Konfirmasi Pengajuan Stock</a>
+				<a href="" class="nav-link" data-target="#label-badge-tab" aria-controls="label-badge-tab" data-toggle="tab" role="tab" onclick="getConfirm()">Konfirmasi Pengajuan Stock</a>
 			</li>
 		</ul>
 		<div class="row">
@@ -38,6 +38,7 @@
 @endsection
 @section('extra_script')
 <script type="text/javascript">
+
 	$(document).ready(function(){
 	    var extensions = {
 	            "sFilterInput": "form-control input-sm",
@@ -47,8 +48,6 @@
 	    $.extend($.fn.dataTableExt.oStdClasses, extensions);
 	    // Used when bJQueryUI is true
 	    $.extend($.fn.dataTableExt.oJUIClasses, extensions);
-
-	    // tableOpname = $('#tabelOpname').DataTable();
 
 	    $('#pemilik').select2();
 
@@ -186,7 +185,7 @@
 
 	    if (index == -1) {
 	        $('#div_item').append(
-                '<tr class="detail'+i_id+'">'
+                '<tr class="detail'+i_id+' saya">'
                 	//item
                 	+'<td width="20%">'
 		            	+ namaitem + '<input type="hidden" name="i_id[]" id="" class="i_id" value="' + i_id + '">'
@@ -255,48 +254,14 @@
         $('#searchitem').focus();
     });
 
-	function simpanOpname() {
-	    $('.kirim-opname').attr('disabled', 'disabled');
-	    $.ajaxSetup({
-	        headers: {
-	            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	        }
-	    });
-	    var a = $('#opname :input').serialize();
-	    var b = tableOpname.$('input').serialize();
-	    $.ajax({
-	        url: baseUrl + '/inventory/namaitem/simpanopname',
-	        type: 'POST',
-	        data: a + '&' + b,
-	        success: function(response, nota) {
-	            if (response.status == 'sukses') {
-	                window.open = baseUrl + '/inventory/stockopname/print_stockopname';
-	                tableOpname.row().clear().draw(false);
-	                var inputs = document.getElementsByClassName('i_id'),
-	                    names = [].map.call(inputs, function(input) {
-	                        return input.value;
-	                    });
-	                tamp = names;
-	                var nota = response.nota.o_nota;
-	                iziToast.success({
-	                    timeout: 5000,
-	                    position: "topRight",
-	                    icon: 'fa fa-chrome',
-	                    title: nota,
-	                    message: 'Telah terkirim.'
-	                });
-	                $('.kirim-opname').removeAttr('disabled', 'disabled');
-	            } else {
-	                iziToast.error({
-	                    position: "topRight",
-	                    title: '',
-	                    message: 'Mohon melengkapi data.'
-	                });
-	                $('.kirim-opname').removeAttr('disabled', 'disabled');
-	            }
-	        }
-	    });
-	}
+    function clearTable()
+    {
+        var button_id = $('.saya').attr('id');
+        var arrayIndex = tamp.findIndex(e => e === button_id);
+        tamp.splice(arrayIndex, 1);
+        $('.saya').remove();
+        $('#searchitem').focus();
+    }
 
 	function getTanggal() {
 	    $('#tableHistory').dataTable().fnDestroy();
@@ -413,15 +378,6 @@
 	    })
 	}
 
-	function clearTable() {
-	    tableOpname.row().clear().draw(false);
-	    var inputs = document.getElementsByClassName('i_id'),
-	        names = [].map.call(inputs, function(input) {
-	            return input.value;
-	        });
-	    tamp = names;
-	}
-
 	function convertToRupiah(angka) {
 	    var rupiah = '';
 	    var angkarev = angka.toString().split('').reverse().join('');
@@ -436,7 +392,6 @@
 	}
 
 	function pilihOpname() {
-		console.log($('#data').serialize());
 	    $.confirm({
 	        title: 'Hey!',
 	        content: 'Silahkan pilih?',
@@ -460,12 +415,7 @@
 	                        data: $('#data').serialize(),
 	                        success: function(response, nota) {
 	                            if (response.status == 'sukses') {
-	                                tableOpname.row().clear().draw(false);
-	                                var inputs = document.getElementsByClassName('i_id'),
-	                                    names = [].map.call(inputs, function(input) {
-	                                        return input.value;
-	                                    });
-	                                tamp = names;
+	                            	clearTable();
 	                                var nota = response.nota;
 	                                $.toast({
 							            heading: nota,
@@ -504,12 +454,7 @@
 	                        data: $('#data').serialize(),
 	                        success: function(response, nota) {
 	                            if (response.status == 'sukses') {
-	                                tableOpname.row().clear().draw(false);
-	                                var inputs = document.getElementsByClassName('i_id'),
-	                                    names = [].map.call(inputs, function(input) {
-	                                        return input.value;
-	                                    });
-	                                tamp = names;
+	                                clearTable();
 	                                var nota = response.nota;
 	                                $.toast({
 							            heading: nota,
@@ -560,19 +505,21 @@
 	                        success: function(response) {
 	                            if (response.status == "sukses") {
 	                                $('#tableHistory').DataTable().ajax.reload();
-	                                iziToast.success({
-	                                    timeout: 5000,
-	                                    position: "topRight",
-	                                    icon: 'fa fa-chrome',
-	                                    title: response.nota,
-	                                    message: 'Terhapus'
-	                                });
+	                                $.toast({
+							            heading: nota,
+							            text: 'Berhasil menghapus data',
+							            bgColor: '#00b894',
+							            textColor: 'white',
+							            loaderBg: '#55efc4',
+							            icon: 'success'
+							        });
 	                            } else {
-	                                iziToast.error({
-	                                    position: "topRight",
-	                                    title: '',
-	                                    message: 'Gagal hapus data'
-	                                });
+	                                $.toast({
+							            heading: 'Ada yang salah',
+							            text: 'Periksa data anda.',
+							            showHideTransition: 'plain',
+							            icon: 'warning'
+							        })
 	                            }
 	                        }
 
@@ -642,20 +589,22 @@
 	                            if (response.status == 'sukses') {
 	                                $('#myModalConfirm').modal('hide')
 	                                $('#table-konfirmasi').DataTable().ajax.reload();
-	                                iziToast.success({
-	                                    timeout: 5000,
-	                                    position: "topRight",
-	                                    icon: 'fa fa-chrome',
-	                                    message: 'Berhasil update status.'
-	                                });
+	                                $.toast({
+							            heading: nota,
+							            text: 'Berhasil update data',
+							            bgColor: '#00b894',
+							            textColor: 'white',
+							            loaderBg: '#55efc4',
+							            icon: 'success'
+							        });
 
 	                            } else {
-	                                iziToast.error({
-	                                    position: "topRight",
-	                                    title: '',
-	                                    message: 'Gagal update status.'
-	                                });
-
+	                                $.toast({
+							            heading: 'Ada yang salah',
+							            text: 'Periksa data anda.',
+							            showHideTransition: 'plain',
+							            icon: 'warning'
+							        })
 	                            }
 	                        }
 	                    });
