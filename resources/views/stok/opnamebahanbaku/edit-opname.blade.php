@@ -13,22 +13,114 @@
 	<section class="section">
 		<ul class="nav nav-pills">
 			<li class="nav-item">
-				<a href="" class="nav-link active" data-target="#opname" aria-controls="opname" data-toggle="tab" role="tab">Opname Stock</a>
-			</li>
-			<li class="nav-item">
-				<a href="" class="nav-link" data-target="#list" aria-controls="list" data-toggle="tab" role="tab" onclick="getTanggal()">List Opname Stock</a>
-			</li>
-			<li class="nav-item">
-				<a href="" class="nav-link" data-target="#list" aria-controls="list" data-toggle="tab" role="tab" onclick="getTanggalKonfirmasi()">Konfirmasi Pengajuan Stock</a>
+				<a href="" class="nav-link active" data-target="#opname" aria-controls="opname" data-toggle="tab" role="tab">Edit Opname</a>
 			</li>
 		</ul>
 		<div class="row">
 			<div class="col-lg-12">
 				
 				<div class="tab-content">
-					@include('stok.opnamebahanbaku.tab_opname')
-					@include('stok.opnamebahanbaku.tab_list_opname')
-					@include('stok.opnamebahanbaku.konfirmasi')
+					<div class="tab-pane fade in active show" id="opname">
+	<div class="card">
+		<div class="card-header bordered p-2">
+			<div class="header-block">
+				<h3 class="title"> Edit Opname {{ $dataIsi[0]->gc_gudang }}</h3>
+			</div>
+		</div>
+		<div class="card-block">
+			<section>
+				<form id="data">
+				<fieldset class="mb-3">
+					<div class="row">
+						<div class="col-md-3 col-sm-6 col-xs-12">
+							<label>Pemilik Item</label>
+						</div>
+						<div class="col-md-9 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<select class="form-control form-control-sm select2" id="pemilik" name="o_comp" style="width: 100%;" onclick="clearTable()">
+									<option class="form-control pemilik-gudang" value="{{ $dataIsi[0]->gc_id }}">
+                                 - {{ $dataIsi[0]->gc_gudang }}</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-6 col-xs-12">
+							<label>Tanggal Opname</label>
+						</div>
+						<div class="col-md-3 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<input type="text" class="form-control form-control-sm datepicker" value="{{date('d-m-Y')}}" name="">
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-6 col-xs-12">
+							<label>Nama Staff</label>
+						</div>
+						<div class="col-md-3 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<input type="text" readonly="" class="form-control form-control-sm" name="" value="{{ Auth::user()->m_name }}">
+                    			<input type="hidden" readonly="" class="form-control form-control-sm" name="o_staff" value="{{ Auth::user()->m_id }}">
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="mb-3">
+				</fieldset>
+				<div class="table-responsive mt-3" style="overflow-y : auto;height : 350px; border: solid 1.5px #bb936a">
+					<table class="table table-striped table-bordered table-hover" id="tabelOpname" cellspacing="0">
+						<thead class="bg-primary">
+							<tr>
+								<th width="20%">Kode | Item</th>
+								<th width="25%">Qty Sistem</th>
+								<th width="25%">Qty Real</th>
+								<th width="25%">Opname</th>
+								<th width="5%">Aksi</th>
+							</tr>
+						</thead>
+
+						<tbody id="div_item">
+							@for ($i = 0; $i < count($dataItem['data_isi']) ; $i++)
+                                 <tr class="detail{{ $dataItem['data_isi'][$i]['i_id'] }}">
+                                    <td>{{ $dataItem['data_isi'][$i]['i_code'] }} - {{ $dataItem['data_isi'][$i]['i_name'] }}
+                                       <input type="hidden" name="i_id[]" id="" class="i_id" value="{{ $dataItem['data_isi'][$i]['i_id'] }}">
+                                    </td>
+                                    <td>
+                                       <input type="text" name="qty[]" id="s-qtykw" class="form-control form-control-sm text-right" readonly value="{{ number_format($dataItem['data_stok'][$i]->qtyStok,2,'.',',') }} {{ $dataItem['data_isi'][$i]['s_name'] }}">
+                                       <input type="hidden" name="satuan_id[]" id="s-qtykw" class="form-control form-control-sm text-right" readonly value="{{ $dataItem['data_isi'][$i]['i_sat1'] }}">
+                                    </td>
+                                    <td>
+                                       <input type="text" name="real[]" id="real" class="form-control form-control-sm text-right qty-real-{{ $dataItem['data_isi'][$i]['i_id'] }} ' currency" onkeyup="hitungOpname({{ $dataItem['data_isi'][$i]['i_id'] }},{{ $dataItem['data_stok'][$i]->qtyStok }})" value="{{ $dataItem['data_isi'][$i]['od_real'] }}">
+                                    </td>
+                                    <td>
+                                       <input type="text" name="opname[]" id="opnameKw" class="form-control form-control-sm text-right opnameKw-{{ $dataItem['data_isi'][$i]['i_id'] }} currency" readonly value="{{$dataItem['data_stok'][$i]->qtyStok + $dataItem['data_isi'][$i]['od_real']}}">
+                                    </td>
+                                    <td>
+                                       @if ($dataIsi[0]->o_confirm == '')
+                                       <div class="text-center">
+                                          <button type="button" class="btn btn-danger btn_remove" id="{{ $dataItem['data_isi'][$i]['i_id'] }}"><i class="fa fa-trash-o"></i></button>
+                                       </div>
+                                       @elseif ($dataIsi[0]->o_confirm == 'WT')
+                                       <div class="text-center">
+                                          <button type="button" class="btn btn-danger btn_remove" id="{{ $dataItem['data_isi'][$i]['i_id'] }}"><i class="fa fa-trash-o"></i></button>
+                                       </div>
+                                       @elseif ($dataIsi[0]->o_confirm == 'AP')
+                                       <div class="text-center">
+                                          <button type="button" disabled="" class="btn btn-danger hapus btn-sm"><i class="fa fa-trash-o"></i>
+                                          </button>
+                                       </div>
+                                       @endif
+                                    </td>
+                                 </tr>
+                                 @endfor
+						</tbody>
+					</table>
+				</div>
+			</form>
+			</section>
+		</div>
+		<div class="card-footer text-right">
+			<button class="btn btn-primary" type="button" onclick="pilihOpname()">Simpan</button>
+		</div>
+	</div>
+</div>
 					<!-- Div #detail-opname -->
 				</div>
 			</div>

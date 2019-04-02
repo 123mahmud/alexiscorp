@@ -17,6 +17,7 @@ use App\d_stock_mutation;
 use App\Lib\mutasi;
 use Carbon\Carbon;
 use Datatables;
+use Auth;
 
 class stockOpnameController extends Controller
 {
@@ -369,7 +370,7 @@ class stockOpnameController extends Controller
                return  '<div class="text-center">
                     <button type="button"
                         style="margin-left:5px;" 
-                        class="btn btn-info fa fa-folder-open-o"
+                        class="btn-sm btn-info fa fa-folder-open-o"
                         title="Detail"
                         type="button"
                         data-toggle="modal"
@@ -378,14 +379,14 @@ class stockOpnameController extends Controller
                     </button>
                     <button type="button"
                         style="margin-left:5px;" 
-                        class="btn btn-warning fa fa-pencil-square-o"
+                        class="btn-sm btn-warning fa fa-pencil-square-o"
                         title="Edit"
                         type="button"
                         onclick="EditOpname('."'".$data->o_id."'".')"
                     </button>
                     <button type="button"
                         style="margin-left:5px;" 
-                        class="btn btn-danger fa fa-trash-o"
+                        class="btn-sm btn-danger fa fa-trash-o"
                         title="Hapus"
                         type="button"
                         onclick="deleteOp('."'".$data->o_id."'".')"
@@ -397,7 +398,7 @@ class stockOpnameController extends Controller
                return  '<div class="text-center">
                     <button type="button"
                         style="margin-left:5px;" 
-                        class="btn btn-info fa fa-folder-open-o"
+                        class="btn-sm btn-info fa fa-folder-open-o"
                         title="Detail"
                         type="button"
                         data-toggle="modal"
@@ -406,7 +407,7 @@ class stockOpnameController extends Controller
                     </button>
                     <button type="button"
                         style="margin-left:5px;" 
-                        class="btn btn-warning fa fa-pencil-square-o"
+                        class="btn-sm btn-warning fa fa-pencil-square-o"
                         title="Edit"
                         type="button"
                         onclick="EditOpname('."'".$data->o_id."'".')"
@@ -418,7 +419,7 @@ class stockOpnameController extends Controller
                return  '<div class="text-center">
                     <button type="button"
                         style="margin-left:5px;" 
-                        class="btn btn-info fa fa-folder-open-o"
+                        class="btn-sm btn-info fa fa-folder-open-o"
                         title="Detail"
                         type="button"
                         data-toggle="modal"
@@ -437,7 +438,7 @@ class stockOpnameController extends Controller
 
     }
 
-    public function getOPname(Request $request){
+   public function getOPname(Request $request){
       $data = d_opnamedt::select( 'i_code',
                             'i_type',
                             'i_name',
@@ -449,9 +450,9 @@ class stockOpnameController extends Controller
         ->get();
         // dd($data);
       return view('stok.opnamebahanbaku.detail-opname',compact('data'));
-    }
+   }
 
-    public function print_stockopname($id){
+   public function print_stockopname($id){
       $data = d_opnamedt::select( 'i_code',
                             'i_type',
                             'i_name',
@@ -469,10 +470,10 @@ class stockOpnameController extends Controller
         ->get();
         // dd($data);
       return view('Inventory::stockopname.print_stockopname',compact('data'));
-    }
+   }
 
-    public function saveOpnameLaporan(Request $request)
-    {
+   public function saveOpnameLaporan(Request $request)
+   {
         DB::beginTransaction();
         try {
             $o_id = d_opname::max('o_id') + 1;
@@ -517,5 +518,148 @@ class stockOpnameController extends Controller
                   'data' => $e
                 ]);
             }
-    }
+   }
+
+   function simpanPengajuan(Request $request)
+   {
+      DB::beginTransaction();
+      try {
+      $o_id = d_opname::max('o_id') + 1;
+      //nota
+      $year = carbon::now()->format('y');
+      $month = carbon::now()->format('m');
+      $date = carbon::now()->format('d');
+      $nota = 'OD'  . $year . $month . $date . $o_id;
+      //end Nota
+      d_opname::insert([
+         'o_id' => $o_id,
+         'o_nota' => $nota,
+         'o_outlet' => Session::get('user_comp'),
+         'o_staff' => $request->o_staff,
+         'o_comp' => $request->o_comp,
+         'o_status' => 'MS',
+         'o_insert' => Carbon::now()
+      ]);
+
+      for ($i=0; $i < count($request->i_id); $i++) 
+      {
+      d_opnamedt::insert([
+         'od_ido' => $o_id,
+         'od_idodt' => $i+1,
+         'od_item' => $request->i_id[$i],
+         'od_system' => str_replace(",","",$request->qty[$i]),
+         'od_real' => str_replace(",","",$request->real[$i]),
+         'od_opname' => str_replace(",","",$request->opname[$i]),
+         'od_satuan' => $request->satuan_id[$i]
+      ]);
+      }
+
+      DB::commit();
+      return response()->json([
+         'status' => 'sukses',
+         'nota' => $nota
+      ]);
+      } catch (\Exception $e) {
+      DB::rollback();
+      return response()->json([
+       'status' => 'gagal',
+       'data' => $e
+      ]);
+      }
+   }
+
+   public function editLaporan($id)
+   {
+      $dataIsi = d_opname::select('o_nota',
+                                 'o_id',
+                                 'i_id',
+                                 'i_code',
+                                 'i_name',
+                                 'i_sat1',
+                                 'gc_id',
+                                 'gc_gudang',
+                                 'od_real',
+                                 's_name',
+                                 'o_confirm'
+                                 )
+         ->join('d_opnamedt','d_opnamedt.od_ido','=','d_opname.o_id')
+         ->join('m_item','m_item.i_id','=','d_opnamedt.od_item')
+         ->join('d_gudangcabang','d_gudangcabang.gc_id','=','d_opname.o_comp')
+         ->join('m_satuan','m_satuan.s_id','=','m_item.i_sat1')
+         ->where('o_id',$id)
+         ->get();
+
+      foreach ($dataIsi as $val) 
+      {
+          //cek item type
+          $itemType[] = DB::table('m_item')->select('i_type', 'i_id')->where('i_id','=', $val['i_id'])->first();
+          //get satuan utama
+          $sat1[] = $val['i_sat1'];
+      }
+      // dd($dataIsi);
+
+      $counter = 0;
+      $gudang = $dataIsi[0]->gc_id;
+      $comp = Session::get('user_comp');
+      $dataStok = $this->getStokByType($itemType, $sat1, $counter, $comp);
+      $staff['nama'] = Auth::user()->m_name;
+      $staff['id'] = Auth::User()->m_id;
+      $dataItem = array(   'data_isi' => $dataIsi, 
+                           'data_stok' => $dataStok['val_stok'], 
+                           'data_satuan' => $dataStok['txt_satuan']
+                  );
+
+      return view('stok.opnamebahanbaku.edit-opname', compact('dataIsi','dataItem','staff'));
+   }
+
+   public function getStokByType($arrItemType, $arrSatuan, $counter, $comp)
+   {
+      // return "klk";
+      foreach ($arrItemType as $val) 
+      {
+         if ($val->i_type == "BJ") //brg jual
+         {
+            $gc_id = d_gudangcabang::select('gc_id')
+                  ->where('gc_gudang','GUDANG PENJUALAN')
+                  ->where('gc_comp',$comp)
+                  ->first();
+            $query = DB::select(DB::raw("SELECT IFNULL( (SELECT s_qty FROM d_stock where s_item = '$val->i_id' AND s_comp = '$gc_id->gc_id' AND s_position = '$gc_id->gc_id' limit 1) ,'0') as qtyStok"));
+            $satUtama = DB::table('m_item')->join('m_satuan', 'm_item.i_sat1', '=', 'm_satuan.s_id')->select('m_satuan.s_name')->where('m_item.i_sat1', '=', $arrSatuan[$counter])->first();
+
+            $stok[] = $query[0];
+            $satuan[] = $satUtama->s_name;
+            $counter++;
+         }
+         elseif ($val->i_type == "BB") //bahan baku
+         {
+            // return 'okee';
+            $gc_id = d_gudangcabang::select('gc_id')
+                  ->where('gc_gudang','GUDANG BAHAN BAKU')
+                  ->where('gc_comp',$comp)
+                  ->first();
+            $query = DB::select(DB::raw("SELECT IFNULL( (SELECT s_qty FROM d_stock where s_item = '$val->i_id' AND s_comp = '$gc_id->gc_id' AND s_position = '$gc_id->gc_id' limit 1) ,'0') as qtyStok"));
+            $satUtama = DB::table('m_item')->join('m_satuan', 'm_item.i_sat1', '=', 'm_satuan.s_id')->select('m_satuan.s_name')->where('m_item.i_sat1', '=', $arrSatuan[$counter])->first();
+
+            $stok[] = $query[0];
+            $satuan[] = $satUtama->s_name;
+            $counter++;
+         }
+         elseif ($val->i_type == "SP") //bahan lain
+         {
+            $gc_id = d_gudangcabang::select('gc_id')
+                  ->where('gc_gudang','GUDANG PENJUALAN')
+                  ->where('gc_comp',$comp)
+                  ->first();
+            $query = DB::select(DB::raw("SELECT IFNULL( (SELECT s_qty FROM d_stock where s_item = '$val->i_id' AND s_comp = '$gc_id->gc_id' AND s_position = '$gc_id->gc_id' limit 1) ,'0') as qtyStok"));
+            $satUtama = DB::table('m_item')->join('m_satuan', 'm_item.i_sat1', '=', 'm_satuan.s_id')->select('m_satuan.s_name')->where('m_item.i_sat1', '=', $arrSatuan[$counter])->first();
+
+            $stok[] = $query[0];
+            $satuan[] = $satUtama->s_name;
+            $counter++;
+         }
+      }
+
+      $data = array('val_stok' => $stok, 'txt_satuan' => $satuan);
+      return $data;
+   }
 }
