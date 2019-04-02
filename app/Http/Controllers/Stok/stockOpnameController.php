@@ -151,130 +151,6 @@ class stockOpnameController extends Controller
 
     }
 
-    public function saveOpname(Request $request){
-      // dd($request->all());
-      DB::beginTransaction();
-    	try {
-      $o_id = d_opname::max('o_id') + 1;
-      //nota
-      $year = carbon::now()->format('y');
-      $month = carbon::now()->format('m');
-      $date = carbon::now()->format('d');
-      $nota = 'OD'  . $year . $month . $date . $o_id;
-      $total_opname = 0;
-      $akun_first = [];
-      $err = true;
-      //end Nota
-      d_opname::insert([
-          'o_id' => $o_id,
-          'o_nota' => $nota,
-          // 'o_staff' => $request->o_staff,
-          'o_comp' => $request->o_comp,
-          'o_position' => $request->o_comp,
-          'o_insert' => Carbon::now()
-      ]);
-
-      for ($i=0; $i < count($request->i_id); $i++) {
-      	d_opnamedt::insert([
-            'od_ido' => $o_id,
-            'od_idodt' => $i+1,
-            'od_item' => $request->i_id[$i],
-            'od_opname' => $request->opname[$i]
-          ]);
-      	$cek = d_stock::select('s_id','s_qty')
-                ->where('s_item', $request->i_id[$i])
-                ->where('s_comp', $request->o_comp)
-                ->where('s_position', $request->o_comp)
-                ->first();
-        // dd($cek);
-        if ($cek == null) {
-          $s_id = d_stock::select('s_id')->max('s_id')+1;
-          d_stock::create([
-            's_id' => $s_id,
-            's_comp' => $request->o_comp,
-            's_position' => $request->o_comp,
-            's_item' => $request->i_id[$i],
-            's_qty' => $request->opname[$i],
-            's_insert' => Carbon::now()
-          ]);
-
-          d_stock_mutation::create([
-              'sm_stock' => $s_id,
-              'sm_detailid' => 1,
-              'sm_date' => Carbon::now(),
-              'sm_comp' => $request->o_comp,
-              'sm_position' => $request->o_comp,
-              'sm_mutcat' => 60,
-              'sm_item' => $request->i_id[$i],
-              'sm_qty' => $request->opname[$i],
-              'sm_qty_used' => 0,
-              'sm_qty_sisa' => $request->opname[$i],
-              'sm_qty_expired' => 0,
-              'sm_detail' => 'MENAMBAH OPNAME',
-              'sm_reff' => $nota,
-              'sm_insert' => Carbon::now()
-            ]);
-
-        }else{
-          $hasil = $cek->s_qty + $request->opname[$i];
-          $sm_detailid = d_stock_mutation::select('sm_detailid')
-            ->where('sm_item', $request->i_id[$i])
-            ->where('sm_comp', $request->o_comp)
-            ->where('sm_position', $request->o_comp)
-            ->max('sm_detailid')+1;
-        // dd($sm_detailid);
-          if ( $request->opname[$i] <= 0) {//+            
-            if(mutasi::mutasiStok(  $request->i_id[$i],
-                                    - $request->opname[$i],
-                                    $comp=$request->o_comp,
-                                    $position=$request->o_comp,
-                                    $flag='MENGURANGI OPNAME',
-                                    $nota,
-                                    '',
-                                    date('Y-m-d'),
-                                    70
-                                  )){}
-          } else {
-            $cek->update([
-              's_qty' => $hasil
-            ]);
-
-            d_stock_mutation::create([
-              'sm_stock' => $cek->s_id,
-              'sm_detailid' => $sm_detailid,
-              'sm_date' => Carbon::now(),
-              'sm_comp' => $request->o_comp,
-              'sm_position' => $request->o_comp,
-              'sm_mutcat' => 60,
-              'sm_item' => $request->i_id[$i],
-              'sm_qty' => $request->opname[$i],
-              'sm_qty_used' => 0,
-              'sm_qty_sisa' => $request->opname[$i],
-              'sm_qty_expired' => 0,
-              'sm_detail' => 'PENAMBAHAN',
-              'sm_reff' => $nota,
-              'sm_insert' => Carbon::now()
-            ]);
-          }
-        }
-        
-      	}
-      	$nota = d_opname::where('o_id',$o_id)
-          ->first();
-        DB::commit();
-	    return response()->json([
-	          'status' => 'sukses',
-	          'nota' => $nota
-	      ]);
-	    } catch (\Exception $e) {
-	    DB::rollback();
-	    return response()->json([
-	        'status' => 'gagal',
-	        'data' => $e
-	      ]);
-	    }
-    }
-
     public function history($tgl1, $tgl2, $jenis, $gudang){
       $y = substr($tgl1, -4);
       $m = substr($tgl1, -7,-5);
@@ -580,7 +456,8 @@ class stockOpnameController extends Controller
                                  'gc_gudang',
                                  'od_real',
                                  's_name',
-                                 'o_confirm'
+                                 'o_confirm',
+                                 'o_status'
                                  )
          ->join('d_opnamedt','d_opnamedt.od_ido','=','d_opname.o_id')
          ->join('m_item','m_item.i_id','=','d_opnamedt.od_item')
@@ -661,5 +538,338 @@ class stockOpnameController extends Controller
 
       $data = array('val_stok' => $stok, 'txt_satuan' => $satuan);
       return $data;
+   }
+
+   public function tableConfirm($tgl1, $tgl2, $gudang)
+   {
+      $y = substr($tgl1, -4);
+      $m = substr($tgl1, -7,-5);
+      $d = substr($tgl1,0,2);
+       $tgll = $y.'-'.$m.'-'.$d;
+
+      $y2 = substr($tgl2, -4);
+      $m2 = substr($tgl2, -7,-5);
+      $d2 = substr($tgl2,0,2);
+        $tgl2 = $y2.'-'.$m2.'-'.$d2;
+        $tgl2 = date('Y-m-d',strtotime($tgl2 . "+1 days"));
+
+      $opname = d_opname::select(
+            'o_id',
+            'o_insert',
+            'o_nota',
+            'u1.gc_gudang as comp',
+            'o_confirm',
+            'o_status',
+            'm_username')
+        ->join('d_gudangcabang as u1', 'd_opname.o_comp', '=', 'u1.gc_id')
+        ->join('d_mem','d_mem.m_id','=','d_opname.o_staff')
+        ->where('o_insert','>=',$tgll)
+        ->where('o_insert','<=',$tgl2)
+        ->where('o_status','MS')
+        ->where('o_comp',$gudang)
+        ->get();
+
+
+      return DataTables::of($opname)
+      ->editColumn('date', function ($data) {
+        return date('d M Y', strtotime($data->o_insert)).' : '.substr($data->o_insert, 10, 18);;
+
+      })
+
+      ->editColumn('status', function ($data) {
+         if ($data->o_confirm == "WT") 
+         { 
+            return '<span class="label label-default">Waiting</span>'; 
+         }
+         else if ($data->o_confirm == "AP") 
+         { 
+            return '<span class="label label-primary">Aprrove</span>'; 
+         }
+         else if ($data->o_confirm == "CL") 
+         {
+            return '<span class="label label-info">Final</span>'; 
+         }
+      })
+
+      ->addColumn('action', function($data){
+            if ($data->o_confirm == "WT") 
+            {
+               return  '<div class="text-center">
+                    <button type="button"
+                        style="margin-left:5px;" 
+                        class="btn-sm btn-warning fa fa-pencil-square-o"
+                        title="Edit"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#myModalConfirm"
+                        onclick="ubahStatusConfirm('."'".$data->o_id."'".')"
+                    </button>
+                </div>';
+            }
+            else if ($data->o_confirm == "AP") 
+            {
+               return  '<div class="text-center">
+                    <button type="button"
+                        style="margin-left:5px;" 
+                        class="btn-sm btn-warning fa fa-pencil-square-o"
+                        title="Edit"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#myModalConfirm"
+                        onclick="ubahStatusConfirm('."'".$data->o_id."'".')"
+                    </button>
+                </div>';
+            }
+            else if ($data->o_confirm == "CL") 
+            {
+               return  '<div class="text-center">
+                    <button type="button"
+                        style="margin-left:5px;" 
+                        class="btn-sm btn-warning fa fa-pencil-square-o"
+                        title="Edit"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#myModalConfirm"
+                        onclick="ubahStatusConfirm('."'".$data->o_id."'".')"
+                    </button>
+                </div>';
+            }
+
+      })
+
+      ->rawColumns(['date','action','status'])
+      ->make(true);
+   }
+
+   public function getConfirm(Request $request)
+   {
+      $data = d_opnamedt::select( 'i_code',
+                                 'i_type',
+                                 'i_name',
+                                 'od_opname',
+                                 'od_system',
+                                 'od_opname',
+                                 'od_real',
+                                 's_name')
+        ->where('od_ido',$request->x)
+        ->join('m_item','i_id','=','od_item')
+        ->join('m_satuan','s_id','=','od_satuan')
+        ->get();
+
+      $status = d_opname::select('o_id',
+                                 'o_confirm')
+         ->where('o_id',$request->x)
+         ->first();
+
+      return view('stok.opnamebahanbaku.detail-opname-confirm',compact('data','status'));
+   }
+
+   public function updateStatusConfirm(Request $request, $id)
+   {
+      DB::beginTransaction();
+         try {
+         $data = d_opname::where('o_id',$id)
+            ->update([
+             'o_confirm' => $request->x,
+             'o_update' => Carbon::now()
+         ]);
+      DB::commit();
+      return response()->json([
+             'status' => 'sukses'
+         ]);
+      } catch (\Exception $e) {
+      DB::rollback();
+      return response()->json([
+           'status' => 'gagal',
+           'data' => $e
+         ]);
+      }
+   }
+
+   function updateOpname(Request $request, $id)
+   {
+      DB::beginTransaction();
+         try {
+         $total_opname = 0;
+         $akun_first = [];
+         $err = true;
+         d_opname::where('o_id',$id)
+            ->update([
+             'o_staff' => $request->o_staff,
+             'o_update' => Carbon::now()
+         ]);
+
+         d_opnamedt::where('od_ido',$id)->delete();
+
+         for ($i=0; $i < count($request->i_id); $i++) 
+         {
+             d_opnamedt::insert([
+               'od_ido' => $id,
+               'od_idodt' => $i+1,
+               'od_item' => $request->i_id[$i],
+               'od_system' => str_replace(",","",$request->qty[$i]),
+               'od_real' => str_replace(",","",$request->real[$i]),
+               'od_opname' => str_replace(",","",$request->opname[$i]),
+               'od_satuan' => $request->satuan_id[$i],
+             ]);
+         }
+
+      DB::commit();
+      return response()->json([
+             'status' => 'sukses',
+             'nota' => $request->o_nota
+         ]);
+      } catch (\Exception $e) {
+      DB::rollback();
+      return response()->json([
+           'status' => 'gagal',
+           'data' => $e
+         ]);
+      }
+   }
+
+   function updateStock(Request $request, $id)
+   {
+      // dd($request->all());
+      DB::beginTransaction();
+        try {
+      d_opname::where('o_id',$id)
+         ->update([
+            'o_staff' => $request->o_staff,
+            'o_status' => 'MS',
+            'o_confirm' => 'CL',
+            'o_update' => Carbon::now()
+         ]);
+
+      $nota = d_opname::select('o_nota')->where('o_id',$id)->first();
+      $nota = $nota->o_nota;
+
+      d_opnamedt::where('od_ido',$id)->delete();
+
+      for ($i=0; $i < count($request->i_id); $i++) {
+
+         d_opnamedt::insert([
+            'od_ido' => $id,
+            'od_idodt' => $i+1,
+            'od_item' => $request->i_id[$i],
+            'od_system' => str_replace(",","",$request->qty[$i]),
+            'od_real' => str_replace(",","",$request->real[$i]),
+            'od_opname' => str_replace(",","",$request->opname[$i]),
+            'od_satuan' => $request->satuan_id[$i],
+         ]);
+
+         $cek = d_stock::select('s_id','s_qty')
+            ->where('s_item', $request->i_id[$i])
+            ->where('s_comp', $request->o_comp)
+            ->where('s_position', $request->o_comp)
+            ->first();
+
+         if ($cek == null) {
+            $s_id = d_stock::select('s_id')->max('s_id')+1;
+               d_stock::create([
+                  's_id' => $s_id,
+                  's_comp' => $request->o_comp,
+                  's_position' => $request->o_comp,
+                  's_item' => $request->i_id[$i],
+                  's_qty' => $request->opname[$i],
+                  's_insert' => Carbon::now()
+               ]);
+
+               d_stock_mutation::create([
+                  'sm_stock' => $s_id,
+                  'sm_detailid' => 1,
+                  'sm_date' => Carbon::now(),
+                  'sm_comp' => $request->o_comp,
+                  'sm_position' => $request->o_comp,
+                  'sm_mutcat' => 9,
+                  'sm_item' => $request->i_id[$i],
+                  'sm_qty' => $request->opname[$i],
+                  'sm_qty_used' => 0,
+                  'sm_qty_sisa' => $request->opname[$i],
+                  'sm_qty_expired' => 0,
+                  'sm_detail' => 'MENAMBAH OPNAME',
+                  'sm_reff' => $nota,
+                  'sm_insert' => Carbon::now()
+               ]);
+
+         }
+         else
+         {
+            $hasil = $cek->s_qty + $request->opname[$i];
+            $sm_detailid = d_stock_mutation::select('sm_detailid')
+               ->where('sm_item', $request->i_id[$i])
+               ->where('sm_comp', $request->o_comp)
+               ->where('sm_position', $request->o_comp)
+               ->max('sm_detailid')+1;
+        // dd($sm_detailid);
+          if ( $request->opname[$i] <= 0) {//+            
+            if(mutasi::mutasiStok(  $request->i_id[$i],
+                                    - $request->opname[$i],
+                                    $comp=$request->o_comp,
+                                    $position=$request->o_comp,
+                                    $flag='MENGURANGI OPNAME',
+                                    $nota,
+                                    '',
+                                    date('Y-m-d'),
+                                    7
+                                  )){}
+          } else {
+            $cek->update([
+              's_qty' => $hasil
+            ]);
+
+            d_stock_mutation::create([
+              'sm_stock' => $cek->s_id,
+              'sm_detailid' => $sm_detailid,
+              'sm_date' => Carbon::now(),
+              'sm_comp' => $request->o_comp,
+              'sm_position' => $request->o_comp,
+              'sm_mutcat' => 9,
+              'sm_item' => $request->i_id[$i],
+              'sm_qty' => $request->opname[$i],
+              'sm_qty_used' => 0,
+              'sm_qty_sisa' => $request->opname[$i],
+              'sm_qty_expired' => 0,
+              'sm_detail' => 'PENAMBAHAN',
+              'sm_reff' => $nota,
+              'sm_insert' => Carbon::now()
+            ]);
+          }
+        }
+      }
+
+      DB::commit();
+      return response()->json([
+         'status' => 'sukses',
+         'nota' => $nota
+         ]);
+      } catch (\Exception $e) {
+      DB::rollback();
+      return response()->json([
+           'status' => 'gagal',
+           'data' => $e
+         ]);
+      }
+   }
+
+   public function hapusLapOpname($id)
+   {
+      DB::beginTransaction();
+      try {
+         $nota = d_opname::select('o_nota')->where('o_id',$id)->first();
+         $o_id = d_opname::where('o_id',$id)->delete();
+
+         DB::commit();
+         return response()->json([
+                'status' => 'sukses',
+                'nota' => $nota->o_nota
+            ]);
+         } catch (\Exception $e) {
+         DB::rollback();
+         return response()->json([
+              'status' => 'gagal',
+              'data' => $e
+            ]);
+         }
    }
 }
