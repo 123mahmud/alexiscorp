@@ -17,7 +17,8 @@
 </div>
 <div class="div-width page-break">
 
-  <div class="col-6">
+<div class="row">
+  <div style="width: 45%; float: left; padding-left: 15px; padding-right: 15px;">
     <table class="border-none" width="100%">
       <tr>
         <td width="15%">Laporan</td>
@@ -42,12 +43,13 @@
     </table>
   </div>
 
-  <div class="col-6">
+  <div style="width: 45%; float: left; padding-left: 15px; padding-right: 15px;">
 
     <h1 class="m-unset">Alexis</h1>
     <h3>Laporan Penjualan</h3>
 
   </div>
+</div>
 
   <table width="100%" class="mt-3" cellpadding="5px">
     <thead>
@@ -93,7 +95,7 @@
   </table>
 
   <br>
-  <div class="col-5">
+  <div style="width: 41.66666667%; float: left; padding-left: 15px; padding-right: 15px;">
     <table class="border-none" width="100%">
       <tr>
         <td width="40%">Diskon % (value)</td>

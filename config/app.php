@@ -166,6 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Barryvdh\DomPDF\ServiceProvider::class,
         Laravel\Tinker\TinkerServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
@@ -207,6 +208,7 @@ return [
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'Datatables' => Yajra\DataTables\Facades\DataTables::class,
         'DB' => Illuminate\Support\Facades\DB::class,
+        'DOMPDF' => Barryvdh\DomPDF\Facade::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,

@@ -270,6 +270,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::post('/penjualan/penjualanorder/update/{id}', 'Penjualan\PenjualanOrderController@update')->name('penjualanorder.update');
 	Route::post('/penjualan/penjualanorder/printLaporan', 'Penjualan\PenjualanOrderController@printLaporan')->name('penjualanorder.printlaporan');
 	Route::post('/penjualan/penjualanorder/exportToExcel', 'Penjualan\PenjualanOrderController@exportToExcel')->name('penjualanorder.exporttoexcel');
+	Route::post('/penjualan/penjualanorder/exportToPdf', 'Penjualan\PenjualanOrderController@exportToPdf')->name('penjualanorder.exporttopdf');
 
 	Route::get('/penjualan/penjualantanpaorder/index', 'Penjualan\PenjualanTOController@index')->name('penjualantanpaorder');
 	Route::get('/penjualan/penjualantanpaorder/getListPenjualan', 'Penjualan\PenjualanTOController@getListPenjualan')->name('penjualantanpaorder.getlistpenjualan');
@@ -283,6 +284,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/penjualan/penjualantanpaorder/getDetailPenjualan/{id}', 'Penjualan\PenjualanTOController@getDetailPenjualan')->name('penjualantanpaorder.getdetailpenjualan');
 	Route::post('/penjualan/penjualantanpaorder/printLaporan', 'Penjualan\PenjualanTOController@printLaporan')->name('penjualantanpaorder.printlaporan');
 	Route::post('/penjualan/penjualantanpaorder/exportToExcel', 'Penjualan\PenjualanTOController@exportToExcel')->name('penjualantanpaorder.exporttoexcel');
+	Route::post('/penjualan/penjualantanpaorder/exportToPdf', 'Penjualan\PenjualanTOController@exportToPdf')->name('penjualantanpaorder.exporttopdf');
 
 	Route::get('/penjualan/diskonpenjualan/index', 'PenjualanController@diskonpenjualan')->name('diskonpenjualan');
 	Route::get('/penjualan/diskonpenjualan/create', 'PenjualanController@tambah_diskonpenjualan')->name('tambah_diskonpenjualan');

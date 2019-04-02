@@ -17,30 +17,33 @@
 </div>
 <div class="div-width page-break">
 
-  <div class="col-6">
-    <table class="border-none" width="100%">
-      <tr>
-        <td width="15%">Laporan</td>
-        <td width="1%">:</td>
-        <td>Penjualan per Barang - Detail</td>
-      </tr>
-      <tr>
-        <td>Tanggal</td>
-        <td>:</td>
-        <td>{{ $data['date_from'] }} - {{ $data['date_to'] }}</td>
-      </tr>
-      <tr>
-        <td>Staff</td>
-        <td>:</td>
-        <td>{{ $data['staff'] }}</td>
-      </tr>
-    </table>
-  </div>
+  <div class="row">
+    <div style="width: 45%; float: left; padding-left: 15px; padding-right: 15px;">
+      <table class="border-none" width="100%">
+        <tr>
+          <td width="15%">Laporan</td>
+          <td width="1%">:</td>
+          <td>Penjualan per Barang - Detail</td>
+        </tr>
+        <tr>
+          <td>Tanggal</td>
+          <td>:</td>
+          <td>{{ $data['date_from'] }} - {{ $data['date_to'] }}</td>
+        </tr>
+        <tr>
+          <td>Staff</td>
+          <td>:</td>
+          <td>{{ $data['staff'] }}</td>
+        </tr>
+      </table>
+    </div>
 
-  <div class="col-6">
+    <div style="width: 45%; float: left; padding-left: 15px; padding-right: 15px;">
 
-    <h1 class="m-unset">Alexis</h1>
-    <h3>Laporan Penjualan</h3>
+      <h1 class="m-unset">Alexis</h1>
+      <h3>Laporan Penjualan</h3>
+
+    </div>
 
   </div>
 
@@ -88,7 +91,7 @@
   </table>
 
   <br>
-  <div class="col-5">
+  <div style="width: 41.66666667%; float: left; padding-left: 15px; padding-right: 15px;">
     <table class="border-none" width="100%">
       <tr>
         <td width="40%">Diskon % (value)</td>

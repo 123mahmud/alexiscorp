@@ -693,6 +693,19 @@
 		$('#btn_refresh_date_lpj').on('click', function() {
 			TableLaporanPenjualan();
 		});
+
+		$('#btn_printlaporan').on('click', function() {
+			$('#laporanForm').attr('action', baseUrl + '/penjualan/penjualantanpaorder/printLaporan');
+			$('#laporanForm').submit();
+		});
+		$('#btn_exportlaporanExcel').on('click', function() {
+			$('#laporanForm').attr('action', baseUrl + '/penjualan/penjualantanpaorder/exportToExcel');
+			$('#laporanForm').submit();
+		});
+		$('#btn_exportlaporanPdf').on('click', function() {
+			$('#laporanForm').attr('action', baseUrl + '/penjualan/penjualantanpaorder/exportToPdf');
+			$('#laporanForm').submit();
+		});
 	});
 
 	// data-table -> function to retrieve DataTable server side

@@ -694,6 +694,19 @@
 		$('#btn_refresh_date_lpj').on('click', function() {
 			TableLaporanPenjualan();
 		});
+
+		$('#btn_printlaporan').on('click', function() {
+			$('#laporanForm').attr('action', baseUrl + '/penjualan/penjualanorder/printLaporan');
+			$('#laporanForm').submit();
+		});
+		$('#btn_exportlaporanExcel').on('click', function() {
+			$('#laporanForm').attr('action', baseUrl + '/penjualan/penjualanorder/exportToExcel');
+			$('#laporanForm').submit();
+		});
+		$('#btn_exportlaporanPdf').on('click', function() {
+			$('#laporanForm').attr('action', baseUrl + '/penjualan/penjualanorder/exportToPdf');
+			$('#laporanForm').submit();
+		});
 	});
 
 	// data-table -> function to retrieve DataTable server side

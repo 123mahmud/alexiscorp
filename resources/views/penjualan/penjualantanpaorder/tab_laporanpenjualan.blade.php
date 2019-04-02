@@ -3,7 +3,7 @@
 
 		<div class="card-block">
     		<section>
-					<form id="laporanForm" action="{{ route('penjualantanpaorder.printlaporan') }}" method="post" target="_blank">
+					<form id="laporanForm" method="post" target="_blank">
 						@csrf
 						<div class="row">
 							<div class="col-sm-12 col-md-3">
@@ -24,7 +24,9 @@
 							</div>
 
 							<div class="col-sm-12 col-md-3 col-lg-3">
-								<button class="btn btn-primary float-right" type="submit" id="btn_printlaporan">Cetak laporan</button>
+								<button class="btn btn-secondary float-right" type="submit" id="btn_printlaporan"><i class="fa fa-print" title="Print"></i></button>
+								<button class="btn btn-warning float-right" type="button" id="btn_exportlaporanExcel"><i class="fa fa-file-excel-o" title="Excel"></i></button>
+								<button class="btn btn-info float-right" type="button" id="btn_exportlaporanPdf"><i class="fa fa-file-pdf-o" title="PDF"></i></button>
 							</div>
 						</div>
 						<div class="row">
