@@ -4,6 +4,13 @@
             <div class="header-block">
                 <h3 class="title">Penerimaan Supplier</h3>
             </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-box-tool btn-primary" title="Tambahkan Data Item" data-toggle="modal" data-target="#modal_terima_return">
+                <i class="fa fa-plus" aria-hidden="true">
+                &nbsp;
+                </i>Tambah Data
+                </button>
+            </div>
         </div>
         <div class="card-block">
             <section>
@@ -15,9 +22,9 @@
                     <div class="col-md-4 col-sm-7 col-xs-12">
                         <div class="form-group" style="display: ">
                             <div class="input-daterange input-group">
-                                <input id="tanggal1" data-provide="datepicker" class="form-control input-sm datepicker1" name="tanggal1" type="text">
+                                <input id="tanggal1" data-provide="datepicker" class="form-control input-sm form-control-sm datepicker1" name="tanggal1" type="text">
                                 <span class="input-group-addon">-</span>
-                                <input id="tanggal2" data-provide="datepicker" class="input-sm form-control datepicker2" name="tanggal2" type="text" value="{{ date('d-m-Y') }}">
+                                <input id="tanggal2" data-provide="datepicker" class="input-sm form-control-sm form-control datepicker2" name="tanggal2" type="text" value="{{ date('d-m-Y') }}">
                             </div>
                         </div>
                     </div>
@@ -31,13 +38,6 @@
                         <strong>
                         <i class="fa fa-undo" aria-hidden="true"></i>
                         </strong>
-                        </button>
-                    </div>
-                    <div align="right">
-                        <button type="button" class="btn btn-box-tool" title="Tambahkan Data Item" data-toggle="modal" data-target="#modal_terima_return">
-                        <i class="fa fa-plus" aria-hidden="true">
-                        &nbsp;
-                        </i>Tambah Data
                         </button>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">

@@ -22,38 +22,36 @@
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12" align="center">
                         <button class="btn btn-primary btn-sm btn-flat autoCari" type="button" onclick="listReceivedByTgl()">
-                            <strong>
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </strong>
+                        <strong>
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                        </strong>
                         </button>
                         <button class="btn btn-info btn-sm btn-flat" type="button" onclick="refreshTabelReceived()">
-                            <strong>
-                                <i class="fa fa-undo" aria-hidden="true"></i>
-                            </strong>
+                        <strong>
+                        <i class="fa fa-undo" aria-hidden="true"></i>
+                        </strong>
                         </button>
                     </div>
-                    <div class="table-responsive" style="padding-top: 15px;">
-                        <div id="tabelPenerimaanReceived">
-                            <table class="table tabelan table-hover table-bordered dt-responsive" id="tbl-received" width="100%">
-                                <thead>
-                                    <tr class="bg-primary">
-                                        <th>Kode PO</th>
-                                        <th>Supplier</th>
-                                        <th>Nama Item</th>
-                                        <th>Satuan</th>
-                                        <th width="5%">Qty PO</th>
-                                        <th width="5%">Qty Masuk</th>
-                                        <th>Tgl PO</th>
-                                        <th width="10%">Status</th>
-                                        <th width="5%">Detail</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table tabelan table-hover table-bordered dt-responsive" id="tbl-received" width="100%">
+                            <thead class="bg-primary">
+                                <tr>
+                                    <th>Kode PO</th>
+                                    <th>Supplier</th>
+                                    <th>Nama Item</th>
+                                    <th>Satuan</th>
+                                    <th>Qty PO</th>
+                                    <th>Qty Masuk</th>
+                                    <th>Tgl PO</th>
+                                    <th width="10%">Status</th>
+                                    <th>Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-        </section>
+            </section>
+        </div>
     </div>
-</div>
