@@ -54,7 +54,7 @@
                 <th width="5%">Satuan</th>
                 <th>Harga</th>
                 <th width="5%">Disc Persen</th>
-                <th>Disc Harga</th>
+                <th>Disc Harga /pcs</th>
                 <th>Total</th>
               </tr>
             </thead>

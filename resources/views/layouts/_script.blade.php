@@ -48,6 +48,7 @@
       prefix: '', //Space after $, this will not truncate the first character.
       rightAlign: false,
       autoUnmask: true,
+      nullable: false,
       // unmaskAsNumber: true,
     });
     // add manually inputmask to each .currency

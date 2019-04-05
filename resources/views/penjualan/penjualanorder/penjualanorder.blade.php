@@ -188,7 +188,7 @@
 
 		$('#modal_bayar').on('hidden.bs.modal', function() {
 			$('#paymentForm')[0].reset();
-			$('#btn_simpan').attr('disabled', true);
+			// $('#btn_simpan').attr('disabled', true);
 		});
 		$('#modal_bayar').on('shown.bs.modal', function() {
 			totalAmount = sumTotalAmount();
@@ -275,6 +275,7 @@
 	// count discount each item inside dataTable
 	function countDiscount(price, rowId)
 	{
+		qty = parseInt(tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val());
 		price = parseInt(price);
 		discH = parseInt(tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val());
 		discP = parseInt(tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val());
@@ -293,7 +294,6 @@
 			discH = price;
 			tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val(price);
 		}
-		qty = parseInt(tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val());
 		totalPrice = qty * price;
 
 		totalDiscP = (totalPrice * discP) / 100;
@@ -471,11 +471,11 @@
 		totalBayar = $('#totalBayar').val();
 
 		kembalian = totalBayar - totalAmount;
-		if (totalBayar > 0 && kembalian >= 0) {
-			$('#btn_simpan').attr('disabled', false);
-		} else {
-			$('#btn_simpan').attr('disabled', true);
-		}
+		// if (totalBayar > 0 && kembalian >= 0) {
+		// 	$('#btn_simpan').attr('disabled', false);
+		// } else {
+		// 	$('#btn_simpan').attr('disabled', true);
+		// }
 		return kembalian;
 	}
 
@@ -514,8 +514,8 @@
 			success : function (response){
 				if(response.status == 'berhasil'){
 					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
-					resetAllInput();
-					$('#modal_bayar').modal('hide');
+					// resetAllInput();
+					// $('#modal_bayar').modal('hide');
 				} else if (response.status == 'invalid') {
 					messageFailed('Perhatian', response.message);
 				} else if (response.status == 'gagal') {
@@ -607,13 +607,10 @@
 				$('#dt_date').val(newDate.getDate() +'-'+ (newDate.getMonth() + 1) +'-'+ newDate.getFullYear());
 				$('#dt_nota').val(response.s_note);
 				(response.get_customer != null) ? $('#dt_customer').val(response.get_customer.c_name) : $('#dt_customer').val('(kosong)');
-				$('#dt_subtotal').val(response.s_gross);
-				$('#dt_totaldisc').val(response.s_disc_value);
-				$('#dt_ppn').val(response.s_tax);
-				$('#dt_grandtotal').val(response.s_net);
-				(response.get_sales_payment != null) ? $('#dt_totalpayment').val(response.get_sales_payment.sp_nominal) : $('#dt_totalpayment').val('(kosong)');
+				let totalDisc = 0;
 
 				$.each(response.get_sales_dt, function(key, val) {
+					totalDisc += (parseInt(val.sd_disc_vpercent) + parseInt(val.sd_disc_value));
 					let discH = val.sd_disc_value / val.sd_qty;
 					rowId = tb_detailpenjualan.rows().count();
 					tb_detailpenjualan.row.add([
@@ -652,6 +649,12 @@
 						});
 					});
 				});
+				console.log(totalDisc);
+				$('#dt_subtotal').val(response.s_gross);
+				$('#dt_totaldisc').val(totalDisc);
+				$('#dt_ppn').val(response.s_tax);
+				$('#dt_grandtotal').val(response.s_net);
+				(response.get_sales_payment != null) ? $('#dt_totalpayment').val(response.get_sales_payment.sp_nominal) : $('#dt_totalpayment').val('(kosong)');
 				tb_detailpenjualan.draw(false);
 			},
 			error : function(e){

@@ -339,12 +339,12 @@ class PenjualanOrderController extends Controller
           'message' => $errors
         ]);
       }
-
+      // dd($request->all());
       DB::beginTransaction();
       try {
         // insert sales
         $salesId = d_sales::max('s_id') + 1;
-        $discPercent = ($request->totalDisc * 100) / $request->totalPenjualan;
+        // $discPercent = ($request->totalDisc * 100) / $request->totalPenjualan;
         $salesNota = CodeGenerator::code('d_sales', 's_note', 5, 'SLS');
         $sales = new d_sales();
         $sales->s_id = $salesId;
@@ -371,14 +371,14 @@ class PenjualanOrderController extends Controller
         // insert sales-detail
         $listItems = $request->listItemId;
         $loopCount = 0;
-        $totalDiscP = 0;
-        $totalDiscH = 0;
+        // $totalDiscP = 0;
+        // $totalDiscH = 0;
         foreach ($listItems as $item) {
           if ($item != null) {
             $valDiscP = ($request->listQty[$loopCount] * $request->listPrice[$loopCount]) * $request->listDiscP[$loopCount] / 100;
             $valDiscH = $request->listQty[$loopCount] * $request->listDiscH[$loopCount];
-            $totalDiscP += $valDiscP;
-            $totalDiscH += $valDiscH;
+            // $totalDiscP += $valDiscP;
+            // $totalDiscH += $valDiscH;
             $salesDtId = d_sales_dt::where('sd_sales', $salesId)
               ->max('sd_detailid') + 1;
             $salesDt = new d_sales_dt;
@@ -396,12 +396,15 @@ class PenjualanOrderController extends Controller
           $loopCount++;
         }
 
+        // DB::rollBack();
+        // dd($totalDiscP);
+
         // update total-discount in d_sales
-        $sales = d_sales::where('s_id', $salesId)
-          ->firstOrFail();
-        $sales->s_disc_percent = $totalDiscP;
-        $sales->s_disc_value = $totalDiscH;
-        $sales->save();
+        // $sales = d_sales::where('s_id', $salesId)
+        //   ->firstOrFail();
+        // $sales->s_disc_percent = $totalDiscP;
+        // $sales->s_disc_value = $totalDiscH;
+        // $sales->save();
 
         // insert sales-payment
         $salesPay = new d_sales_payment;
@@ -473,8 +476,8 @@ class PenjualanOrderController extends Controller
 
       DB::beginTransaction();
       try {
-        // insert sales
-        $discPercent = ($request->totalDisc * 100) / $request->totalPenjualan;
+        // update sales
+        // $discPercent = ($request->totalDisc * 100) / $request->totalPenjualan;
         $sales = d_sales::where('s_id', $id)
           ->firstOrFail();
         $sales->s_date = Carbon::parse($request->orderDate)->format('Y-m-d');
@@ -555,11 +558,11 @@ class PenjualanOrderController extends Controller
         }
 
         // update total-discount in d_sales
-        $sales = d_sales::where('s_id', $salesId)
-        ->firstOrFail();
-        $sales->s_disc_percent = $totalDiscP;
-        $sales->s_disc_value = $totalDiscH;
-        $sales->save();
+        // $sales = d_sales::where('s_id', $salesId)
+        // ->firstOrFail();
+        // $sales->s_disc_percent = $totalDiscP;
+        // $sales->s_disc_value = $totalDiscH;
+        // $sales->save();
 
         // insert sales-payment
         $salesPay = d_sales_payment::where('sp_sales', $id)

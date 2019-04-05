@@ -22,4 +22,8 @@ class d_sales_payment extends Model
     {
       return $this->belongsTo('App\d_sales', 'sp_sales', 's_id');
     }
+    public function getPaymentMethod()
+    {
+      return $this->belongsTo('App\m_paymentmethod', 'sp_method', 'pm_id');
+    }
 }
