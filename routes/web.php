@@ -408,7 +408,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
     Route::post('/inventory/b_rusak/hapus-data-ubahjenis', 'Stok\BarangRusakController@hapusDataUbah');
 //End Barang Rusak
 //p_returnsupplier
-    Route::get('/inventory/p_returnsupplier/index', 'Stok\PenerimaanRtrSupController@index')->name('p_returnsupplier');
+    Route::get('/stok/p_returnsupplier/index', 'Stok\PenerimaanRtrSupController@index')->name('p_returnsupplier');
     Route::get('/inventory/p_returnsupplier/lookup-data-return', 'Stok\PenerimaanRtrSupController@lookupDataReturn');
     Route::get('/inventory/p_returnsupplier/get-data-form/{id}', 'Stok\PenerimaanRtrSupController@getDataForm');
     Route::get('/inventory/p_returnsupplier/simpan-penerimaan', 'Stok\PenerimaanRtrSupController@simpanPenerimaan');

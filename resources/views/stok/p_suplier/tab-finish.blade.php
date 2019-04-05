@@ -35,8 +35,8 @@
             <div class="table-responsive" style="padding-top: 15px;">
                 <div id="tabelPenerimaanReceived">
                     <table class="table tabelan table-hover table-bordered dt-responsive" id="tbl-received" width="100%">
-                        <thead>
-                            <tr class="bg-primary">
+                        <thead class="bg-primary">
+                            <tr>
                                 <th>Kode PO</th>
                                 <th>Supplier</th>
                                 <th>Nama Item</th>
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
+        </section>
     </div>
-    </section>
     </div>
 </div>
