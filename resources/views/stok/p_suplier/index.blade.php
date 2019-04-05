@@ -23,12 +23,11 @@ border: 1px solid #8080ff !important;
     </div>
     <section class="section">
         <ul class="nav nav-pills">
-            <li class="nav-item active"><a data-target="#index-tab" class="nav-link active" aria-controls="index-tab" data-toggle="tab" role="tab">Daftar Penerimaan</a></li>
+            <li class="nav-item"><a data-target="#index-tab" class="nav-link active" aria-controls="index-tab" data-toggle="tab" role="tab">Daftar Penerimaan</a></li>
             <li class="nav-item"><a data-target="#wait-tab" class="nav-link" aria-controls="wait-tab" data-toggle="tab" role="tab" onclick="listWaitingByTgl()">Daftar Tunggu</a></li>
             <li class="nav-item"><a data-target="#finish-tab" class="nav-link" aria-controls="finish-tab" data-toggle="tab" role="tab" onclick="listReceivedByTgl()">Daftar Hasil Penerimaan</a></li>
         </ul>
         <div class="row">
-            
             <div class="tab-content">
                 {!! $tabIndex !!}
                 {!! $tabWait !!}
