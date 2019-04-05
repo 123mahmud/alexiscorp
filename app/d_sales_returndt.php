@@ -19,4 +19,13 @@ class d_sales_returndt extends Model
     return $query;
   }
 
+  public function getItem()
+  {
+    return $this->belongsTo('App\m_item', 'dsrdt_item', 'i_id');
+  }
+  public function getSalesRet()
+  {
+    return $this->belongsTo('App\d_sales_return', 'dsrdt_idsr', 's_id');
+  }
+
 }

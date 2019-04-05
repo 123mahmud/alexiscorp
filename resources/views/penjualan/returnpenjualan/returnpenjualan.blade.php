@@ -34,22 +34,22 @@
 
 
                         	<div class="table-responsive">
-	                            <table class="table data-table table-hover" cellspacing="0">
-	                                <thead class="bg-primary">
-	                                    <tr>
-							                <th>Tgl Return</th>
-							                <th>Nota</th>
-							                <th>Metode</th>
-							                <th>Jenis Return</th>
-							                <th>Type Sales</th>
-							                <th>Status</th>
-							                <th>Aksi</th>
-							            </tr>
-	                                </thead>
-	                                <tbody>
+														<table class="table data-table table-hover" cellspacing="0" id="table_returnpenjualan">
+															<thead class="bg-primary">
+																<tr>
+																	<th>Tgl Return</th>
+																	<th>Nota</th>
+																	<th>Metode</th>
+																	<th>Jenis Return</th>
+																	<th>Type Sales</th>
+																	<th>Status</th>
+																	<th>Aksi</th>
+																</tr>
+															</thead>
+															<tbody>
 
-							        </tbody>
-	                            </table>
+															</tbody>
+														</table>
 	                        </div>
                         </section>
                     </div>
@@ -63,4 +63,40 @@
 
 </article>
 
+@endsection
+
+@section('extra_script')
+<script type="text/javascript">
+	$(document).ready(function() {
+		TableReturnPenjualan();
+	});
+	// data-table -> function to retrieve DataTable server side
+	var tb_returnpenjualan;
+	function TableReturnPenjualan()
+	{
+		$('#table_returnpenjualan').dataTable().fnDestroy();
+		tb_returnpenjualan = $('#table_returnpenjualan').DataTable({
+			responsive: true,
+			serverSide: true,
+			ajax: {
+				url: "{{ route('returnpenjualan.getlist') }}",
+				type: "get",
+				data: {
+					"_token": "{{ csrf_token() }}"
+				}
+			},
+			columns: [
+				{data: 'date'},
+				{data: 'dsr_code'},
+				{data: 'return_method'},
+				{data: 'return_type'},
+				{data: 'sales_type'},
+				{data: 'status'},
+				{data: 'action'}
+			],
+			pageLength: 10,
+			lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All']]
+		});
+	}
+</script>
 @endsection

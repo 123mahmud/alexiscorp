@@ -291,6 +291,7 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/penjualan/penjualanproject/index', 'PenjualanController@penjualanproject')->name('penjualanproject');
 
 	Route::get('/penjualan/returnpenjualan/index', 'Penjualan\PenjualanReturnController@index')->name('returnpenjualan');
+	Route::get('/penjualan/returnpenjualan/getList', 'Penjualan\PenjualanReturnController@getList')->name('returnpenjualan.getlist');
 	Route::get('/penjualan/returnpenjualan/create', 'Penjualan\PenjualanReturnController@create')->name('returnpenjualan.create');
 	Route::get('/penjualan/returnpenjualan/getSales', 'Penjualan\PenjualanReturnController@getSales')->name('returnpenjualan.getsales');
 	Route::post('/penjualan/returnpenjualan/store', 'Penjualan\PenjualanReturnController@store')->name('returnpenjualan.store');

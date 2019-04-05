@@ -16,9 +16,69 @@ use carbon\Carbon;
 use CodeGenerator;
 use DB;
 use Session;
+use Yajra\DataTables\DataTables;
 
 class PenjualanReturnController extends Controller
 {
+
+    /**
+    * Return DataTable list for view.
+    *
+    * @return Yajra/DataTables
+    */
+    public function getList(Request $request)
+    {
+      $datas = d_sales_return::with('getSalesRetDt.getItem')
+        ->with('getCustomer')
+        ->orderBy('dsr_code', 'desc')
+        ->get();
+
+      return Datatables::of($datas)
+      ->addIndexColumn()
+      ->addColumn('date', function($datas) {
+        return Carbon::parse($datas->dsr_date)->format('d M Y');
+      })
+      ->addColumn('return_method', function($datas) {
+        if ($datas->dsr_method === 'PN') {
+          return 'Potong Nota';
+        } elseif ($datas->dsr_method === 'TK') {
+          return 'Tukar Barang';
+        }
+      })
+      ->addColumn('return_type', function($datas) {
+        if ($datas->dsr_jenis_return === 'BR') {
+          return 'Barang Rusak';
+        } elseif ($datas->dsr_jenis_return === 'KB') {
+          return 'Kelebihan Barang';
+        }
+      })
+      ->addColumn('sales_type', function($datas) {
+        if ($datas->dsr_type_sales === 'OD') {
+          return 'Order';
+        } elseif ($datas->dsr_type_sales === 'TO') {
+          return 'Tanpa Order';
+        }
+      })
+      ->addColumn('status', function($datas) {
+        return '-X-';
+      })
+      ->addColumn('action', function($datas) {
+        return '-Y-';;
+        // if ($datas->s_status == 'PR') {
+        //   return '<div class="btn-group btn-group-sm">
+        //   <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
+        //   <button class="btn btn-warning" onclick="EditPenjualan('.$datas->s_id.')" rel="tooltip" title="Edit"><i class="fa fa-pencil"></i></button>
+        //   </div>';
+        // } elseif ($datas->s_status == 'FN') {
+        //   return '<div class="btn-group btn-group-sm">
+        //   <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
+        //   </div>';
+        // }
+      })
+      ->rawColumns(['date', 'return_method', 'return_type', 'sales_type', 'status', 'action'])
+      ->make(true);
+    }
+
     /**
      * return sales based on id sales
      *
