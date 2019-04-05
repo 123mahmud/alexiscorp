@@ -49,15 +49,14 @@ border: 1px solid #8080ff !important;
     </article>
 @endsection
 @section('extra_script')
-<script src="{{ asset ('assets/script/icheck.min.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
     //fix to issue select2 on modal when opening in firefox
     $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
     var extensions = {
-            "sFilterInput": "form-control input-sm",
-            "sLengthSelect": "form-control input-sm"
+            "sFilterInput": "form-control input-sm form-control-sm",
+            "sLengthSelect": "form-control input-sm form-control-sm"
         }
         // Used when bJQueryUI is false
     $.extend($.fn.dataTableExt.oStdClasses, extensions);
@@ -143,28 +142,28 @@ border: 1px solid #8080ff !important;
                         key +
                         '</td>' +
                         '<td>' +
-                        '<input type="text" value="' + data.data_isi[key - 1].i_code + ' | ' + data.data_isi[key - 1].i_name + '" name="fieldNamaItem[]" class="form-control input-sm" readonly/>' +
-                        '<input type="hidden" value="' + data.data_isi[key - 1].i_id + '" name="fieldItemId[]" class="form-control input-sm"/>' +
-                        '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_id + '" name="fieldIdReturnDet[]" class="form-control input-sm"/>' +
+                        '<input type="text" value="' + data.data_isi[key - 1].i_code + ' | ' + data.data_isi[key - 1].i_name + '" name="fieldNamaItem[]" class="form-control input-sm form-control-sm" readonly/>' +
+                        '<input type="hidden" value="' + data.data_isi[key - 1].i_id + '" name="fieldItemId[]" class="form-control input-sm form-control-sm"/>' +
+                        '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_id + '" name="fieldIdReturnDet[]" class="form-control input-sm form-control-sm"/>' +
                         '</td>' +
                         '<td>' +
-                        '<input type="text" value="' + qtyCost + '" name="fieldQty[]" class="form-control numberinput input-sm field_qty" readonly/>' +
+                        '<input type="text" value="' + qtyCost + '" name="fieldQty[]" class="form-control numberinput input-sm form-control-sm field_qty" readonly/>' +
                         '</td>' +
                         '<td>' +
-                        '<input type="text" value="' + qtyTerima + '" name="fieldQtyterima[]" class="form-control numberinput input-sm field_qty_terima" id="' + i + '"/>' +
-                        '<input type="hidden" value="' + qtyTerima + '" name="fieldQtyterimaHidden[]" class="form-control numberinput input-sm" id="qtymskhidden_' + i + '"/>' +
+                        '<input type="text" value="' + qtyTerima + '" name="fieldQtyterima[]" class="form-control numberinput input-sm form-control-sm field_qty_terima" id="' + i + '"/>' +
+                        '<input type="hidden" value="' + qtyTerima + '" name="fieldQtyterimaHidden[]" class="form-control numberinput input-sm form-control-sm" id="qtymskhidden_' + i + '"/>' +
                         '</td>' +
                         '<td>' +
-                        '<input type="text" value="' + data.data_isi[key - 1].s_name + '" name="fieldSatuanTxt[]" class="form-control input-sm" readonly/>' +
-                        '<input type="hidden" value="' + data.data_isi[key - 1].s_id + '" name="fieldSatuanId[]" class="form-control input-sm" readonly/>' +
-                        '<input type="hidden" value="' + convertDecimalToRupiah(hargaSatuanItemNet) + '" name="fieldHarga[]" id="cost_' + i + '" class="form-control input-sm field_harga numberinput" readonly/>' +
-                        '<input type="hidden" value="' + hargaSatuanItemNet + '" name="fieldHargaRaw[]" id="costRaw_' + i + '" class="form-control input-sm field_harga_raw numberinput" readonly/>' +
-                        '<input type="hidden" value="' + convertDecimalToRupiah(hargaTotalPerRow) + '" name="fieldHargaTotal[]" class="form-control input-sm hargaTotalItem" id="total_' + i + '" readonly/>' +
-                        '<input type="hidden" value="' + hargaTotalPerRow + '" name="fieldHargaTotalRaw[]" id="totalRaw_' + i + '" class="form-control input-sm field_hargatotal_raw numberinput" readonly/>' +
+                        '<input type="text" value="' + data.data_isi[key - 1].s_name + '" name="fieldSatuanTxt[]" class="form-control input-sm form-control-sm" readonly/>' +
+                        '<input type="hidden" value="' + data.data_isi[key - 1].s_id + '" name="fieldSatuanId[]" class="form-control input-sm form-control-sm" readonly/>' +
+                        '<input type="hidden" value="' + convertDecimalToRupiah(hargaSatuanItemNet) + '" name="fieldHarga[]" id="cost_' + i + '" class="form-control input-sm form-control-sm field_harga numberinput" readonly/>' +
+                        '<input type="hidden" value="' + hargaSatuanItemNet + '" name="fieldHargaRaw[]" id="costRaw_' + i + '" class="form-control input-sm form-control-sm field_harga_raw numberinput" readonly/>' +
+                        '<input type="hidden" value="' + convertDecimalToRupiah(hargaTotalPerRow) + '" name="fieldHargaTotal[]" class="form-control input-sm form-control-sm hargaTotalItem" id="total_' + i + '" readonly/>' +
+                        '<input type="hidden" value="' + hargaTotalPerRow + '" name="fieldHargaTotalRaw[]" id="totalRaw_' + i + '" class="form-control input-sm form-control-sm field_hargatotal_raw numberinput" readonly/>' +
                         '</td>' +
                         '<td>' +
-                        '<input type="text" value="' + data.data_stok[key - 1].qtyStok + ' ' + data.data_satuan[key - 1] + '" name="fieldStokTxt[]" class="form-control input-sm" readonly/>' +
-                        '<input type="hidden" value="' + data.data_stok[key - 1].qtyStok + '" name="fieldStokVal[]" class="form-control input-sm" readonly/>' +
+                        '<input type="text" value="' + data.data_stok[key - 1].qtyStok + ' ' + data.data_satuan[key - 1] + '" name="fieldStokTxt[]" class="form-control input-sm form-control-sm" readonly/>' +
+                        '<input type="hidden" value="' + data.data_stok[key - 1].qtyStok + '" name="fieldStokVal[]" class="form-control input-sm form-control-sm" readonly/>' +
                         '</td>' +
                         '<td>' +
                         '<button name="remove" id="' + i + '" class="btn btn-danger btn_remove btn-sm">X</button>' +

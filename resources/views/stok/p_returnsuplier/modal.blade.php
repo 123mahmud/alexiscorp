@@ -1,5 +1,5 @@
 <div class="modal fade" id="modal_terima_return" role="dialog">
-  <div class="modal-dialog" style="width: 90%;margin: auto;">
+  <div class="modal-dialog" style="width: 90%;margin: auto; font-size:10pt;">
     
     <form method="post" id="form-terima-return" name="formTerimaReturn">
       {{ csrf_field() }}
@@ -11,7 +11,7 @@
         </div>
 
         <div class="modal-body">
-          <div class="col-md-12 col-sm-12 col-xs-12 tamma-bg" style="margin-top:10px;padding-bottom: 10px;padding-top: 20px;margin-bottom: 15px;">
+          <div class="col-md-12 col-sm-12 col-xs-12 row" style="margin-top:10px;padding-bottom: 10px;padding-top: 20px;margin-bottom: 15px;">
 
             <div class="col-md-2 col-sm-12 col-xs-12">
               <label class="tebal">Nota Return</label>
@@ -101,4 +101,3 @@
   </div>
 
   </div>
-</div>
