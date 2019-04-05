@@ -289,8 +289,11 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/penjualan/diskonpenjualan/index', 'PenjualanController@diskonpenjualan')->name('diskonpenjualan');
 	Route::get('/penjualan/diskonpenjualan/create', 'PenjualanController@tambah_diskonpenjualan')->name('tambah_diskonpenjualan');
 	Route::get('/penjualan/penjualanproject/index', 'PenjualanController@penjualanproject')->name('penjualanproject');
-	Route::get('/penjualan/returnpenjualan/index', 'PenjualanController@returnpenjualan')->name('returnpenjualan');
-	Route::get('/penjualan/returnpenjualan/create', 'PenjualanController@tambah_returnpenjualan')->name('tambah_returnpenjualan');
+
+	Route::get('/penjualan/returnpenjualan/index', 'Penjualan\PenjualanReturnController@index')->name('returnpenjualan');
+	Route::get('/penjualan/returnpenjualan/create', 'Penjualan\PenjualanReturnController@create')->name('returnpenjualan.create');
+	Route::get('/penjualan/returnpenjualan/getSales', 'Penjualan\PenjualanReturnController@getSales')->name('returnpenjualan.getsales');
+	Route::get('/penjualan/returnpenjualan/store', 'Penjualan\PenjualanReturnController@store')->name('returnpenjualan.store');
 
 
 	// Pengiriman

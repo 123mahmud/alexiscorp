@@ -83,30 +83,6 @@ class PenjualanOrderController extends Controller
       }
       return response()->json($results);
     }
-    //
-    // /**
-    // * Return list of customers from 'd_mem' where 'pegawai manajemen'.
-    // *
-    // * @return \Illuminate\Http\Response
-    // */
-    // public function getStaff(Request $request)
-    // {
-    //   $term = $request->term;
-    //   $staff = d_mem::where('m_name', 'like', '%'.$term.'%')
-    //     ->whereHas('getPegawaiMan')
-    //     ->get();
-    //   if (sizeof($staff) > 0) {
-    //     foreach ($staff as $staf) {
-    //       $results[] = [
-    //         'id' => $staf->m_id,
-    //         'label' => $staf->m_name .', '. $staf->m_addr,
-    //       ];
-    //     }
-    //   } else {
-    //     $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
-    //   }
-    //   return response()->json($results);
-    // }
 
     /**
     * Return list of customers from 'm_customer'.
@@ -296,7 +272,7 @@ class PenjualanOrderController extends Controller
         return '<div class="text-right">'. $datas->sd_disc_percent .'</div>';
       })
       ->addColumn('discount_value', function($datas) {
-        return '<div class="text-right">'. (int)$datas->sd_disc_value / (int)$datas->sd_qty .'</div>';
+        return '<div class="text-right">'. $datas->sd_disc_value .'</div>';
       })
       ->addColumn('sub_total', function($datas) {
         return '<div class="text-right">'. $datas->sd_total .'</div>';
@@ -380,8 +356,8 @@ class PenjualanOrderController extends Controller
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_customer = $request->idCustomer;
         $sales->s_gross = $request->totalPenjualan;
-        $sales->s_disc_percent = $discPercent;
-        $sales->s_disc_value = $request->totalDisc;
+        // $sales->s_disc_percent = $discPercent;
+        // $sales->s_disc_value = $request->totalDisc;
         $sales->s_tax = $request->ppn;
         $sales->s_jatuh_tempo = Carbon::parse($request->dueDate)->format('Y-m-d');
         // $sales->s_ongkir
@@ -395,10 +371,14 @@ class PenjualanOrderController extends Controller
         // insert sales-detail
         $listItems = $request->listItemId;
         $loopCount = 0;
+        $totalDiscP = 0;
+        $totalDiscH = 0;
         foreach ($listItems as $item) {
           if ($item != null) {
             $valDiscP = ($request->listQty[$loopCount] * $request->listPrice[$loopCount]) * $request->listDiscP[$loopCount] / 100;
             $valDiscH = $request->listQty[$loopCount] * $request->listDiscH[$loopCount];
+            $totalDiscP += $valDiscP;
+            $totalDiscH += $valDiscH;
             $salesDtId = d_sales_dt::where('sd_sales', $salesId)
               ->max('sd_detailid') + 1;
             $salesDt = new d_sales_dt;
@@ -415,6 +395,13 @@ class PenjualanOrderController extends Controller
           }
           $loopCount++;
         }
+
+        // update total-discount in d_sales
+        $sales = d_sales::where('s_id', $salesId)
+          ->firstOrFail();
+        $sales->s_disc_percent = $totalDiscP;
+        $sales->s_disc_value = $totalDiscH;
+        $sales->save();
 
         // insert sales-payment
         $salesPay = new d_sales_payment;
@@ -493,8 +480,8 @@ class PenjualanOrderController extends Controller
         $sales->s_date = Carbon::parse($request->orderDate)->format('Y-m-d');
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_gross = $request->totalPenjualan;
-        $sales->s_disc_percent = $discPercent;
-        $sales->s_disc_value = $request->totalDisc;
+        // $sales->s_disc_percent = $discPercent;
+        // $sales->s_disc_value = $request->totalDisc;
         $sales->s_tax = $request->ppn;
         $sales->s_jatuh_tempo = Carbon::parse($request->dueDate)->format('Y-m-d');
         $sales->s_net = $request->totalAmount;
@@ -516,10 +503,14 @@ class PenjualanOrderController extends Controller
         // insert sales-detail
         $listItems = $request->listItemId;
         $loopCount = 0;
+        $totalDiscP = 0;
+        $totalDiscH = 0;
         foreach ($listItems as $item) {
           if ($item != null) {
             $valDiscP = ($request->listQty[$loopCount] * $request->listPrice[$loopCount]) * $request->listDiscP[$loopCount] / 100;
             $valDiscH = $request->listQty[$loopCount] * $request->listDiscH[$loopCount];
+            $totalDiscP += $valDiscP;
+            $totalDiscH += $valDiscH;
             $salesDtId = d_sales_dt::where('sd_sales', $id)
               ->max('sd_detailid') + 1;
             $salesDt = new d_sales_dt;
@@ -562,6 +553,13 @@ class PenjualanOrderController extends Controller
           }
           $loopCount++;
         }
+
+        // update total-discount in d_sales
+        $sales = d_sales::where('s_id', $salesId)
+        ->firstOrFail();
+        $sales->s_disc_percent = $totalDiscP;
+        $sales->s_disc_value = $totalDiscH;
+        $sales->save();
 
         // insert sales-payment
         $salesPay = d_sales_payment::where('sp_sales', $id)
@@ -692,7 +690,7 @@ class PenjualanOrderController extends Controller
       foreach ($data['sales'] as $index => $sales) {
         array_push($data['salesdate'], Carbon::parse($data['sales'][$index]->getSales->s_date)->format('d M Y'));
         $data['totalDiscP'] += $sales->sd_disc_vpercent;
-        $data['totalDiscH'] += ($sales->sd_disc_value / $sales->sd_qty);
+        $data['totalDiscH'] += $sales->sd_disc_value;
         $data['grandTotal'] += $sales->sd_total;
       }
 
@@ -806,7 +804,7 @@ class PenjualanOrderController extends Controller
       foreach ($data['sales'] as $index => $sales) {
         array_push($data['salesdate'], Carbon::parse($data['sales'][$index]->getSales->s_date)->format('d M Y'));
         $data['totalDiscP'] += $sales->sd_disc_vpercent;
-        $data['totalDiscH'] += ($sales->sd_disc_value / $sales->sd_qty);
+        $data['totalDiscH'] += $sales->sd_disc_value;
         $data['grandTotal'] += $sales->sd_total;
       }
 
