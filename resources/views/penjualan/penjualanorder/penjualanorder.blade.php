@@ -275,6 +275,7 @@
 	// count discount each item inside dataTable
 	function countDiscount(price, rowId)
 	{
+		qty = parseInt(tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val());
 		price = parseInt(price);
 		discH = parseInt(tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val());
 		discP = parseInt(tb_penjualan.cell(rowId, 4).nodes().to$().find('input').val());
@@ -293,7 +294,6 @@
 			discH = price;
 			tb_penjualan.cell(rowId, 5).nodes().to$().find('input').val(price);
 		}
-		qty = parseInt(tb_penjualan.cell(rowId, 1).nodes().to$().find('input').val());
 		totalPrice = qty * price;
 
 		totalDiscP = (totalPrice * discP) / 100;

@@ -473,7 +473,7 @@ class PenjualanOrderController extends Controller
 
       DB::beginTransaction();
       try {
-        // insert sales
+        // update sales
         $discPercent = ($request->totalDisc * 100) / $request->totalPenjualan;
         $sales = d_sales::where('s_id', $id)
           ->firstOrFail();
