@@ -378,6 +378,49 @@ Route::group(['middleware' => ['auth', 'web']], function() {
 	Route::get('/keuangan/konfirmasipembelian/confirm-return/{id}/{type}', 'Keuangan\purchaseConfirmController@confirmReturnPembelian');
 	Route::post('/keuangan/konfirmasipembelian/confirm-return-submit', 'Keuangan\purchaseConfirmController@submitReturnPembelian');
 
+//penerimaan supplier
+	Route::get('/stok/p_suplier/suplier', 'Stok\PenerimaanBrgSupController@index')->name('p_suplier');
+	Route::get('/inventory/p_suplier/get-penerimaan-by-tgl/{tgl1}/{tgl2}', 'Stok\PenerimaanBrgSupController@getPenerimaanByTgl');
+	Route::get('/inventory/p_suplier/lookup-data-pembelian', 'Stok\PenerimaanBrgSupController@lookupDataPembelian');
+	Route::get('/inventory/p_suplier/get-data-form/{id}', 'Stok\PenerimaanBrgSupController@getdataform');
+	Route::get('/inventory/p_suplier/get-data-detail/{id}', 'Stok\PenerimaanBrgSupController@getdatadetail');
+	Route::get('/inventory/p_suplier/simpan-penerimaan', 'Stok\PenerimaanBrgSupController@simpan_penerimaan');
+	Route::get('/inventory/p_suplier/get-list-waiting-bytgl/{tgl1}/{tgl2}', 'Stok\PenerimaanBrgSupController@getListWaitingByTgl');
+	Route::get('/inventory/p_suplier/get-list-received-bytgl/{tgl1}/{tgl2}', 'Stok\PenerimaanBrgSupController@getListReceivedByTgl');
+	Route::get('/inventory/p_suplier/get-detail-penerimaan/{id}', 'Stok\PenerimaanBrgSupController@getDataDetail');
+	Route::get('/inventory/p_suplier/print/{id}', 'Stok\PenerimaanBrgSupController@print');
+//Barang Rusak
+    Route::get('/inventory/b_rusak/index', 'Stok\BarangRusakController@index')->name('b_rusak');
+    Route::get('/inventory/b_rusak/get-brg-rusak-by-tgl/{tgl1}/{tgl2}', 'Stok\BarangRusakController@getBrgRusakByTgl');
+    Route::get('/inventory/b_rusak/lookup-data-gudang', 'Stok\BarangRusakController@lookupDataGudang');
+    Route::get('/inventory/b_rusak/lookup-gudang', 'Stok\BarangRusakController@DataGudangAll');
+    Route::get('/inventory/b_rusak/autocomplete-barang', 'Stok\BarangRusakController@autocompleteBarang');
+    Route::get('/inventory/b_rusak/simpan-data-rusak', 'Stok\BarangRusakController@simpanDataRusak');
+    Route::get('/inventory/b_rusak/get-detail/{id}', 'Stok\BarangRusakController@detailBrgRusak');
+    Route::get('/inventory/b_rusak/print/{id}', 'Stok\BarangRusakController@printTandaTerimaRusak');
+    Route::post('/inventory/b_rusak/musnahkan-barang-rusak', 'Stok\BarangRusakController@musnahkanBrgRusak');
+    Route::get('/inventory/b_rusak/kembalikan-barang-rusak', 'Stok\BarangRusakController@kembalikanBrgRusak');
+    Route::get('/inventory/b_rusak/get-brg-musnah-by-tgl/{tgl1}/{tgl2}', 'Stok\BarangRusakController@getBrgMusnahByTgl');
+    Route::post('/inventory/b_rusak/simpan-ubah-jenis', 'Stok\BarangRusakController@simpanUbahJenis');
+    Route::get('/inventory/b_rusak/proses-ubah-jenis', 'Stok\BarangRusakController@prosesUbahJenis');
+    Route::get('/inventory/b_rusak/get-brg-ubahjenis-by-tgl/{tgl1}/{tgl2}', 'Stok\BarangRusakController@getBrgUbahJenisByTgl');
+    Route::get('/inventory/b_rusak/get-detail-ubahjenis/{id}', 'Stok\BarangRusakController@detailBrgUbahJenis');
+    Route::post('/inventory/b_rusak/hapus-data-ubahjenis', 'Stok\BarangRusakController@hapusDataUbah');
+//End Barang Rusak
+//p_returnsupplier
+    Route::get('/inventory/p_returnsupplier/index', 'Stok\PenerimaanRtrSupController@index')->name('p_returnsupplier');
+    Route::get('/inventory/p_returnsupplier/lookup-data-return', 'Stok\PenerimaanRtrSupController@lookupDataReturn');
+    Route::get('/inventory/p_returnsupplier/get-data-form/{id}', 'Stok\PenerimaanRtrSupController@getDataForm');
+    Route::get('/inventory/p_returnsupplier/simpan-penerimaan', 'Stok\PenerimaanRtrSupController@simpanPenerimaan');
+    Route::get('/inventory/p_returnsupplier/get-datatable-index', 'Stok\PenerimaanRtrSupController@getDatatableIndex');
+    Route::get('/inventory/p_returnsupplier/get-detail-penerimaan/{id}', 'Stok\PenerimaanRtrSupController@getDataDetail');
+    Route::post('/inventory/p_returnsupplier/delete-data-penerimaan', 'Stok\PenerimaanRtrSupController@deletePenerimaan');
+    Route::get('/inventory/p_returnsupplier/get-list-waiting-bytgl/{tgl1}/{tgl2}', 'Stok\PenerimaanRtrSupController@getListWaitingByTgl');
+    Route::get('/inventory/p_returnsupplier/get-list-received-bytgl/{tgl1}/{tgl2}', 'Stok\PenerimaanRtrSupController@getListReceivedByTgl');
+    Route::get('/inventory/p_returnsupplier/get-penerimaan-peritem/{id}', 'Stok\PenerimaanRtrSupController@getPenerimaanPeritem');
+    Route::get('/inventory/p_returnsupplier/print/{id}', 'Stok\PenerimaanRtrSupController@printTandaTerima');
+    Route::get('/inventory/p_returnsupplier/get-terimaretur-by-tgl/{tgl1}/{tgl2}', 'Stok\PenerimaanRtrSupController@getTerimaRtrByTgl');
+
 }); // End Route Group
 
 

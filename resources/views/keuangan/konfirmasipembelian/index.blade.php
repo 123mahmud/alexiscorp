@@ -160,8 +160,8 @@
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
         var extensions = {
-                "sFilterInput": "form-control input-sm",
-                "sLengthSelect": "form-control input-sm"
+                "sFilterInput": "form-control input-sm form-control-sm",
+                "sLengthSelect": "form-control input-sm form-control-sm"
             }
             // Used when bJQueryUI is false
         $.extend($.fn.dataTableExt.oStdClasses, extensions);
@@ -328,7 +328,7 @@
                             '<td>' + key + '</td>' +
                             '<td>' + data.data_isi[key - 1].i_code + ' ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td align="right">' + formatAngka(data.data_isi[key - 1].ppdt_qty) + '</td>' +
-                            '<td><input type="text" value="' + data.data_isi[key - 1].ppdt_qty + '" name="fieldConfirm[]" class="form-control input-sm crfmField currency" style="text-align:right;"/>' +
+                            '<td><input type="text" value="' + data.data_isi[key - 1].ppdt_qty + '" name="fieldConfirm[]" class="form-control input-sm form-control-sm crfmField currency" style="text-align:right;"/>' +
                             '<input type="hidden" value="' + data.data_isi[key - 1].ppdt_pruchaseplan + '" name="fieldIdDt[]" class="form-control"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td align="right">' + convertDecimalToRupiah(data.data_isi[key - 1].ppdt_prevcost) + '</td>' +
@@ -346,7 +346,7 @@
                             '<td>' + key + '</td>' +
                             '<td>' + data.data_isi[key - 1].i_code + ' ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td align="right">' + formatAngka(data.data_isi[key - 1].ppdt_qty) + '</td>' +
-                            '<td><input type="text" value="' + data.data_isi[key - 1].ppdt_qtyconfirm + '" name="fieldConfirm[]" class="form-control input-sm crfmField currency" style="text-align:right;"/>' +
+                            '<td><input type="text" value="' + data.data_isi[key - 1].ppdt_qtyconfirm + '" name="fieldConfirm[]" class="form-control input-sm form-control-sm crfmField currency" style="text-align:right;"/>' +
                             '<input type="hidden" value="' + data.data_isi[key - 1].ppdt_pruchaseplan + '" name="fieldIdDt[]" class="form-control"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td align="right">' + convertDecimalToRupiah(data.data_isi[key - 1].ppdt_prevcost) + '</td>' +
@@ -392,7 +392,7 @@
                             '<td>' + key + '</td>' +
                             '<td>' + data.data_isi[key - 1].i_code + ' ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td align="right">' + formatAngka(data.data_isi[key - 1].ppdt_qty) + '</td>' +
-                            '<td><input type="text" value="' + data.data_isi[key - 1].ppdt_qtyconfirm + '" name="fieldConfirm[]" class="form-control input-sm crfmField currency" style="text-align:right;"/>' +
+                            '<td><input type="text" value="' + data.data_isi[key - 1].ppdt_qtyconfirm + '" name="fieldConfirm[]" class="form-control input-sm form-control-sm crfmField currency" style="text-align:right;"/>' +
                             '<input type="hidden" value="' + data.data_isi[key - 1].ppdt_pruchaseplan + '" name="fieldIdDt[]" class="form-control"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td align="right">' + convertDecimalToRupiah(data.data_isi[key - 1].ppdt_prevcost) + '</td>' +
@@ -410,7 +410,7 @@
                             '<td>' + key + '</td>' +
                             '<td>' + data.data_isi[key - 1].i_code + ' ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td align="right">' + formatAngka(data.data_isi[key - 1].ppdt_qty) + '</td>' +
-                            '<td><input type="text" value="' + data.data_isi[key - 1].ppdt_qtyconfirm + '" name="fieldConfirm[]" class="form-control input-sm crfmField currency" style="text-align:right;"/>' +
+                            '<td><input type="text" value="' + data.data_isi[key - 1].ppdt_qtyconfirm + '" name="fieldConfirm[]" class="form-control input-sm form-control-sm crfmField currency" style="text-align:right;"/>' +
                             '<input type="hidden" value="' + data.data_isi[key - 1].ppdt_pruchaseplan + '" name="fieldIdDt[]" class="form-control"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td align="right">' + convertDecimalToRupiah(data.data_isi[key - 1].ppdt_prevcost) + '</td>' +
@@ -451,12 +451,7 @@
                 url: baseUrl + "/keuangan/konfirmasipembelian/get-data-tabel-order",
                 type: 'GET'
             },
-            "columns": [{
-                    "data": "DT_Row_Index",
-                    orderable: true,
-                    searchable: false,
-                    "width": "5%"
-                }, //memanggil column row
+            "columns": [
                 {
                     "data": "tglOrder",
                     "width": "15%"
@@ -684,12 +679,12 @@
                             '<td>' + key + '</td>' +
                             '<td>' + data.data_isi[key - 1].i_code + ' ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td align="right">' + formatAngka(data.data_isi[key - 1].d_pcsdt_qty) + '</td>' +
-                            '<td><input type="text" value="' + data.data_isi[key - 1].d_pcsdt_qty + '" name="fieldConfirmOrder[]" id="' + i + '" class="form-control input-sm field_qty_confirm currency" readonly style="text-align:right;"/>' +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsdt_id + '" name="fieldIdDtOrder[]" class="form-control input-sm"/></td>' +
+                            '<td><input type="text" value="' + data.data_isi[key - 1].d_pcsdt_qty + '" name="fieldConfirmOrder[]" id="' + i + '" class="form-control input-sm form-control-sm field_qty_confirm currency" readonly style="text-align:right;"/>' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsdt_id + '" name="fieldIdDtOrder[]" class="form-control input-sm form-control-sm"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td align="right">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsdt_prevcost) + '</td>' +
                             '<td align="right" id="price_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsdt_price) + '</td>' +
-                            '<td align="right" id="total_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsdt_total) + '<input type="hidden" value="' + formatAngka(data.data_isi[key - 1].d_pcsdt_total) + '" name="" class="form-control input-sm hasil"/></td>' +
+                            '<td align="right" id="total_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsdt_total) + '<input type="hidden" value="' + formatAngka(data.data_isi[key - 1].d_pcsdt_total) + '" name="" class="form-control input-sm form-control-sm hasil"/></td>' +
                             '<td align="right">' + formatAngka(data.data_stok[key - 1].qtyStok) + ' ' + data.data_satuan[key - 1] + '</td>' +
                             '<td><button name="remove" id="' + i + '" class="btn btn-danger btn_remove_row_order btn-sm" disabled>X</button></td>' +
                             '</tr>');
@@ -705,8 +700,8 @@
                             '<td>' + key + '</td>' +
                             '<td>' + data.data_isi[key - 1].i_code + ' ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td>' + formatAngka(data.data_isi[key - 1].d_pcsdt_qty) + '</td>' +
-                            '<td><input type="text" value="' + data.data_isi[key - 1].d_pcsdt_qty + '" name="fieldConfirmOrder[]" id="' + i + '" class="form-control input-sm field_qty_confirm currency" readonly style="text-align:right;"/>' +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsdt_id + '" name="fieldIdDtOrder[]" class="form-control input-sm"/></td>' +
+                            '<td><input type="text" value="' + data.data_isi[key - 1].d_pcsdt_qty + '" name="fieldConfirmOrder[]" id="' + i + '" class="form-control input-sm form-control-sm field_qty_confirm currency" readonly style="text-align:right;"/>' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsdt_id + '" name="fieldIdDtOrder[]" class="form-control input-sm form-control-sm"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td align="right">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsdt_prevcost) + '</td>' +
                             '<td align="right" id="price_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsdt_price) + '</td>' +
@@ -842,8 +837,8 @@
                             '<td>' + data.data_isi[key - 1].i_code + ' ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td>' + data.data_isi[key - 1].d_pcsrdt_qty + '</td>' +
                             '<td>' + data.data_isi[key - 1].d_pcsrdt_qty +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_qty + '" name="fieldConfirmReturn[]" id="' + i + '" class="form-control numberinput input-sm field_qty_confirm">' +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_id + '" name="fieldIdDtReturn[]" class="form-control input-sm"/></td>' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_qty + '" name="fieldConfirmReturn[]" id="' + i + '" class="form-control numberinput input-sm form-control-sm field_qty_confirm">' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_id + '" name="fieldIdDtReturn[]" class="form-control input-sm form-control-sm"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td id="price_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsrdt_price) + '</td>' +
                             '<td id="total_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsrdt_pricetotal) + '</td>' +
@@ -861,8 +856,8 @@
                             '<td>' + data.data_isi[key - 1].i_code + ' ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td>' + data.data_isi[key - 1].d_pcsrdt_qty + '</td>' +
                             '<td>' + data.data_isi[key - 1].d_pcsrdt_qty +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_qty + '" name="fieldConfirmReturn[]" id="' + i + '" class="form-control numberinput input-sm field_qty_confirm">' +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_id + '" name="fieldIdDtReturn[]" class="form-control input-sm"/></td>' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_qty + '" name="fieldConfirmReturn[]" id="' + i + '" class="form-control numberinput input-sm form-control-sm field_qty_confirm">' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcsrdt_id + '" name="fieldIdDtReturn[]" class="form-control input-sm form-control-sm"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td id="price_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsrdt_price) + '</td>' +
                             '<td id="total_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcsrdt_pricetotal) + '</td>' +
@@ -927,8 +922,8 @@
                             '<td>' + data.data_isi[key - 1].i_code + ' | ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td>' + data.data_isi[key - 1].d_pcshdt_qty + '</td>' +
                             '<td>' + data.data_isi[key - 1].d_pcshdt_qty +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcshdt_qty + '" name="fieldConfirmBelanja[]" id="' + i + '" class="form-control numberinput input-sm field_qty_confirm">' +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcshdt_id + '" name="fieldIdDtBelanja[]" class="form-control input-sm"/></td>' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcshdt_qty + '" name="fieldConfirmBelanja[]" id="' + i + '" class="form-control numberinput input-sm form-control-sm field_qty_confirm">' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcshdt_id + '" name="fieldIdDtBelanja[]" class="form-control input-sm form-control-sm"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td id="price_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcshdt_price) + '</td>' +
                             '<td id="total_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcshdt_pricetotal) + '</td>' +
@@ -946,8 +941,8 @@
                             '<td>' + data.data_isi[key - 1].i_code + ' | ' + data.data_isi[key - 1].i_name + '</td>' +
                             '<td>' + data.data_isi[key - 1].d_pcshdt_qty + '</td>' +
                             '<td>' + data.data_isi[key - 1].d_pcshdt_qty +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcshdt_qty + '" name="fieldConfirmBelanja[]" id="' + i + '" class="form-control numberinput input-sm field_qty_confirm">' +
-                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcshdt_id + '" name="fieldIdDtBelanja[]" class="form-control input-sm"/></td>' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcshdt_qty + '" name="fieldConfirmBelanja[]" id="' + i + '" class="form-control numberinput input-sm form-control-sm field_qty_confirm">' +
+                            '<input type="hidden" value="' + data.data_isi[key - 1].d_pcshdt_id + '" name="fieldIdDtBelanja[]" class="form-control input-sm form-control-sm"/></td>' +
                             '<td>' + data.data_isi[key - 1].s_name + '</td>' +
                             '<td id="price_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcshdt_price) + '</td>' +
                             '<td id="total_' + i + '">' + convertDecimalToRupiah(data.data_isi[key - 1].d_pcshdt_pricetotal) + '</td>' +
@@ -1040,78 +1035,6 @@
         });
     }
 
-    // function submitOrderConfirm(id) {
-    //     iziToast.question({
-    //         close: false,
-    //         overlay: true,
-    //         displayMode: 'once',
-    //         //zindex: 999, //jika form pd modal, jgn digunakan
-    //         title: 'Konfirmasi PO',
-    //         message: 'Apakah anda yakin ?',
-    //         position: 'center',
-    //         buttons: [
-    //             ['<button><b>Ya</b></button>', function(instance, toast) {
-    //                 $('#button_confirm_order').text('Proses...');
-    //                 $('#button_confirm_order').attr('disabled', true);
-    //                 $.ajax({
-    //                     url: baseUrl + "/keuangan/konfirmasipembelian/confirm-order-submit",
-    //                     type: "GET",
-    //                     dataType: "JSON",
-    //                     data: $('#form-confirm-order').serialize(),
-    //                     success: function(response) {
-    //                         if (response.status == "sukses") {
-    //                             instance.hide({
-    //                                 transitionOut: 'fadeOut'
-    //                             }, toast, 'button');
-    //                             iziToast.success({
-    //                                 position: 'center', //center, bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
-    //                                 title: 'Pemberitahuan',
-    //                                 message: response.status,
-    //                                 onClosing: function(instance, toast, closedBy) {
-    //                                     $('#modal-confirm-order').modal('hide');
-    //                                     $('#button_confirm_order').text('Konfirmasi');
-    //                                     $('#button_confirm_order').attr('disabled', false);
-    //                                     $('#tbl-order').DataTable().ajax.reload();
-    //                                 }
-    //                             });
-    //                         } else {
-    //                             instance.hide({
-    //                                 transitionOut: 'fadeOut'
-    //                             }, toast, 'button');
-    //                             iziToast.error({
-    //                                 position: 'center', //center, bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
-    //                                 title: 'Pemberitahuan',
-    //                                 message: response.status,
-    //                                 onClosing: function(instance, toast, closedBy) {
-    //                                     $('#modal-confirm-order').modal('hide');
-    //                                     $('#button_confirm_order').text('Konfirmasi');
-    //                                     $('#button_confirm_order').attr('disabled', false);
-    //                                     $('#tbl-order').DataTable().ajax.reload();
-    //                                 }
-    //                             });
-    //                         }
-    //                     },
-    //                     error: function() {
-    //                         instance.hide({
-    //                             transitionOut: 'fadeOut'
-    //                         }, toast, 'button');
-    //                         iziToast.warning({
-    //                             icon: 'fa fa-times',
-    //                             message: 'Terjadi Kesalahan!'
-    //                         });
-    //                     },
-    //                     async: false
-    //                 });
-    //             }, true],
-    //             ['<button>Tidak</button>', function(instance, toast) {
-    //                 instance.hide({
-    //                     transitionOut: 'fadeOut'
-    //                 }, toast, 'button');
-    //             }],
-    //         ]
-    //     });
-    // }
-
     function submitOrderConfirm(id) {
         $.confirm({
             title: 'Ehem!',
@@ -1127,11 +1050,9 @@
                         $('#button_confirm_order').attr('disabled', true);
                         $.ajax({
                             url: baseUrl + '/keuangan/konfirmasipembelian/confirm-order-submit',
-                            type: "get",
+                            type: "GET",
                             dataType: "JSON",
-                            data: {
-                                id: id
-                            },
+                            data: $('#form-confirm-order').serialize(),
                             success: function(response) {
                                 if (response.status == "sukses") {
                                     $.toast({

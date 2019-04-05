@@ -40,15 +40,6 @@ class purchaseConfirmController extends Controller
    public function confirmIndex()
    {
 
-      // $tbh =view('Purchase::konfirmasipembelian/tab-belanjaharian');
-      // $td =view('Purchase::konfirmasipembelian/tab-daftar');
-      // $to =view('Purchase::konfirmasipembelian/tab-order');
-      // $tr =view('Purchase::konfirmasipembelian/tab-return');
-
-      // $mcb =view('Purchase::konfirmasipembelian/modal-confirm-belanjaharian');
-      // $mco =view('Purchase::konfirmasipembelian/modal-confirm-order');
-      // $mcr =view('Purchase::konfirmasipembelian/modal-confirm-return');
-      // $mc =view('Purchase::konfirmasipembelian/modal-confirm');
 
       return view('Keuangan.konfirmasipembelian.index');
    }
@@ -674,9 +665,6 @@ class purchaseConfirmController extends Controller
 
    public function submitOrderPembelian(Request $request)
    { 
-
-      // return json_encode($request->all());
-
       DB::beginTransaction();
       try {
         //update table d_purchasing
@@ -699,47 +687,6 @@ class purchaseConfirmController extends Controller
                 $purchasedt->d_pcsdt_isconfirm = "TRUE";
                 $purchasedt->save();
             }
-
-            // tambahan dirga (register di data hutang)
-            if(modulSetting()['onLogin'] == modulSetting()['id_pusat']){
-              $dataAkunHutang = DB::table('dk_akun_penting')
-                                    ->whereNull('ap_comp')
-                                    ->where('ap_nama', 'Hutang Usaha')
-                                    ->select('ap_akun')
-                                    ->first();
-            }
-            else{
-              $dataAkunHutang = DB::table('dk_akun_penting')
-                                    ->where('ap_comp', modulSetting()['onLogin'])
-                                    ->where('ap_nama', 'Hutang Usaha')
-                                    ->select('ap_akun')
-                                    ->first();
-            }
-
-            if(!$dataAkunHutang || !$dataAkunHutang->ap_akun){
-                return response()->json([
-                      'status' => 'gagal',
-                      'pesan'  => 'Akun Hutang Usaha Belum Ditentukan. Anda Bisa Memilihnya Di Menu Setting/Akun Penting'
-                ]);
-            }
-
-            $id = (DB::table('dk_payable')->max('py_id') + 1);
-            
-            DB::table('dk_payable')->insert([
-              'py_id'             => $id,
-              'py_comp'           => modulSetting()['onLogin'],
-              'py_nomor'          => 'HT-'.date('y/dm', strtotime($purchase->d_pcs_date_created)).'/'.str_pad($id, 4, "0", STR_PAD_LEFT),
-              'py_chanel'        => 'Hutang Supplier',
-              'py_ref_nomor'      => $purchase->d_pcs_code,
-              'py_kreditur'       => $purchase->s_id,
-              'py_tanggal'        => $purchase->d_pcs_date_created,
-              'py_total_tagihan'  => 0,
-              'py_sudah_dibayar'  => 0,
-              'py_akun_hutang'    => $dataAkunHutang->ap_akun,
-              'py_due_date'       => date('Y-m-d', strtotime('+7 days', strtotime($purchase->d_pcs_date_created)))
-            ]);
-
-            // Selesai Tambahan Dirga
         }
         else
         {   
