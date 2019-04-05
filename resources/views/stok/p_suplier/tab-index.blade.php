@@ -1,8 +1,15 @@
-<div id="index-tab" class="tab-pane fade in show active">
+<div id="index-tab" class="tab-pane fade in active show">
     <div class="card">
         <div class="card-header bordered p-2">
             <div class="header-block">
                 <h3 class="title">Penerimaan Supplier</h3>
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-box-tool btn-primary" title="Tambahkan Data Item" data-toggle="modal" data-target="#modal_terima_beli">
+                <i class="fa fa-plus" aria-hidden="true">
+                &nbsp;
+                </i>Tambah Data
+                </button>
             </div>
         </div>
         <div class="card-block">
@@ -30,13 +37,6 @@
                         <strong>
                         <i class="fa fa-undo" aria-hidden="true"></i>
                         </strong>
-                        </button>
-                    </div>
-                    <div align="right">
-                        <button type="button" class="btn btn-box-tool" title="Tambahkan Data Item" data-toggle="modal" data-target="#modal_terima_beli">
-                        <i class="fa fa-plus" aria-hidden="true">
-                        &nbsp;
-                        </i>Tambah Data
                         </button>
                     </div>
                     
