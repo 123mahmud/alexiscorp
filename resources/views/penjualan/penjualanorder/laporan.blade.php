@@ -79,7 +79,7 @@
         <td><div class="digits text-right">{{ $val->sd_qty }}</div></td>
         <td><div class="digits text-right">{{ $val->sd_price }}</div></td>
         <td><div class="currency text-right">{{ $val->sd_disc_vpercent }}</div></td>
-        <td><div class="currency text-right">{{ (int)$val->sd_disc_value / (int)$val->sd_qty }}</div></td>
+        <td><div class="currency text-right">{{ $val->sd_disc_value }}</div></td>
         <td><div class="currency text-right">{{ $val->sd_total }}</div></td>
       </tr>
       @endforeach

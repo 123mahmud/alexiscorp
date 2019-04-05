@@ -322,8 +322,8 @@ class PenjualanTOController extends Controller
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_customer = $request->idCustomer;
         $sales->s_gross = $request->totalPenjualan;
-        $sales->s_disc_percent = $discPercent;
-        $sales->s_disc_value = $request->totalDisc;
+        // $sales->s_disc_percent = $discPercent;
+        // $sales->s_disc_value = $request->totalDisc;
         $sales->s_tax = $request->ppn;
         // $sales->s_jatuh_tempo = null;
         // $sales->s_ongkir = null
@@ -337,10 +337,14 @@ class PenjualanTOController extends Controller
         // insert sales-detail
         $listItems = $request->listItemId;
         $loopCount = 0;
+        $totalDiscP = 0;
+        $totalDiscH = 0;
         foreach ($listItems as $item) {
           if ($item != null) {
             $valDiscP = ($request->listQty[$loopCount] * $request->listPrice[$loopCount]) * $request->listDiscP[$loopCount] / 100;
             $valDiscH = $request->listQty[$loopCount] * $request->listDiscH[$loopCount];
+            $totalDiscP += $valDiscP;
+            $totalDiscH += $valDiscH;
             $salesDtId = d_sales_dt::where('sd_sales', $salesId)
               ->max('sd_detailid') + 1;
             $salesDt = new d_sales_dt;
@@ -379,6 +383,13 @@ class PenjualanTOController extends Controller
           }
           $loopCount++;
         }
+
+        // update total-discount in d_sales
+        $sales = d_sales::where('s_id', $salesId)
+        ->firstOrFail();
+        $sales->s_disc_percent = $totalDiscP;
+        $sales->s_disc_value = $totalDiscH;
+        $sales->save();
 
         // insert sales-payment
         $salesPay = new d_sales_payment;
@@ -516,7 +527,7 @@ class PenjualanTOController extends Controller
       foreach ($data['sales'] as $index => $sales) {
         array_push($data['salesdate'], Carbon::parse($data['sales'][$index]->getSales->s_date)->format('d M Y'));
         $data['totalDiscP'] += $sales->sd_disc_vpercent;
-        $data['totalDiscH'] += ($sales->sd_disc_value / $sales->sd_qty);
+        $data['totalDiscH'] += $sales->sd_disc_value;
         $data['grandTotal'] += $sales->sd_total;
       }
 
@@ -596,7 +607,7 @@ class PenjualanTOController extends Controller
       foreach ($data['sales'] as $index => $sales) {
         array_push($data['salesdate'], Carbon::parse($data['sales'][$index]->getSales->s_date)->format('d M Y'));
         $data['totalDiscP'] += $sales->sd_disc_vpercent;
-        $data['totalDiscH'] += ($sales->sd_disc_value / $sales->sd_qty);
+        $data['totalDiscH'] += $sales->sd_disc_value;
         $data['grandTotal'] += $sales->sd_total;
       }
 
