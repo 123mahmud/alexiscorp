@@ -164,6 +164,15 @@
                         <li class="{{Request::is('stok/stockgudang/*') ? 'active' : ''}}">
                             <a href="{{route('stockgudang.index')}}">Stock Gudang</a>
                         </li>
+                        <li class="{{Request::is('stok/p_suplier/*') ? 'active' : ''}}">
+                            <a href="{{route('p_suplier')}}">Penerimaan Barang Supplier</a>
+                        </li>
+                        <li class="{{Request::is('stok/p_returnsupplier/*') ? 'active' : ''}}">
+                            <a href="{{route('p_returnsupplier')}}">Penerimaan Barang Return Supplier</a>
+                        </li>
+                        <li class="{{Request::is('stok/b_rusak/*') ? 'active' : ''}}">
+                            <a href="{{route('b_rusak')}}">Barang Rusak</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="{{Request::is('produksi/*') ? 'active open' : ''}}">
