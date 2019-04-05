@@ -385,11 +385,11 @@ class PenjualanTOController extends Controller
         }
 
         // update total-discount in d_sales
-        $sales = d_sales::where('s_id', $salesId)
-        ->firstOrFail();
-        $sales->s_disc_percent = $totalDiscP;
-        $sales->s_disc_value = $totalDiscH;
-        $sales->save();
+        // $sales = d_sales::where('s_id', $salesId)
+        // ->firstOrFail();
+        // $sales->s_disc_percent = $totalDiscP;
+        // $sales->s_disc_value = $totalDiscH;
+        // $sales->save();
 
         // insert sales-payment
         $salesPay = new d_sales_payment;

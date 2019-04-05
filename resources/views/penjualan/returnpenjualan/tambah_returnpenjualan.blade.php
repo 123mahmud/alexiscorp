@@ -139,8 +139,8 @@
                               </div>
                               <div class="col-md-3 col-sm-6 col-xs-12">
                                 <div class="form-group">
-                                  <input type="hidden" name="sales_discp" id="sales_discp" value="">
-                                  <input type="hidden" name="sales_disch" id="sales_disch" value="">
+                                  <!-- <input type="hidden" name="sales_discp" id="sales_discp" value="">
+                                  <input type="hidden" name="sales_disch" id="sales_disch" value=""> -->
                                   <input type="text" class="form-control-sm form-control currency text-right" readonly="" id="sales_total_disc" name="">
                                 </div>
                               </div>
@@ -329,8 +329,8 @@
           $('#payment_method').val(response.get_sales_payment.get_payment_method.pm_name);
           $('#cust_id_hidden').val(response.get_customer.c_id);
           $('#cust_detail').val(response.get_customer.c_name+ ', ' +response.get_customer.c_address);
-          $('#sales_discp').val(parseInt(response.s_disc_percent));
-          $('#sales_disch').val(parseInt(response.s_disc_value));
+          // $('#sales_discp').val(parseInt(response.get_sales_dt.sd_disc_vpercent));
+          // $('#sales_disch').val(parseInt(response.get_sales_dt.sd_disc_value));
           $('#sales_total_disc').val(parseInt(response.s_disc_percent) + parseInt(response.s_disc_value));
           $('#sales_gross').val(parseInt(response.s_gross));
           $('#sales_total_net').val(parseInt(response.s_net));
@@ -353,7 +353,8 @@
                 '<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'">' +
                   '<input type="hidden" value="'+ val.get_item.i_sat1 +'" name="listSatId[]">',
                 '<input type="text" class="form-control form-control-plaintext form-control-sm currency" name="listPrice[]" value="'+ val.sd_price +'">',
-                '<input type="text" min="0" class="form-control form-control-plaintext digits" name="listDiscP[]" value="'+ val.sd_disc_percent +'">',
+                '<input type="text" min="0" class="form-control form-control-plaintext digits" name="listDiscP[]" value="'+ val.sd_disc_percent +'">' +
+                  '<input type="hidden" value="'+ val.sd_disc_vpercent +'" name="listDiscVP[]">',
                 '<input type="text" min="0" class="form-control form-control-plaintext currency" name="listDiscH[]" value="'+ parseInt(val.sd_disc_value) / parseInt(val.sd_qty) +'">',
                 '<input type="text" min="0" class="form-control form-control-plaintext currency" name="listTotalBelanja[]" value="'+ val.sd_total +'">' ,
                 '<input type="text" min="0" class="form-control form-control-plaintext currency" name="listTotalReturn[]" value="'+ 0 +'">' ,
@@ -518,9 +519,9 @@
       success : function (response){
         if(response.status == 'berhasil'){
           messageSuccess('Berhasil', 'Data return berhasil disimpan !');
-          // resetAllInput(0);
-          // $('#return_method').focus();
-          // $('#return_method').select2('open');
+          resetAllInput(0);
+          $('#return_method').focus();
+          $('#return_method').select2('open');
         } else if (response.status == 'invalid') {
           messageFailed('Perhatian', response.message);
         } else if (response.status == 'gagal') {

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Penjualan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use Auth;
 use App\d_sales;
+use App\d_sales_dt;
 use App\d_gudangcabang;
 use App\d_sales_return;
 use App\d_sales_returndt;
@@ -66,7 +68,7 @@ class PenjualanReturnController extends Controller
      */
     public function store(Request $request)
     {
-      dd($request->all());
+      // dd($request->all());
 
       DB::beginTransaction();
       try {
@@ -85,8 +87,8 @@ class PenjualanReturnController extends Controller
         $salesReturn->dsr_date = Carbon::parse($request->return_date);
         $salesReturn->dsr_price_return = $request->sales_total_return;
         $salesReturn->dsr_sgross = $request->sales_gross;
-        $salesReturn->dsr_disc_vpercent = $request->sales_discp;
-        $salesReturn->dsr_disc_value = $request->sales_disch;
+        // $salesReturn->dsr_disc_vpercent = $request->sales_discp;
+        // $salesReturn->dsr_disc_value = $request->sales_disch;
         $salesReturn->dsr_tax = $request->sales_ppn;
         $salesReturn->dsr_net = $request->sales_total_net;
         $salesReturn->save();
@@ -96,8 +98,8 @@ class PenjualanReturnController extends Controller
         ->firstOrFail();
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_gross = $request->sales_gross;
-        $sales->s_disc_percent = $request->sales_discp;
-        $sales->s_disc_value = $request->sales_disch;
+        // $sales->s_disc_percent = $request->sales_discp;
+        // $sales->s_disc_value = $request->sales_disch;
         $sales->s_tax = $request->sales_ppn;
         $sales->s_net = $request->sales_total_net;
         $sales->save();
@@ -118,10 +120,10 @@ class PenjualanReturnController extends Controller
           $salesRDT->dsrdt_smdt = $salesRDTId;
           $salesRDT->dsrdt_item = $request->listItemId[$i];
           $salesRDT->dsrdt_qty = $request->listQty[$i];
-          $salesRDT->dsrdt_qty_confirm = $listReturnQty[$i];
+          $salesRDT->dsrdt_qty_confirm = $request->listReturnQty[$i];
           $salesRDT->dsrdt_price = $request->listPrice[$i];
           $salesRDT->dsrdt_disc_percent = $request->listDiscP[$i];
-          // $salesRDT->dsrdt_disc_vpercent = ;
+          $salesRDT->dsrdt_disc_vpercent = $request->listDiscVP[$i];
           // $salesRDT->dsrdt_disc_vpercentreturn = ;
           $salesRDT->dsrdt_disc_value = $request->listDiscH[$i];
           $salesRDT->dsrdt_return_price = $request->listTotalReturn[$i];
@@ -136,7 +138,7 @@ class PenjualanReturnController extends Controller
           $salesDt->sd_sales = $request->sales_note_id;
           $salesDt->sd_detailid = $salesDtId;
           $salesDt->sd_item = $request->listItemId[$i];
-          $salesDt->sd_qty = $request->listQty[$i];
+          $salesDt->sd_qty = (int)$request->listQty[$i] - (int)$request->listReturnQty[$i];
           $salesDt->sd_price = $request->listPrice[$i];
           $salesDt->sd_disc_percent = $request->listDiscP[$i];
           $salesDt->sd_disc_vpercent = $valDiscP;
@@ -152,7 +154,7 @@ class PenjualanReturnController extends Controller
           $gudangCabangId = $gudangCabang->gc_id;
           mutasi::tambahmutasi(
               $request->listItemId[$i], // iditem
-              $listReturnQty[$i], // qty-return
+              $request->listReturnQty[$i], // qty-return
               $gudangCabangId, // gudangCabangId (PENJUALAN) -> sama dg penjualan
               $gudangCabangId, // sama dg 'comp'
               'MENAMBAH', // 'MENAMBAH'
