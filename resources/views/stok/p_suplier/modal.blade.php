@@ -104,8 +104,5 @@
       <!-- /Modal content-->
     </form>   
     <!-- /Form-->
-
-  </div>
-
   </div>
 </div>
