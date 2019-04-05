@@ -19,19 +19,10 @@ use App\d_gudangcabang;
 
 class PenerimaanRtrSupController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     public function index()
     {
-        return view('Inventory::p_returnsuplier/index');
+        return view('stok.p_returnsuplier/index');
     }
 
     public function lookupDataReturn(Request $request)
