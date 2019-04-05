@@ -32,24 +32,24 @@
                         </strong>
                         </button>
                     </div>
-                    <div class="table-responsive" style="padding-top: 15px;">
-                        <div id="tabelPenerimaanWaiting">
-                            <table class="table tabelan table-hover table-bordered dt-responsive" id="tbl-waiting" width="100%">
-                                <thead class="bg-primary">
-                                    <tr>
-                                        <th>Kode PO</th>
-                                        <th>Supplier</th>
-                                        <th>Nama Item</th>
-                                        <th>Satuan</th>
-                                        <th width="5%">Qty PO</th>
-                                        <th width="5%">Qty Sisa</th>
-                                        <th>Tgl PO</th>
-                                        <th width="10%">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="table-responsive">
+                                <table class="table tabelan table-hover table-bordered" id="tbl-waiting">
+                                    <thead class="bg-primary">
+                                        <tr>
+                                            <th>Kode PO</th>
+                                            <th>Supplier</th>
+                                            <th>Nama Item</th>
+                                            <th>Satuan</th>
+                                            <th>Qty PO</th>
+                                            <th>Qty Sisa</th>
+                                            <th>Tgl PO</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                         </div>
                     </div>
                 </div>

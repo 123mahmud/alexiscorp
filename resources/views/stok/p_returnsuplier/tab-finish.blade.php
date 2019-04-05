@@ -8,16 +8,15 @@
         <div class="card-block">
             <section>
                 <div class="row">
-                    <div class="panel-body">
                         <div class="col-md-3 col-sm-3 col-xs-12">
                             <label class="tebal">Tanggal Return Pembelian</label>
                         </div>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                             <div class="form-group">
                                 <div class="input-daterange input-group">
-                                    <input id="tanggal3" class="form-control input-sm datepicker1 " name="tanggal" type="text">
+                                    <input id="tanggal3" class="form-control input-sm form-control-sm datepicker1 " name="tanggal" type="text">
                                     <span class="input-group-addon">-</span>
-                                    <input id="tanggal4" class="input-sm form-control datepicker2" name="tanggal" type="text" value="{{ date('d-m-Y') }}">
+                                    <input id="tanggal4" class="input-sm form-control-sm form-control datepicker2" name="tanggal" type="text" value="{{ date('d-m-Y') }}">
                                 </div>
                             </div>
                         </div>
@@ -56,7 +55,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </section>
         </div>
     </div>
