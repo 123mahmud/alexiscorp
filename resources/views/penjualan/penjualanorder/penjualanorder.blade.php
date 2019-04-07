@@ -514,8 +514,8 @@
 			success : function (response){
 				if(response.status == 'berhasil'){
 					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
-					// resetAllInput();
-					// $('#modal_bayar').modal('hide');
+					resetAllInput();
+					$('#modal_bayar').modal('hide');
 				} else if (response.status == 'invalid') {
 					messageFailed('Perhatian', response.message);
 				} else if (response.status == 'gagal') {
