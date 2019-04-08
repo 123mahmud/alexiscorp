@@ -63,17 +63,7 @@ class PenjualanReturnController extends Controller
         return '-X-';
       })
       ->addColumn('action', function($datas) {
-        return '-Y-';;
-        // if ($datas->s_status == 'PR') {
-        //   return '<div class="btn-group btn-group-sm">
-        //   <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
-        //   <button class="btn btn-warning" onclick="EditPenjualan('.$datas->s_id.')" rel="tooltip" title="Edit"><i class="fa fa-pencil"></i></button>
-        //   </div>';
-        // } elseif ($datas->s_status == 'FN') {
-        //   return '<div class="btn-group btn-group-sm">
-        //   <button class="btn btn-info" onclick="DetailPenjualan('.$datas->s_id.')" rel="tooltip" title="Detail"><i class="fa fa-folder"></i></button>
-        //   </div>';
-        // }
+        return '-Y-';
       })
       ->rawColumns(['date', 'return_method', 'return_type', 'sales_type', 'status', 'action'])
       ->make(true);
@@ -95,9 +85,7 @@ class PenjualanReturnController extends Controller
       foreach ($data['sales']->getSalesDt as $salesDT) {
         $data['totalDisc'] += ($salesDT->sd_disc_vpercent + $salesDT->sd_disc_value);
       }
-      // dd($data);
       return $data;
-      // return view('penjualan/returnpenjualan/returnpenjualan', compact('data'));
     }
 
     /**
@@ -132,8 +120,6 @@ class PenjualanReturnController extends Controller
      */
     public function store(Request $request)
     {
-      // dd($request->all());
-
       DB::beginTransaction();
       try {
         // generate code return
@@ -151,8 +137,6 @@ class PenjualanReturnController extends Controller
         $salesReturn->dsr_date = Carbon::parse($request->return_date);
         $salesReturn->dsr_price_return = $request->sales_total_return;
         $salesReturn->dsr_sgross = $request->sales_gross;
-        // $salesReturn->dsr_disc_vpercent = $request->sales_discp;
-        // $salesReturn->dsr_disc_value = $request->sales_disch;
         $salesReturn->dsr_tax = $request->sales_ppn;
         $salesReturn->dsr_net = $request->sales_total_net;
         $salesReturn->save();
@@ -162,8 +146,6 @@ class PenjualanReturnController extends Controller
         ->firstOrFail();
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_gross = $request->sales_gross;
-        // $sales->s_disc_percent = $request->sales_discp;
-        // $sales->s_disc_value = $request->sales_disch;
         $sales->s_tax = $request->sales_ppn;
         $sales->s_net = $request->sales_total_net;
         $sales->save();
@@ -192,7 +174,6 @@ class PenjualanReturnController extends Controller
           $salesRDT->dsrdt_price = $request->listPrice[$i];
           $salesRDT->dsrdt_disc_percent = $request->listDiscP[$i];
           $salesRDT->dsrdt_disc_vpercent = $valDiscP;
-          // $salesRDT->dsrdt_disc_vpercentreturn = ;
           $salesRDT->dsrdt_disc_value = $valDiscH;
           $salesRDT->dsrdt_return_price = $request->listTotalReturn[$i];
           $salesRDT->dsrdt_hasil = $request->listTotalBrgSesuai[$i];
@@ -238,7 +219,6 @@ class PenjualanReturnController extends Controller
             );
         }
 
-
         DB::commit();
         return response()->json([
           'status' => 'berhasil'
@@ -250,7 +230,6 @@ class PenjualanReturnController extends Controller
           'message' => $e->getMessage()
         ]);
       }
-
     }
 
     /**

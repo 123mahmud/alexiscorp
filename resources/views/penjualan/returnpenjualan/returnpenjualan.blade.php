@@ -41,7 +41,7 @@
 																	<th>Nota</th>
 																	<th>Metode</th>
 																	<th>Jenis Return</th>
-																	<th>Type Sales</th>
+																	<th>Tipe Penjualan</th>
 																	<th>Status</th>
 																	<th>Aksi</th>
 																</tr>

@@ -35,29 +35,29 @@ class PenjualanOrderController extends Controller
     */
     public function validate_req(Request $request)
     {
-      // start: validate data before execute
-      $validator = Validator::make($request->all(), [
-        'idCustomer' => 'required',
-        'orderDate' => 'required',
-        'dueDate' => 'required',
-        'ppn' => 'required',
-        'listItemId' => 'required'
-      ],
-      [
-        'idCustomer.required' => 'Silahkan pilih customer terlebih dahulu !',
-        'orderDate.required' => 'Silahkan isi tanggal order terlebih dahulu !',
-        'dueDate.required' => 'Silahkan isi tanggal jatuh tempo terlebih dahulu !',
-        'ppn.required' => 'PPN masih kosong !',
-        'listItemId.required' => 'Item masih kosong !'
-      ]);
-      if($validator->fails())
-      {
-        return $validator->errors()->first();
-      }
-      else
-      {
-        return '1';
-      }
+        // start: validate data before execute
+        $validator = Validator::make($request->all(), [
+            'idCustomer' => 'required',
+            'orderDate' => 'required',
+            'dueDate' => 'required',
+            'ppn' => 'required',
+            'listItemId' => 'required'
+        ],
+        [
+            'idCustomer.required' => 'Silahkan pilih customer terlebih dahulu !',
+            'orderDate.required' => 'Silahkan isi tanggal order terlebih dahulu !',
+            'dueDate.required' => 'Silahkan isi tanggal jatuh tempo terlebih dahulu !',
+            'ppn.required' => 'PPN masih kosong !',
+            'listItemId.required' => 'Item masih kosong !'
+        ]);
+        if($validator->fails())
+        {
+            return $validator->errors()->first();
+        }
+        else
+        {
+            return '1';
+        }
     }
 
     /**
@@ -72,11 +72,11 @@ class PenjualanOrderController extends Controller
         ->get();
       if (sizeof($customers) > 0) {
         foreach ($customers as $customer) {
-          $results[] = [
-            'id' => $customer->c_id,
-            'label' => $customer->c_name .', '. $customer->c_address,
-            'address' => $customer->c_address,
-          ];
+            $results[] = [
+                'id' => $customer->c_id,
+                'label' => $customer->c_name .', '. $customer->c_address,
+                'address' => $customer->c_address,
+            ];
         }
       } else {
         $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
@@ -93,20 +93,20 @@ class PenjualanOrderController extends Controller
     {
       $term = $request->term;
       $items = m_item::where('i_name', 'like', '%'.$term.'%')
-        ->with('getSatuan1')
-        ->get();
+      ->with('getSatuan1')
+      ->get();
       if (sizeof($items) > 0) {
         foreach ($items as $item) {
-          $results[] = [
-            'id' => $item->i_id,
-            'name' => $item->i_name,
-            'sat1_id' => $item->getSatuan1['s_id'],
-            'sat1_name' => $item->getSatuan1['s_name'],
-            'label' => $item->i_code .', '. $item->i_name
-          ];
+            $results[] = [
+                'id' => $item->i_id,
+                'name' => $item->i_name,
+                'sat1_id' => $item->getSatuan1['s_id'],
+                'sat1_name' => $item->getSatuan1['s_name'],
+                'label' => $item->i_code .', '. $item->i_name
+            ];
         }
       } else {
-        $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+          $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
       }
       return response()->json($results);
     }
@@ -199,86 +199,86 @@ class PenjualanOrderController extends Controller
     */
     public function getLaporanPenjualan(Request $request)
     {
-      $from = Carbon::parse($request->date_from)->format('Y-m-d');
-      $to = Carbon::parse($request->date_to)->format('Y-m-d');
+        $from = Carbon::parse($request->date_from)->format('Y-m-d');
+        $to = Carbon::parse($request->date_to)->format('Y-m-d');
 
-      if ($request->staff == 'x') {
-        if ($request->status == 'AL') {
-          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
-              $query
-                ->where('s_channel', 'OD')
-                ->whereBetween('s_date', [$from, $to])
-                ->orderBy('s_note', 'desc');
-            })
-            ->with('getItem.getSatuan1')
-            ->get();
+        if ($request->staff == 'x') {
+            if ($request->status == 'AL') {
+                $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+                    $query
+                    ->where('s_channel', 'OD')
+                    ->whereBetween('s_date', [$from, $to])
+                    ->orderBy('s_note', 'desc');
+                })
+                ->with('getItem.getSatuan1')
+                ->get();
+            } else {
+                $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+                    $query
+                    ->where('s_channel', 'OD')
+                    ->whereBetween('s_date', [$from, $to])
+                    ->where('s_status', $request->status)
+                    ->orderBy('s_note', 'desc');
+                })
+                ->with('getItem.getSatuan1')
+                ->get();
+            }
         } else {
-          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
-              $query
-                ->where('s_channel', 'OD')
-                ->whereBetween('s_date', [$from, $to])
-                ->where('s_status', $request->status)
-                ->orderBy('s_note', 'desc');
-            })
-            ->with('getItem.getSatuan1')
-            ->get();
+            if ($request->status == 'AL') {
+                $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+                    $query
+                    ->where('s_channel', 'OD')
+                    ->whereBetween('s_date', [$from, $to])
+                    ->where('s_staff', $request->staff)
+                    ->orderBy('s_note', 'desc');
+                })
+                ->with('getItem.getSatuan1')
+                ->get();
+            } else {
+                $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
+                    $query
+                    ->where('s_channel', 'OD')
+                    ->whereBetween('s_date', [$from, $to])
+                    ->where('s_staff', $request->staff)
+                    ->where('s_status', $request->status)
+                    ->orderBy('s_note', 'desc');
+                })
+                ->with('getItem.getSatuan1')
+                ->get();
+            }
         }
-      } else {
-        if ($request->status == 'AL') {
-          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
-              $query
-                ->where('s_channel', 'OD')
-                ->whereBetween('s_date', [$from, $to])
-                ->where('s_staff', $request->staff)
-                ->orderBy('s_note', 'desc');
-            })
-            ->with('getItem.getSatuan1')
-            ->get();
-        } else {
-          $datas = d_sales_dt::whereHas('getSales', function($query) use ($request, $from, $to) {
-              $query
-                ->where('s_channel', 'OD')
-                ->whereBetween('s_date', [$from, $to])
-                ->where('s_staff', $request->staff)
-                ->where('s_status', $request->status)
-                ->orderBy('s_note', 'desc');
-            })
-            ->with('getItem.getSatuan1')
-            ->get();
-        }
-      }
 
-      return Datatables::of($datas)
-      ->addIndexColumn()
-      ->addColumn('item', function($datas) {
-        return $datas->getItem['i_name'];
-      })
-      ->addColumn('nota', function($datas) {
-        return $datas->getSales['s_note'];
-      })
-      ->addColumn('date', function($datas) {
-        return $datas->getSales['s_date'];
-      })
-      ->addColumn('satuan', function($datas) {
-        return $datas->getItem['getSatuan1']['s_name'];
-      })
-      ->addColumn('qty', function($datas) {
-        return '<div class="text-right">'. number_format($datas->sd_qty, 0, '.', ',') .'</div>';
-      })
-      ->addColumn('price', function($datas) {
-        return '<div class="text-right">'. number_format($datas->sd_price, 2, '.', ',') .'</div>';
-      })
-      ->addColumn('discount', function($datas) {
-        return '<div class="text-right">'. $datas->sd_disc_percent .'</div>';
-      })
-      ->addColumn('discount_value', function($datas) {
-        return '<div class="text-right">'. number_format(((int)$datas->sd_disc_value / (int)$datas->sd_qty), 2, '.', ',') .'</div>';
-      })
-      ->addColumn('sub_total', function($datas) {
-        return '<div class="text-right">'. number_format($datas->sd_total, 2, '.', ',') .'</div>';
-      })
-      ->rawColumns(['item', 'satuan', 'qty', 'price', 'discount', 'discount_value', 'sub_total'])
-      ->make(true);
+        return Datatables::of($datas)
+        ->addIndexColumn()
+        ->addColumn('item', function($datas) {
+            return $datas->getItem['i_name'];
+        })
+        ->addColumn('nota', function($datas) {
+            return $datas->getSales['s_note'];
+        })
+        ->addColumn('date', function($datas) {
+            return $datas->getSales['s_date'];
+        })
+        ->addColumn('satuan', function($datas) {
+            return $datas->getItem['getSatuan1']['s_name'];
+        })
+        ->addColumn('qty', function($datas) {
+            return '<div class="text-right">'. number_format($datas->sd_qty, 0, '.', ',') .'</div>';
+        })
+        ->addColumn('price', function($datas) {
+            return '<div class="text-right">'. number_format($datas->sd_price, 2, '.', ',') .'</div>';
+        })
+        ->addColumn('discount', function($datas) {
+            return '<div class="text-right">'. $datas->sd_disc_percent .'</div>';
+        })
+        ->addColumn('discount_value', function($datas) {
+            return '<div class="text-right">'. number_format(((int)$datas->sd_disc_value / (int)$datas->sd_qty), 2, '.', ',') .'</div>';
+        })
+        ->addColumn('sub_total', function($datas) {
+            return '<div class="text-right">'. number_format($datas->sd_total, 2, '.', ',') .'</div>';
+        })
+        ->rawColumns(['item', 'satuan', 'qty', 'price', 'discount', 'discount_value', 'sub_total'])
+        ->make(true);
     }
 
     /**
@@ -356,29 +356,20 @@ class PenjualanOrderController extends Controller
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_customer = $request->idCustomer;
         $sales->s_gross = $request->totalPenjualan;
-        // $sales->s_disc_percent = $discPercent;
-        // $sales->s_disc_value = $request->totalDisc;
         $sales->s_tax = $request->ppn;
         $sales->s_jatuh_tempo = Carbon::parse($request->dueDate)->format('Y-m-d');
-        // $sales->s_ongkir
         $sales->s_net = $request->totalAmount;
-        // $sales->s_sisa
         $sales->s_status = 'PR'; // PR: Progress || FN: Final
-        // $sales->s_resi
         $sales->s_info = $request->keterangan;
         $sales->save();
 
         // insert sales-detail
         $listItems = $request->listItemId;
         $loopCount = 0;
-        // $totalDiscP = 0;
-        // $totalDiscH = 0;
         foreach ($listItems as $item) {
           if ($item != null) {
             $valDiscP = ($request->listQty[$loopCount] * $request->listPrice[$loopCount]) * $request->listDiscP[$loopCount] / 100;
             $valDiscH = $request->listQty[$loopCount] * $request->listDiscH[$loopCount];
-            // $totalDiscP += $valDiscP;
-            // $totalDiscH += $valDiscH;
             $salesDtId = d_sales_dt::where('sd_sales', $salesId)
               ->max('sd_detailid') + 1;
             $salesDt = new d_sales_dt;
@@ -396,23 +387,12 @@ class PenjualanOrderController extends Controller
           $loopCount++;
         }
 
-        // DB::rollBack();
-        // dd($totalDiscP);
-
-        // update total-discount in d_sales
-        // $sales = d_sales::where('s_id', $salesId)
-        //   ->firstOrFail();
-        // $sales->s_disc_percent = $totalDiscP;
-        // $sales->s_disc_value = $totalDiscH;
-        // $sales->save();
-
         // insert sales-payment
         $salesPay = new d_sales_payment;
         $salesPay->sp_sales = $salesId;
         $salesPay->sp_paymentid = 1;
         $salesPay->sp_method = $request->paymentMethod;
         $salesPay->sp_nominal = $request->totalBayar;
-        // $salesPay->sp_ref =
         $salesPay->save();
 
         DB::commit();
@@ -456,23 +436,23 @@ class PenjualanOrderController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    * Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
     public function update(Request $request, $id)
     {
-      // validate request
-      $isValidRequest = $this->validate_req($request);
-      if ($isValidRequest != '1') {
-        $errors = $isValidRequest;
-        return response()->json([
-          'status' => 'invalid',
-          'message' => $errors
-        ]);
-      }
+        // validate request
+        $isValidRequest = $this->validate_req($request);
+        if ($isValidRequest != '1') {
+            $errors = $isValidRequest;
+            return response()->json([
+                'status' => 'invalid',
+                'message' => $errors
+            ]);
+        }
 
       DB::beginTransaction();
       try {
@@ -483,8 +463,6 @@ class PenjualanOrderController extends Controller
         $sales->s_date = Carbon::parse($request->orderDate)->format('Y-m-d');
         $sales->s_staff = Auth::user()->m_id;
         $sales->s_gross = $request->totalPenjualan;
-        // $sales->s_disc_percent = $discPercent;
-        // $sales->s_disc_value = $request->totalDisc;
         $sales->s_tax = $request->ppn;
         $sales->s_jatuh_tempo = Carbon::parse($request->dueDate)->format('Y-m-d');
         $sales->s_net = $request->totalAmount;
@@ -506,14 +484,10 @@ class PenjualanOrderController extends Controller
         // insert sales-detail
         $listItems = $request->listItemId;
         $loopCount = 0;
-        $totalDiscP = 0;
-        $totalDiscH = 0;
         foreach ($listItems as $item) {
           if ($item != null) {
             $valDiscP = ($request->listQty[$loopCount] * $request->listPrice[$loopCount]) * $request->listDiscP[$loopCount] / 100;
             $valDiscH = $request->listQty[$loopCount] * $request->listDiscH[$loopCount];
-            $totalDiscP += $valDiscP;
-            $totalDiscH += $valDiscH;
             $salesDtId = d_sales_dt::where('sd_sales', $id)
               ->max('sd_detailid') + 1;
             $salesDt = new d_sales_dt;
@@ -550,19 +524,10 @@ class PenjualanOrderController extends Controller
                   'message' => 'Mutasi gagal, Hubungi pengembang !'
                 ]);
               }
-              // DB::rollback();
-              // dd($mutasi);
             }
           }
           $loopCount++;
         }
-
-        // update total-discount in d_sales
-        // $sales = d_sales::where('s_id', $salesId)
-        // ->firstOrFail();
-        // $sales->s_disc_percent = $totalDiscP;
-        // $sales->s_disc_value = $totalDiscH;
-        // $sales->save();
 
         // insert sales-payment
         $salesPay = d_sales_payment::where('sp_sales', $id)
@@ -570,7 +535,6 @@ class PenjualanOrderController extends Controller
         $salesPay->sp_paymentid = 1;
         $salesPay->sp_method = $request->paymentMethod;
         $salesPay->sp_nominal = $request->totalBayar;
-        // $salesPay->sp_ref =
         $salesPay->save();
 
         DB::commit();
