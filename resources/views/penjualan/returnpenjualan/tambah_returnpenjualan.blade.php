@@ -199,13 +199,14 @@
                                 <thead class="bg-primary">
                                   <tr>
                                     <th>Nama</th>
-                                    <th>Jumlah</th>
-                                    <th>Rusak</th>
+                                    <th>Pesanan (qty)</th>
+                                    <th>Rusak (qty)</th>
                                     <th>Satuan</th>
                                     <th>Harga</th>
                                     <th>Disc Percent</th>
                                     <th>Disc Value</th>
-                                    <th>Jumlah Kirim</th>
+                                    <th>Total Belanja</th>
+                                    <th>Total Rusak</th>
                                     <th>Total Barang Sesuai</th>
                                   </tr>
                                 </thead>
@@ -282,24 +283,6 @@
       }
       $('#return_type').focus();
       $('#return_type').select2('open');
-
-      // if ($(this).val() === 'BR') {
-      //   $('#barang_rusak').removeClass('d-none');
-      //   $('#jumlah_salah').addClass('d-none');
-      //   $('#kembali_uang').addClass('d-none');
-      // } else if($(this).val() === 'JS'){
-      //   $('#barang_rusak').addClass('d-none');
-      //   $('#jumlah_salah').removeClass('d-none');
-      //   $('#kembali_uang').addClass('d-none');
-      // } else if($(this).val() === 'KU'){
-      //   $('#barang_rusak').addClass('d-none');
-      //   $('#jumlah_salah').addClass('d-none');
-      //   $('#kembali_uang').removeClass('d-none');
-      // } else {
-      //   $('#barang_rusak').addClass('d-none');
-      //   $('#jumlah_salah').addClass('d-none');
-      //   $('#kembali_uang').addClass('d-none');
-      // }
     });
 
     $('#return_type').on('change', function() {
@@ -325,16 +308,14 @@
         },
         success: function(response) {
           console.log(response);
-          $('#sales_type_hidden').val(response.s_channel);
-          $('#payment_method').val(response.get_sales_payment.get_payment_method.pm_name);
-          $('#cust_id_hidden').val(response.get_customer.c_id);
-          $('#cust_detail').val(response.get_customer.c_name+ ', ' +response.get_customer.c_address);
-          // $('#sales_discp').val(parseInt(response.get_sales_dt.sd_disc_vpercent));
-          // $('#sales_disch').val(parseInt(response.get_sales_dt.sd_disc_value));
-          $('#sales_total_disc').val(parseInt(response.s_disc_percent) + parseInt(response.s_disc_value));
-          $('#sales_gross').val(parseInt(response.s_gross));
-          $('#sales_total_net').val(parseInt(response.s_net));
-          $('#sales_ppn').val(parseInt(response.s_tax));
+          $('#sales_type_hidden').val(response.sales.s_channel);
+          $('#payment_method').val(response.sales.get_sales_payment.get_payment_method.pm_name);
+          $('#cust_id_hidden').val(response.sales.get_customer.c_id);
+          $('#cust_detail').val(response.sales.get_customer.c_name+ ', ' +response.sales.get_customer.c_address);
+          $('#sales_total_disc').val(response.totalDisc);
+          $('#sales_gross').val(parseInt(response.sales.s_gross));
+          $('#sales_total_net').val(parseInt(response.sales.s_net));
+          $('#sales_ppn').val(parseInt(response.sales.s_tax));
 
           // insert item into DataTable
           if ($('#return_type').val() === 'KB')
@@ -342,7 +323,7 @@
             $('#table_penjualan_kb').dataTable().fnDestroy();
             tb_penjualan = $('#table_penjualan_kb').DataTable();
         		tb_penjualan.clear().draw();
-            $.each(response.get_sales_dt, function(key, val) {
+            $.each(response.sales.get_sales_dt, function(key, val) {
               rowId = tb_penjualan.rows().count();
               console.log(val, rowId);
               tb_penjualan.row.add([
@@ -390,6 +371,54 @@
           } // end if 'KB'
           else if ($('#return_type').val() === 'BR')
           {
+            $('#table_penjualan_br').dataTable().fnDestroy();
+            tb_penjualan = $('#table_penjualan_br').DataTable();
+        		tb_penjualan.clear().draw();
+            $.each(response.sales.get_sales_dt, function(key, val) {
+              rowId = tb_penjualan.rows().count();
+              console.log(val, rowId);
+              tb_penjualan.row.add([
+                val.get_item.i_name +
+                  '<input type="hidden" value="'+ val.sd_item +'" class="barang" name="listItemId[]">',
+                '<input type="text" min="0" class="form-control form-control-plaintext digits" name="listQty[]" value="'+ val.sd_qty +'">',
+                '<input type="text" min="0" class="form-control form-control-sm digits" name="listReturnQty[]" value="0" onchange="countTotalReturn('+ rowId +')">' ,
+                '<input type="text" class="form-control form-control-plaintext form-control-sm" value="'+ val.get_item.get_satuan1.s_name +'">' +
+                  '<input type="hidden" value="'+ val.get_item.i_sat1 +'" name="listSatId[]">',
+                '<input type="text" class="form-control form-control-plaintext form-control-sm currency" name="listPrice[]" value="'+ val.sd_price +'">',
+                '<input type="text" min="0" class="form-control form-control-plaintext digits" name="listDiscP[]" value="'+ val.sd_disc_percent +'">' +
+                  '<input type="hidden" value="'+ val.sd_disc_vpercent +'" name="listDiscVP[]">',
+                '<input type="text" min="0" class="form-control form-control-plaintext currency" name="listDiscH[]" value="'+ parseInt(val.sd_disc_value) / parseInt(val.sd_qty) +'">',
+                '<input type="text" min="0" class="form-control form-control-plaintext currency" name="listTotalBelanja[]" value="'+ val.sd_total +'">' ,
+                '<input type="text" min="0" class="form-control form-control-plaintext currency" name="listTotalReturn[]" value="'+ 0 +'">' ,
+                '<input type="text" min="0" class="form-control form-control-plaintext currency" name="listTotalBrgSesuai[]" value="'+ 0 +'">'
+              ]).node().id = rowId;
+              $.each(tb_penjualan.row(rowId).nodes().to$().find('.currency'), function() {
+                $(this).inputmask("currency", {
+                  radixPoint: ".",
+                  groupSeparator: ".",
+                  digits: 2,
+                  autoGroup: true,
+                  prefix: '', //Space after $, this will not truncate the first character.
+                  rightAlign: true,
+                  autoUnmask: true,
+                  nullable: false,
+                });
+              }); // end 'currency'
+              $.each(tb_penjualan.row(rowId).nodes().to$().find('.digits'), function() {
+                $(this).inputmask("currency", {
+                  radixPoint: ".",
+                  groupSeparator: ".",
+                  digits: 0,
+                  autoGroup: true,
+                  prefix: '', //Space after $, this will not truncate the first character.
+                  rightAlign: true,
+                  autoUnmask: true,
+                  nullable: false,
+                });
+              }); // end 'digits'
+              tb_penjualan.draw(false);
+              countTotalReturn(rowId);
+            }); // end loop insert DataTable
           }
         },
         error: function() {
@@ -407,7 +436,7 @@
       countTotalNet();
     });
 
-    $('#btn_simpan').on('click', function() {
+    $('#btn_simpan').one('click', function() {
       SubmitForm();
     });
   }); // end document ready
@@ -496,9 +525,38 @@
     return totalSesuai;
   }
 
+  // check is return-qty === 0
+  function isReturn()
+  {
+    rowCount = tb_penjualan.rows().count();
+    for (let i = 0; i < rowCount; i++) {
+      if (parseInt(tb_penjualan.cell(i, 2).nodes().to$().find('input').val()) !== 0) {
+        return true;
+      };
+    }
+    return false;
+  }
+
   // store-data -> submit form to store data in db
   function SubmitForm()
   {
+    // if isReturn == false, then don't submit the form
+    if (tb_penjualan) {
+      if (isReturn() === false) {
+        $('#btn_simpan').one('click', function() {
+          SubmitForm();
+        });
+        messageWarning('Perhatian', 'Jumlah return masih kosong, proses tidak dilanjutkan !');
+        return 0;
+      }
+    } else {
+      $('#btn_simpan').one('click', function() {
+        SubmitForm();
+      });
+      messageWarning('Perhatian', 'Jumlah return masih kosong, proses tidak dilanjutkan !');
+      return 0;
+    }
+
     upperForm = $('#upperForm').serialize();
     middleForm = $('#middleForm').serialize();
     bottomForm = $('#bottomForm').serialize();
@@ -522,6 +580,9 @@
           resetAllInput(0);
           $('#return_method').focus();
           $('#return_method').select2('open');
+          $('#btn_simpan').one('click', function() {
+            SubmitForm();
+          });
         } else if (response.status == 'invalid') {
           messageFailed('Perhatian', response.message);
         } else if (response.status == 'gagal') {

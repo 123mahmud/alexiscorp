@@ -91,8 +91,12 @@ class PenjualanReturnController extends Controller
         ->with('getCustomer')
         ->with('getSalesPayment.getPaymentMethod')
         ->firstOrFail();
-
-      return $data['sales'];
+      $data['totalDisc'] = 0;
+      foreach ($data['sales']->getSalesDt as $salesDT) {
+        $data['totalDisc'] += ($salesDT->sd_disc_vpercent + $salesDT->sd_disc_value);
+      }
+      // dd($data);
+      return $data;
       // return view('penjualan/returnpenjualan/returnpenjualan', compact('data'));
     }
 
@@ -173,6 +177,10 @@ class PenjualanReturnController extends Controller
 
         for ($i=0; $i < sizeof($request->listItemId); $i++) {
           // insert new record into sales-return-detail
+          // $valDiscP: count discP-value before order-qty minus by return-qty
+          // $valDiscH: count discH-value (disc each item) before order-qty minus by return-qty
+          $valDiscP = ($request->listQty[$i] * $request->listPrice[$i]) * $request->listDiscP[$i] / 100;
+          $valDiscH = $request->listQty[$i] * $request->listDiscH[$i];
           $salesRDTId = d_sales_returndt::where('dsrdt_idsr', $salesRetId)
             ->max('dsrdt_smdt') + 1;
           $salesRDT = new d_sales_returndt();
@@ -183,15 +191,18 @@ class PenjualanReturnController extends Controller
           $salesRDT->dsrdt_qty_confirm = $request->listReturnQty[$i];
           $salesRDT->dsrdt_price = $request->listPrice[$i];
           $salesRDT->dsrdt_disc_percent = $request->listDiscP[$i];
-          $salesRDT->dsrdt_disc_vpercent = $request->listDiscVP[$i];
+          $salesRDT->dsrdt_disc_vpercent = $valDiscP;
           // $salesRDT->dsrdt_disc_vpercentreturn = ;
-          $salesRDT->dsrdt_disc_value = $request->listDiscH[$i];
+          $salesRDT->dsrdt_disc_value = $valDiscH;
           $salesRDT->dsrdt_return_price = $request->listTotalReturn[$i];
           $salesRDT->dsrdt_hasil = $request->listTotalBrgSesuai[$i];
           $salesRDT->save();
 
           // insert new record in sales-detail
+          // $valDiscP: count discP-value after order-qty minus by return-qty
+          // $valDiscH: count discH-value (disc each item) after order-qty minus by return-qty
           $valDiscP = (($request->listQty[$i] - $request->listReturnQty[$i]) * $request->listPrice[$i]) * $request->listDiscP[$i] / 100;
+          $valDiscH = ($request->listQty[$i] - $request->listReturnQty[$i]) * $request->listDiscH[$i];
           $salesDtId = d_sales_dt::where('sd_sales', $request->sales_note_id)
             ->max('sd_detailid') + 1;
           $salesDt = new d_sales_dt;
@@ -202,7 +213,7 @@ class PenjualanReturnController extends Controller
           $salesDt->sd_price = $request->listPrice[$i];
           $salesDt->sd_disc_percent = $request->listDiscP[$i];
           $salesDt->sd_disc_vpercent = $valDiscP;
-          $salesDt->sd_disc_value = $request->listDiscH[$i];
+          $salesDt->sd_disc_value = $valDiscH;
           $salesDt->sd_total = $request->listTotalBrgSesuai[$i];
           $salesDt->save();
 

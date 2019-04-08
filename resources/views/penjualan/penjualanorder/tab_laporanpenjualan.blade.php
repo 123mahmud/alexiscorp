@@ -68,7 +68,7 @@
     							<th>Qty</th>
     							<th>Harga</th>
     							<th>Disc (%)</th>
-    							<th>Disc /@pcs</th>
+    							<th>Disc /pcs</th>
     							<th>Total</th>
     						</tr>
     					</thead>

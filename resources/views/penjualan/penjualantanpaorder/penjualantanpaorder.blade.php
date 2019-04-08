@@ -192,7 +192,7 @@
 			$('.totalAmount').val(totalAmount);
 		});
 
-		$('#btn_simpan').on('click', function() {
+		$('#btn_simpan').one('click', function() {
 			SubmitForm(event);
 		});
 	});
@@ -514,6 +514,10 @@
 					messageSuccess('Berhasil', 'Data berhasil ditambahkan !');
 					resetAllInput();
 					$('#modal_bayar').modal('hide');
+					// activate btn_simpan once again
+					$('#btn_simpan').one('click', function() {
+						SubmitForm(event);
+					});
 				} else if (response.status == 'invalid') {
 					messageFailed('Perhatian', response.message);
 				} else if (response.status == 'gagal') {
@@ -667,7 +671,6 @@
 	}
 
 </script>
-
 
 <!-- script for tab-laporan-penjualan -->
 <script type="text/javascript">

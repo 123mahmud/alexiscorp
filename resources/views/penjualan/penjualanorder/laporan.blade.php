@@ -77,7 +77,7 @@
         <td>{{ $val->getSales->getCustomer->c_name }}</td>
         <td>{{ $val->getItem->getSatuan1->s_name }}</td>
         <td><div class="digits text-right">{{ $val->sd_qty }}</div></td>
-        <td><div class="digits text-right">{{ $val->sd_price }}</div></td>
+        <td><div class="currency text-right">{{ $val->sd_price }}</div></td>
         <td><div class="currency text-right">{{ $val->sd_disc_vpercent }}</div></td>
         <td><div class="currency text-right">{{ $val->sd_disc_value }}</div></td>
         <td><div class="currency text-right">{{ $val->sd_total }}</div></td>

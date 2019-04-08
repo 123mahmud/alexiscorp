@@ -263,19 +263,19 @@ class PenjualanOrderController extends Controller
         return $datas->getItem['getSatuan1']['s_name'];
       })
       ->addColumn('qty', function($datas) {
-        return '<div class="text-right">'. $datas->sd_qty .'</div>';
+        return '<div class="text-right">'. number_format($datas->sd_qty, 0, '.', ',') .'</div>';
       })
       ->addColumn('price', function($datas) {
-        return '<div class="text-right">'. $datas->sd_price .'</div>';
+        return '<div class="text-right">'. number_format($datas->sd_price, 2, '.', ',') .'</div>';
       })
       ->addColumn('discount', function($datas) {
         return '<div class="text-right">'. $datas->sd_disc_percent .'</div>';
       })
       ->addColumn('discount_value', function($datas) {
-        return '<div class="text-right">'. $datas->sd_disc_value .'</div>';
+        return '<div class="text-right">'. number_format(((int)$datas->sd_disc_value / (int)$datas->sd_qty), 2, '.', ',') .'</div>';
       })
       ->addColumn('sub_total', function($datas) {
-        return '<div class="text-right">'. $datas->sd_total .'</div>';
+        return '<div class="text-right">'. number_format($datas->sd_total, 2, '.', ',') .'</div>';
       })
       ->rawColumns(['item', 'satuan', 'qty', 'price', 'discount', 'discount_value', 'sub_total'])
       ->make(true);
@@ -542,7 +542,7 @@ class PenjualanOrderController extends Controller
               'MENGURANGI',
               $sales->s_note,
               'MENGURANGI',
-              Carbon::now(),
+              Carbon::now('Asia/Jakarta'),
               1);
               if ($mutasi['true'] == false) {
                 return response()->json([
