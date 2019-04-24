@@ -26,7 +26,7 @@ class BasicTest extends TestCase
      */
     public function testGetDetailPenjualanTO()
     {
-        $response = $this->json('get', '/penjualan/penjualanorder/getDetailPenjualan/7');
+        $response = $this->get('/penjualan/penjualantanpaorder/getDetailPenjualan/7');
         $response->assertStatus(200);
 
         $response->assertJsonStructure(
